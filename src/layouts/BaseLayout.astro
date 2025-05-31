@@ -1,0 +1,32 @@
+---
+import '../global.css';
+import { ClientRouter } from 'astro:transitions';
+import Navbar from '../components/Navbar.astro';
+
+const { title } = Astro.props;
+
+function stripTagsRegex(title:string = 'MISSING TITLE') {
+	return title.replace(/<[^>]*>/g, '');
+}
+---
+<html lang="en" style="overflow-y: scroll">
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="generator" content={Astro.generator} />
+	<title>{stripTagsRegex(title)}</title>
+	<ClientRouter />
+</head>
+<body class="flex flex-col min-h-screen dark:bg-black">
+
+<Navbar />
+
+<div class="grow">
+	<div class="container p-2 font-mono">
+		<slot />
+	</div>
+</div>
+
+</body>
+</html>

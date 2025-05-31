@@ -5,10 +5,29 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "preview": "astro preview"
   },
   "dependencies": {
-    "astro": "^5.8.1"
+    "@fontsource/ibm-plex-mono": "^5.2.5",
+    "@tailwindcss/vite": "^4.1.8",
+    "@types/hast": "^3.0.4",
+    "astro": "^5.8.1",
+    "hast-util-to-string": "^3.0.1",
+    "rehype": "^13.0.2",
+    "rehype-image-caption": "^2.1.0",
+    "rehype-stringify": "^10.0.1",
+    "remark": "^15.0.1",
+    "remark-marginnotes": "^0.1.4",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "tailwindcss": "^4.1.8",
+    "typescript": "^5.8.3",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.0.0"
+  },
+  "devDependencies": {
+    "prettier": "3.5.3",
+    "prettier-plugin-astro": "0.14.1",
+    "vite": "^6.3.5"
   }
 }

@@ -1,0 +1,48 @@
+@import 'tailwindcss';
+@import "@fontsource/ibm-plex-mono";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@utility container {
+    margin-inline: auto;
+}
+
+@theme {
+    --font-sans: "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+    * {
+        cursor: url('/cursor.svg'), pointer;
+    }
+    h1 {
+        font-size: var(--text-3xl);
+        font-weight: bold;
+    }
+
+    h2 {
+        font-size: var(--text-2xl);
+        font-weight: bold;
+    }
+
+    h3 {
+        font-size: var(--text-xl);
+        font-weight: bold;
+    }
+
+    h4 {
+        font-size: var(--text-lg);
+        font-weight: bold;
+    }
+
+    p {
+        margin: 1em 0;
+    }
+
+    a {
+        color: var(--color-blue-500);
+    }
+    a:hover {
+        cursor: url('/pointer.svg'), pointer;
+    }
+}

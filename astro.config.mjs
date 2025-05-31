@@ -1,5 +1,16 @@
-// @ts-check
-import { defineConfig } from 'astro/config';
+import {defineConfig, envField} from 'astro/config';
+import tailwindcss from '@tailwindcss/vite';
 
-// https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+    prefetch: true,
+
+    vite: {
+        plugins: [tailwindcss()]
+    },
+
+    env: {
+        schema: {
+            BUILD_TIME: envField.string({ context: "server", access: "public", default: new Date().toISOString() })
+        }
+    }
+});
