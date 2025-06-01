@@ -1,59 +1,75 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentLayout from '../../layouts/ContentLayout.astro';
 import formatAuthorCitation from '../../lib/authorCitation.js';
 import { getCollection, render } from 'astro:content';
-import PostLink from "../../components/PostLink.astro";
+import PostLink from '../../components/ui/PostLink.astro';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
 	const gatherings = await getCollection('gatherings');
-	return gatherings.map(gathering => ({
+	return gatherings.map((gathering) => ({
 		params: { id: gathering.id },
 		props: { gathering },
 	}));
 }
-// 2. For your template, you can get the entry directly from the prop
 const { gathering } = Astro.props;
 
-const authorsByGathering = (await getCollection('authors'))
-	.filter(author =>  gathering.data.authors.some(item => item.id === author.id));
+const authorsByGathering = (await getCollection('authors')).filter((author) =>
+	gathering.data.authors.some((item) => item.id === author.id),
+);
 
-const postsByGathering = (await getCollection('posts'))
-	.filter(post =>  gathering.data.posts?.some(item => item.id === post.id));
+const postsByGathering = (await getCollection('posts')).filter((post) =>
+	gathering.data.posts?.some((item) => item.id === post.id),
+);
 
 const authorCitation = formatAuthorCitation(authorsByGathering);
 
 const { Content } = await render(gathering);
 ---
-<BaseLayout title={gathering.data.title}>
+
+<ContentLayout title={gathering.data.title}>
 	<article>
 		<h1>{gathering.data.title}</h1>
 
-		<a href={'https://electronicbookreview.com/gathering/'+gathering.data.slug} target="_blank">EBR Link</a>
+		<a href={'https://electronicbookreview.com/gathering/' + gathering.data.slug} target="_blank"
+			>EBR Link</a
+		>
 
-		<p>By: {authorsByGathering.map(author => (
-			<a href={`/authors/${author.id}`}>{author.data.title}</a>
-		)).reduce((prev, curr) => [prev, ', ', curr])}</p>
+		<p>
+			By: {
+				authorsByGathering
+					.map((author) => <a href={`/authors/${author.id}`}>{author.data.title}</a>)
+					.reduce((prev, curr) => [prev, ', ', curr])
+			}
+		</p>
 
 		<p>Published: {gathering.data.publish_date.toISOString().split('T')[0]}</p>
 
-		<div>Essays:
-			<ul class="list-disc ml-4">
-				{postsByGathering.map(post => (
-					<li>
-						<PostLink id={post.id} />
-					</li>
-				))}
+		<div>
+			Essays:
+			<ul class="ml-4 list-disc">
+				{
+					postsByGathering.map((post) => (
+						<li>
+							<PostLink id={post.id} />
+						</li>
+					))
+				}
 			</ul>
 		</div>
 
-		<hr>
+		<hr />
 		<Content />
 
 		<h3>Cite this Gathering:</h3>
-		<p>{authorCitation}. "{gathering.data.title}" <span class="italic">Electronic Book Review</span>, {gathering.data.publish_date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}, {'https://electronicbookreview.com/gathering/'+gathering.data.slug }</p>
+		<p>
+			{authorCitation}. "{gathering.data.title}" <span class="italic">Electronic Book Review</span>, {
+				gathering.data.publish_date.toLocaleDateString('en-GB', {
+					year: 'numeric',
+					month: 'long',
+					day: 'numeric',
+				})
+			}, {'https://electronicbookreview.com/gathering/' + gathering.data.slug}
+		</p>
 	</article>
-</BaseLayout>
-<script>
-
-</script>
+</ContentLayout>

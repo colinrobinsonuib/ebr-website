@@ -1,0 +1,27 @@
+---
+import { getCollection, render } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import { processBlurb } from '../../lib/utils';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('posts');
+	return posts.map((post) => ({
+		params: { id: post.id, postType: post.data.type },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
+---
+
+<ContentLayout title={post.data.title}>
+	<!--<em>{blurb}</em>-->
+
+	<article class="article-body">
+		<h1>{post.data.title}</h1>
+		<Content />
+	</article>
+</ContentLayout>

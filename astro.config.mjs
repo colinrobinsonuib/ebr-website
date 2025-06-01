@@ -1,16 +1,30 @@
-import {defineConfig, envField} from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
+import rehypeImageCaption from 'rehype-image-caption';
+import { remarkMarginnotesPlugin, marginnoteHandlers } from 'remark-marginnotes';
 
 export default defineConfig({
-    prefetch: true,
+	markdown: {
+		remarkPlugins: [remarkMarginnotesPlugin],
+		rehypePlugins: [[rehypeImageCaption, { wrapImagesWithoutCaptions: false }]],
+		remarkRehype: {
+			handlers: marginnoteHandlers({ label: 'letters' }),
+		},
+	},
 
-    vite: {
-        plugins: [tailwindcss()]
-    },
+	prefetch: true,
 
-    env: {
-        schema: {
-            BUILD_TIME: envField.string({ context: "server", access: "public", default: new Date().toISOString() })
-        }
-    }
+	vite: {
+		plugins: [tailwindcss()],
+	},
+
+	env: {
+		schema: {
+			BUILD_TIME: envField.string({
+				context: 'server',
+				access: 'public',
+				default: new Date().toISOString(),
+			}),
+		},
+	},
 });

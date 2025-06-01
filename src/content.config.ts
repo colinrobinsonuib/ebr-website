@@ -3,7 +3,7 @@ import { glob } from 'astro/loaders';
 import { loadEnv } from 'vite';
 import { threads, postTypes } from './lib/enums.ts';
 
-const { CONTENT_DIR } = loadEnv(process.env.CONTENT_DIR || 'src/content', process.cwd(), "");
+const { CONTENT_DIR } = loadEnv(process.env.CONTENT_DIR || 'src/content', process.cwd(), '');
 
 export const baseSchema = z.object({
 	title: z.string().min(1, { message: 'Title is required.' }),
@@ -11,13 +11,17 @@ export const baseSchema = z.object({
 	publish_date: z.coerce.date().default(new Date()),
 	modified_date: z.coerce.date().default(new Date()),
 });
+export type BaseItem = {
+	id: string;
+	data: z.infer<typeof baseSchema>;
+};
 
 export const postSchema = baseSchema.extend({
 	draft: z.boolean().default(true),
 	type: z.enum(postTypes).default('essay'),
 	thread: z.enum(threads).optional(),
 	peer_reviewed: z.boolean().default(false).optional(),
-	authors: z.array(reference("authors")),
+	authors: z.array(reference('authors')),
 	citation_override: z.string().optional(),
 	doi: z.string().url().optional(),
 	blurb: z.string().optional(),
@@ -28,28 +32,31 @@ export const postSchema = baseSchema.extend({
 export const gatheringSchema = baseSchema.extend({
 	draft: z.boolean().default(true),
 	doi: z.string().url().optional(),
-	authors: z.array(reference("authors")),
-	posts: z.array(reference("posts")).optional(),
+	authors: z.array(reference('authors')),
+	posts: z.array(reference('posts')).optional(),
 	image: z.string().optional(),
 });
 
 export const authorSchema = baseSchema.extend({
-	qid: z.string().regex(/^Q\d+$/).optional()
+	qid: z
+		.string()
+		.regex(/^Q\d+$/)
+		.optional(),
 });
 
 const posts = defineCollection({
-	loader: glob({ pattern: "**/*.md", base: CONTENT_DIR+"/essays" }),
-	schema: gatheringSchema
+	loader: glob({ pattern: '**/*.md', base: CONTENT_DIR + '/posts' }),
+	schema: postSchema,
 });
 
 const gatherings = defineCollection({
-	loader: glob({ pattern: "**/*.md", base: CONTENT_DIR+"/gatherings" }),
-	schema: gatheringSchema
+	loader: glob({ pattern: '**/*.md', base: CONTENT_DIR + '/gatherings' }),
+	schema: gatheringSchema,
 });
 
 const authors = defineCollection({
-	loader: glob({ pattern: "**/*.md", base: CONTENT_DIR+"/authors" }),
-	schema: authorSchema
+	loader: glob({ pattern: '**/*.md', base: CONTENT_DIR + '/authors' }),
+	schema: authorSchema,
 });
 
 export const collections = { posts, gatherings, authors };

@@ -1,0 +1,33 @@
+---
+import { postTypes } from '../../lib/enums';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import { getCollection } from 'astro:content';
+import { capitalizeFirstLetter } from '../../lib/utils';
+
+export async function getStaticPaths() {
+	return postTypes.map((type) => ({
+		params: { postType: type },
+	}));
+}
+
+const { postType } = Astro.params;
+
+const posts = await getCollection('posts', ({ data }) => {
+	return data.type === postType;
+});
+
+const title = capitalizeFirstLetter(postType) + 's';
+---
+
+<ContentLayout title={title}>
+	<h1>{title}</h1>
+	<ul>
+		{
+			posts.map((item) => (
+				<li>
+					<a href={`/${postType}s/${item.id}`}>{item.data.title}</a>
+				</li>
+			))
+		}
+	</ul>
+</ContentLayout>

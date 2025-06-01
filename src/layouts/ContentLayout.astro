@@ -1,0 +1,15 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Navbar from '../components/core/Navbar.astro';
+const { title } = Astro.props;
+---
+
+<BaseLayout title={title}>
+	<Navbar />
+
+	<div class="grow">
+		<div class="container p-2 font-mono">
+			<slot />
+		</div>
+	</div>
+</BaseLayout>

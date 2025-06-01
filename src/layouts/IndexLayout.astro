@@ -1,0 +1,20 @@
+---
+import ContentLayout from './ContentLayout.astro';
+import type { BaseItem } from '../content.config';
+import { getCollection } from 'astro:content';
+const { title, collection } = Astro.props;
+const collectionArr: BaseItem[] = await getCollection(collection);
+---
+
+<ContentLayout title={title}>
+	<h1>{title}</h1>
+	<ul>
+		{
+			collectionArr.map((item: BaseItem) => (
+				<li>
+					<a href={`/${collection}/${item.id}`}>{item.data.title}</a>
+				</li>
+			))
+		}
+	</ul>
+</ContentLayout>

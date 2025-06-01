@@ -11,6 +11,12 @@ importers:
       '@fontsource/ibm-plex-mono':
         specifier: ^5.2.5
         version: 5.2.5
+      '@fontsource/source-sans-3':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@fontsource/source-serif-4':
+        specifier: ^5.2.8
+        version: 5.2.8
       '@tailwindcss/vite':
         specifier: ^4.1.8
         version: 4.1.8(vite@6.3.5(@types/node@22.15.29)(jiti@2.4.2)(lightningcss@1.30.1))
@@ -23,6 +29,12 @@ importers:
       hast-util-to-string:
         specifier: ^3.0.1
         version: 3.0.1
+      phosphor-astro:
+        specifier: ^2.1.0
+        version: 2.1.0
+      prettier-plugin-tailwindcss:
+        specifier: ^0.6.12
+        version: 0.6.12(prettier-plugin-astro@0.14.1)(prettier@3.5.3)
       rehype:
         specifier: ^13.0.2
         version: 13.0.2
@@ -36,8 +48,8 @@ importers:
         specifier: ^15.0.1
         version: 15.0.1
       remark-marginnotes:
-        specifier: ^0.1.4
-        version: 0.1.4(hastscript@9.0.1)(mdast-util-to-hast@13.2.0)(rehype@13.0.2)(remark@15.0.1)(unified@11.0.5)(unist-util-remove@4.0.0)(unist-util-visit@5.0.0)
+        specifier: ^0.1.5
+        version: 0.1.5(hastscript@9.0.1)(mdast-util-to-hast@13.2.0)(rehype@13.0.2)(remark@15.0.1)(unified@11.0.5)(unist-util-remove@4.0.0)(unist-util-visit@5.0.0)
       remark-parse:
         specifier: ^11.0.0
         version: 11.0.0
@@ -265,6 +277,12 @@ packages:
 
   '@fontsource/ibm-plex-mono@5.2.5':
     resolution: {integrity: sha512-G09N3GfuT9qj3Ax2FDZvKqZttzM3v+cco2l8uXamhKyXLdmlaUDH5o88/C3vtTHj2oT7yRKsvxz9F+BXbWKMYA==}
+
+  '@fontsource/source-sans-3@5.2.8':
+    resolution: {integrity: sha512-3NRlxRk9QHkLQbKbPn+sfcl+bPURLmgd5RKlK+SWd+YBepCEeAS0XUU8ro5ychlm4vYp8xUQOyFweLElpFw8QQ==}
+
+  '@fontsource/source-serif-4@5.2.8':
+    resolution: {integrity: sha512-Z8/igNA8UJ+QrFEaR2mk7oywizPSUuKhEurKpKpPnquKDOmCNAwBHYkIAyDtA91ZluiWf7jRcBl22d8pVagO6A==}
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -1332,6 +1350,9 @@ packages:
   parse5@7.3.0:
     resolution: {integrity: sha512-IInvU7fabl34qmi9gY8XOVxhYyMyuH2xUNpb2q8/Y+7552KlejkRvqvD19nMoUW/uQGGbqNpA6Tufu5FL5BZgw==}
 
+  phosphor-astro@2.1.0:
+    resolution: {integrity: sha512-qyYUlxF8DbfHc+85DDGPL04ghNBwrVK75EsNsBfYOChiCeCRwAwfbHxj/qqPrrSFPMgh9cUyEvgKYjI/7bjCUA==}
+
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
@@ -1350,6 +1371,61 @@ packages:
   prettier-plugin-astro@0.14.1:
     resolution: {integrity: sha512-RiBETaaP9veVstE4vUwSIcdATj6dKmXljouXc/DDNwBSPTp8FRkLGDSGFClKsAFeeg+13SB0Z1JZvbD76bigJw==}
     engines: {node: ^14.15.0 || >=16.0.0}
+
+  prettier-plugin-tailwindcss@0.6.12:
+    resolution: {integrity: sha512-OuTQKoqNwV7RnxTPwXWzOFXy6Jc4z8oeRZYGuMpRyG3WbuR3jjXdQFK8qFBMBx8UHWdHrddARz2fgUenild6aw==}
+    engines: {node: '>=14.21.3'}
+    peerDependencies:
+      '@ianvs/prettier-plugin-sort-imports': '*'
+      '@prettier/plugin-pug': '*'
+      '@shopify/prettier-plugin-liquid': '*'
+      '@trivago/prettier-plugin-sort-imports': '*'
+      '@zackad/prettier-plugin-twig': '*'
+      prettier: ^3.0
+      prettier-plugin-astro: '*'
+      prettier-plugin-css-order: '*'
+      prettier-plugin-import-sort: '*'
+      prettier-plugin-jsdoc: '*'
+      prettier-plugin-marko: '*'
+      prettier-plugin-multiline-arrays: '*'
+      prettier-plugin-organize-attributes: '*'
+      prettier-plugin-organize-imports: '*'
+      prettier-plugin-sort-imports: '*'
+      prettier-plugin-style-order: '*'
+      prettier-plugin-svelte: '*'
+    peerDependenciesMeta:
+      '@ianvs/prettier-plugin-sort-imports':
+        optional: true
+      '@prettier/plugin-pug':
+        optional: true
+      '@shopify/prettier-plugin-liquid':
+        optional: true
+      '@trivago/prettier-plugin-sort-imports':
+        optional: true
+      '@zackad/prettier-plugin-twig':
+        optional: true
+      prettier-plugin-astro:
+        optional: true
+      prettier-plugin-css-order:
+        optional: true
+      prettier-plugin-import-sort:
+        optional: true
+      prettier-plugin-jsdoc:
+        optional: true
+      prettier-plugin-marko:
+        optional: true
+      prettier-plugin-multiline-arrays:
+        optional: true
+      prettier-plugin-organize-attributes:
+        optional: true
+      prettier-plugin-organize-imports:
+        optional: true
+      prettier-plugin-sort-imports:
+        optional: true
+      prettier-plugin-style-order:
+        optional: true
+      prettier-plugin-svelte:
+        optional: true
 
   prettier@3.5.3:
     resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
@@ -1404,8 +1480,8 @@ packages:
   remark-gfm@4.0.1:
     resolution: {integrity: sha512-1quofZ2RQ9EWdeN34S79+KExV1764+wCUGop5CPL1WGdD0ocPpu91lzPGbwWMECpEpd42kJGQwzRfyov9j4yNg==}
 
-  remark-marginnotes@0.1.4:
-    resolution: {integrity: sha512-I8a3JaEiCbJi4QvfeSW096iCp58Jti5Jfaxi81YxJyw7qYBOLFlvzrRJEmIwIbvj2UoKRu9V/6SblEa4MYpKhA==}
+  remark-marginnotes@0.1.5:
+    resolution: {integrity: sha512-S1no2SV3zLUTZ3bai6mhLBM2Z8TXoZVKfRl2v+h3m77jF3+qufke8eEeo/4kwGJzqDE9kVGK8V/cgSvDDzeFyg==}
     engines: {node: '>=20'}
     peerDependencies:
       hastscript: ^9.0.0
@@ -1793,8 +1869,8 @@ packages:
       typescript: ^4.9.4 || ^5.0.2
       zod: ^3
 
-  zod@3.25.42:
-    resolution: {integrity: sha512-PcALTLskaucbeHc41tU/xfjfhcz8z0GdhhDcSgrCTmSazUuqnYqiXO63M0QUBVwpBlsLsNVn5qHSC5Dw3KZvaQ==}
+  zod@3.25.46:
+    resolution: {integrity: sha512-IqRxcHEIjqLd4LNS/zKffB3Jzg3NwqJxQQ0Ns7pdrvgGkwQsEBdEQcOHaBVqvvZArShRzI39+aMST3FBGmTrLQ==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -1954,6 +2030,10 @@ snapshots:
     optional: true
 
   '@fontsource/ibm-plex-mono@5.2.5': {}
+
+  '@fontsource/source-sans-3@5.2.8': {}
+
+  '@fontsource/source-serif-4@5.2.8': {}
 
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:
@@ -2350,9 +2430,9 @@ snapshots:
       xxhash-wasm: 1.1.0
       yargs-parser: 21.1.1
       yocto-spinner: 0.2.3
-      zod: 3.25.42
-      zod-to-json-schema: 3.24.5(zod@3.25.42)
-      zod-to-ts: 1.2.0(typescript@5.8.3)(zod@3.25.42)
+      zod: 3.25.46
+      zod-to-json-schema: 3.24.5(zod@3.25.46)
+      zod-to-ts: 1.2.0(typescript@5.8.3)(zod@3.25.46)
     optionalDependencies:
       sharp: 0.33.5
     transitivePeerDependencies:
@@ -3235,6 +3315,8 @@ snapshots:
     dependencies:
       entities: 6.0.0
 
+  phosphor-astro@2.1.0: {}
+
   picocolors@1.1.1: {}
 
   picomatch@2.3.1: {}
@@ -3252,6 +3334,12 @@ snapshots:
       '@astrojs/compiler': 2.12.0
       prettier: 3.5.3
       sass-formatter: 0.7.9
+
+  prettier-plugin-tailwindcss@0.6.12(prettier-plugin-astro@0.14.1)(prettier@3.5.3):
+    dependencies:
+      prettier: 3.5.3
+    optionalDependencies:
+      prettier-plugin-astro: 0.14.1
 
   prettier@3.5.3: {}
 
@@ -3326,7 +3414,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  remark-marginnotes@0.1.4(hastscript@9.0.1)(mdast-util-to-hast@13.2.0)(rehype@13.0.2)(remark@15.0.1)(unified@11.0.5)(unist-util-remove@4.0.0)(unist-util-visit@5.0.0):
+  remark-marginnotes@0.1.5(hastscript@9.0.1)(mdast-util-to-hast@13.2.0)(rehype@13.0.2)(remark@15.0.1)(unified@11.0.5)(unist-util-remove@4.0.0)(unist-util-visit@5.0.0):
     dependencies:
       devlop: 1.1.0
       remark: 15.0.1
@@ -3716,15 +3804,15 @@ snapshots:
 
   yoctocolors@2.1.1: {}
 
-  zod-to-json-schema@3.24.5(zod@3.25.42):
+  zod-to-json-schema@3.24.5(zod@3.25.46):
     dependencies:
-      zod: 3.25.42
+      zod: 3.25.46
 
-  zod-to-ts@1.2.0(typescript@5.8.3)(zod@3.25.42):
+  zod-to-ts@1.2.0(typescript@5.8.3)(zod@3.25.46):
     dependencies:
       typescript: 5.8.3
-      zod: 3.25.42
+      zod: 3.25.46
 
-  zod@3.25.42: {}
+  zod@3.25.46: {}
 
   zwitch@2.0.4: {}

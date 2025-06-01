@@ -1,0 +1,59 @@
+---
+// Navbar.astro
+---
+
+<nav class="px-6 py-4">
+	<div class="container font-mono">
+		<div class="flex items-start justify-between">
+			<div class="flex flex-col">
+				<a class="block text-5xl leading-tight font-bold text-black" href="/">
+					<div>electronic</div>
+					<div>book</div>
+					<div>review</div>
+				</a>
+			</div>
+
+			<div class="flex flex-col items-end space-y-3">
+				<div class="text-md flex items-center space-x-4 font-semibold">
+					<a href="/about" class="text-black transition-colors hover:text-gray-500"> about </a>
+					<span class="text-gray-400">|</span>
+					<a href="/submissions" class="text-black transition-colors hover:text-gray-500">
+						submissions
+					</a>
+					<span class="text-gray-400">|</span>
+					<a href="/publications" class="text-black transition-colors hover:text-gray-500">
+						publications
+					</a>
+					<span class="text-gray-400">|</span>
+					<a href="/gatherings" class="text-black transition-colors hover:text-gray-500">
+						gatherings
+					</a>
+					<span class="text-gray-400">|</span>
+					<a href="/newsletters" class="text-black transition-colors hover:text-gray-500">
+						newsletters
+					</a>
+					<span class="text-gray-400">|</span>
+					<a href="/subscribe" class="text-black transition-colors hover:text-gray-500">
+						subscribe
+					</a>
+				</div>
+
+				<div class="flex items-center space-x-2">
+					<input
+						type="search"
+						placeholder="Search..."
+						class="border border-black px-3 py-1 text-sm focus:border-blue-500 focus:ring focus:ring-blue-500/50 focus:outline-none"
+					/>
+					<button
+						type="button"
+						class="bg-black px-3 py-1 text-sm text-white transition-colors hover:bg-gray-900">
+						GO
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="mt-2 font-serif text-2xl font-light tracking-tighter text-gray-400">
+			digital futures of literature, theory, criticism, and the arts
+		</div>
+	</div>
+</nav>
