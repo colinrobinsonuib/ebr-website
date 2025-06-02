@@ -37,7 +37,6 @@
         font-size: var(--text-lg);
     }
     p {
-        margin: 1em 0;
         font-family: var(--font-serif);
     }
 }
@@ -77,10 +76,10 @@ body {
 }
 
 @layer components {
-    .article-body {
+    .article-prose {
         font-size: var(--text-xl);
         > * {
-            width: 75%;
+            /*width: 75%;*/
         }
         a {
             color: var(--color-blue-500);
@@ -102,20 +101,32 @@ body {
             color: var(--color-black)
         }
 
+        /*.marginnote-def {*/
+        /*    float: right;*/
+        /*    clear: right;*/
+        /*    margin-right: -30%;*/
+        /*    width: 25%;*/
+        /*    margin-top: 0.3rem;*/
+        /*    line-height: 1.3;*/
+        /*    vertical-align: baseline;*/
+        /*    position: relative;*/
+        /*    padding-bottom: 0.5em;*/
+        /*    border-bottom: 1px dotted #666;*/
+        /*    margin-bottom: 2em;*/
+        /*    font-size: var(--text-sm);*/
+        /*    font-weight: var(--font-weight-normal);*/
+        /*}*/
+
         .marginnote-def {
-            float: right;
-            clear: right;
-            margin-right: -30%;
+            float: left;
+            margin-left: -33.333333%;
             width: 25%;
-            margin-top: 0.3rem;
-            line-height: 1.3;
-            vertical-align: baseline;
-            position: relative;
-            padding-bottom: 0.5em;
-            border-bottom: 1px dotted #666;
-            margin-bottom: 2em;
-            font-size: var(--text-sm);
-            font-weight: var(--font-weight-normal);
+            clear: left;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            color: #6b7280;
+            padding-right: 1rem;
+            margin-bottom: 1rem;
         }
 
         .marginnote-def::before {
@@ -146,3 +157,37 @@ body {
     }
 }
 
+
+.prose p {
+    text-align: justify;
+    line-height: 32px;
+    text-indent: 50px;
+    hyphens: auto;
+    margin: 0.5em 0;
+}
+.marginnote-def {
+    float: left;
+    margin-left: -33.333333%; /* -w-1/3 equivalent */
+    width: 25%; /* w-1/4 equivalent */
+    clear: left;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: #6b7280;
+    padding-right: 1rem;
+    margin-bottom: 1rem;
+}
+
+.marginnote-ref {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.marginnote-ref:hover {
+    text-decoration: underline;
+}
+
+.marginnote-number {
+    font-weight: 600;
+    margin-right: 0.25rem;
+}
