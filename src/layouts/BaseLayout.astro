@@ -10,7 +10,7 @@ function stripTagsRegex(title: string = 'MISSING TITLE') {
 }
 ---
 
-<html lang="en" style="overflow-y: scroll">
+<html lang="en" style="overflow-y: scroll" class="">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.ico" />
@@ -19,7 +19,7 @@ function stripTagsRegex(title: string = 'MISSING TITLE') {
 		<title>{stripTagsRegex(title)} | ebr</title>
 		<ClientRouter />
 	</head>
-	<body class="flex min-h-screen flex-col">
+	<body class="">
 		<slot />
 	</body>
 </html>

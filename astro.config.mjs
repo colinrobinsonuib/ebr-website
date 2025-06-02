@@ -16,6 +16,9 @@ export default defineConfig({
 
 	vite: {
 		plugins: [tailwindcss()],
+		server: {
+			hmr: true /* hot reload */,
+		},
 	},
 
 	env: {
