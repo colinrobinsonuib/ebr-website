@@ -47,6 +47,7 @@
     --font-serif: "Source Serif 4 Variable", "Times New Roman", serif;
 
     --color-electric-blue: #54deff;
+    /*--container-7xl: 85rem;*/
 }
 
 /*
@@ -159,26 +160,46 @@ body {
 
 @layer components {
     .prose {
+        max-width: 75ch;
         p {
-            line-height: 1.6;
-            text-indent: 1.5em;
-            hyphens: auto;
-            margin: 0.5em 0;
+            margin: 1em 0;
+            @variant md {
+                hyphens: auto;
+                line-height: 2rem;
+                text-indent: 1.5rem;
+                margin: 1.2em 0;
+                text-align: left;
+            }
+        }
+        a {
+            word-break: break-all;
         }
     }
 }
 
+
 .marginnote-def {
-    float: right;
-    clear: right;
-    margin-right: -55%;
-    width: calc(var(--spacing) * 64);
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    color: #6b7280;
-    padding: 0 1rem;
-    margin-bottom: 1rem;
+    display: block;
+    font-size: 0.9rem;
+    line-height: 1.2rem;
+    margin: 1rem 1.5em 1.5rem 1.5em;
+    text-indent: 0;
+
+    @variant xl {
+        float: right;
+        clear: right;
+        margin-right: -45%;
+        width: calc(var(--spacing) * 60);
+        padding: 2rem 1.5rem;
+        margin-bottom: 1rem;
+        color: black;
+        font-family: var(--font-mono);
+        background: #54deff;
+        hyphens: auto;
+        margin-top: -1rem;
+    }
 }
+
 
 .marginnote-ref {
     color: #3b82f6;
@@ -192,5 +213,6 @@ body {
 
 .marginnote-number {
     font-weight: 600;
-    margin-right: 0.25rem;
+    display: block;
+    margin-top: -1rem;
 }

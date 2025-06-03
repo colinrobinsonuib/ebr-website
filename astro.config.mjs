@@ -28,6 +28,11 @@ export default defineConfig({
 				access: 'public',
 				default: new Date().toISOString(),
 			}),
+			CONTENT_DIR: envField.string({
+				context: "server",
+				access: "public",
+				default: './src/content'
+			})
 		},
 	},
 });

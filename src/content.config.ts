@@ -1,9 +1,7 @@
 import { defineCollection, reference, z } from 'astro:content';
 import { glob } from 'astro/loaders';
-import { loadEnv } from 'vite';
 import { threads, postTypes } from './lib/enums.ts';
-
-const { CONTENT_DIR } = loadEnv(process.env.CONTENT_DIR || 'src/content', process.cwd(), '');
+import { CONTENT_DIR } from "astro:env/server";
 
 export const baseSchema = z.object({
 	title: z.string().min(1, { message: 'Title is required.' }),

@@ -1,7 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
 import ContentLayout from '../../layouts/ContentLayout.astro';
-import TypographyToggle from '../../components/ui/TypographyToggle.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { processBlurb } from '../../lib/utils';
 
@@ -20,13 +19,13 @@ const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 ---
 
 <BaseLayout title={post.data.title}>
-	<div class="container mx-auto max-w-6xl">
-		<main class="flex bg-red-200 dark:bg-gray-950 dark:text-gray-50">
-			<aside class="w-64 border-r border-gray-200 bg-white">asd</aside>
+	<div class="max-w-7xl mx-auto flex bg-white" style="border: 10px solid #54deff;">
 
-			<div class="relative w-full bg-white">
-				<div class="ml-16 py-8 pr-16">
-					<article class="prose max-w-prose text-lg">
+			<aside class="hidden lg:block w-64 border-r border-black-200 ">asd</aside>
+
+			<div class="relative flex-1 w-full lg:min-w-3xl ">
+				<div class="py-8 px-4 ">
+					<article class="prose text-lg m-auto">
 						<h1 class="mb-8 text-3xl font-semibold text-gray-900 dark:text-gray-50">
 							{post.data.title}
 						</h1>
@@ -36,9 +35,8 @@ const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 			</div>
 
 			<!-- Right aside -->
-			<aside class="w-64 border-l border-gray-200 bg-white">
+			<aside class="hidden xl:block w-64 border-l border-black-200 ">
 				<div class="p-4">
-					<TypographyToggle />
 					<div class="space-y-4">
 						<div class="text-sm text-gray-600">
 							<h4 class="mb-2 font-medium text-gray-900">Table of Contents</h4>
@@ -51,6 +49,5 @@ const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 					</div>
 				</div>
 			</aside>
-		</main>
 	</div>
 </BaseLayout>
