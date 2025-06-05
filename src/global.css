@@ -68,6 +68,11 @@
 }
 */
 
+:root {
+    --background-color: #ffffff;
+    --highlighted-link-outline-color: #8b8b8b;
+}
+
 body {
     background-image: url('/background.svg');
     background-repeat: repeat;
@@ -94,8 +99,8 @@ body {
             --o-p: 4px;
             --o-h-s: 2px;
             --background-color: #ffffff;
-            --GW-highlighted-link-outline-color: #8b8b8b;
-            box-shadow: var(--o-h-s) var(--o-v-o) 0 var(--o-p) var(--background-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 var(--o-p) var(--background-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 1px) var(--GW-highlighted-link-outline-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 1px) var(--GW-highlighted-link-outline-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 2px) var(--background-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 2px) var(--background-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 3px) var(--GW-highlighted-link-outline-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 3px) var(--GW-highlighted-link-outline-color);
+            --highlighted-link-outline-color: #8b8b8b;
+            box-shadow: var(--o-h-s) var(--o-v-o) 0 var(--o-p) var(--background-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 var(--o-p) var(--background-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 1px) var(--highlighted-link-outline-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 1px) var(--highlighted-link-outline-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 2px) var(--background-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 2px) var(--background-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 3px) var(--highlighted-link-outline-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 3px) var(--highlighted-link-outline-color);
         }
         .marginnote-ref {
             font-size: var(--text-sm);
@@ -200,15 +205,34 @@ body {
     }
 }
 
-
-.marginnote-ref {
-    color: #3b82f6;
-    text-decoration: none;
-    font-weight: 500;
+.marginnote-def {
+    transition: box-shadow 0.15s ease 0.05s;
+}
+.marginnote-def:hover {
+    box-shadow: inset 0 0 0 1px black, inset 0 0 0 10px #54deff, inset 0 0 0 12px black;
 }
 
-.marginnote-ref:hover {
-    text-decoration: underline;
+.marginnote-ref {
+    color: #54deff;
+    text-shadow: -2px -2px 0 black;
+    transform: rotate(180deg);
+    display: inline-block;
+    text-decoration: none;
+    font-weight: 500;
+    line-height: 1;
+    text-indent: 0;
+}
+.marginnote-ref-wrapper {
+    margin-left: 0.125em;
+    cursor: pointer;
+    transition: box-shadow 0.15s ease 0.05s;
+}
+
+.marginnote-ref-wrapper:hover {
+    --o-v-o: 2px;
+    --o-p: 4px;
+    --o-h-s: 2px;
+    box-shadow: var(--o-h-s) var(--o-v-o) 0 var(--o-p) var(--background-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 var(--o-p) var(--background-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 1px) var(--highlighted-link-outline-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 1px) var(--highlighted-link-outline-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 2px) var(--background-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 2px) var(--background-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 3px) var(--highlighted-link-outline-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 3px) var(--highlighted-link-outline-color);
 }
 
 .marginnote-number {

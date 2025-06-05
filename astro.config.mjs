@@ -8,7 +8,7 @@ export default defineConfig({
 		remarkPlugins: [remarkMarginnotesPlugin],
 		rehypePlugins: [[rehypeImageCaption, { wrapImagesWithoutCaptions: false }]],
 		remarkRehype: {
-			handlers: marginnoteHandlers({ label: 'letters' }),
+			handlers: marginnoteHandlers({ label: 'custom', charList: '◀'  }),
 		},
 	},
 
