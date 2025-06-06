@@ -94,8 +94,6 @@ const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 				});
 
 				ref.addEventListener('click', (event) => {
-					relatedDef.classList.toggle('toggle-effect');
-
 					// Convert rem to px and compare to xl (80rem)
 					if (
 						window.innerWidth <=
@@ -103,6 +101,7 @@ const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 					) {
 						event.stopPropagation();
 						event.preventDefault();
+						relatedDef.classList.toggle('toggle-effect');
 					}
 				});
 			}

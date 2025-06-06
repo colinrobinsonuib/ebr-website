@@ -8,7 +8,7 @@ export default defineConfig({
 		remarkPlugins: [remarkMarginnotesPlugin],
 		rehypePlugins: [[rehypeImageCaption, { wrapImagesWithoutCaptions: false }]],
 		remarkRehype: {
-			handlers: marginnoteHandlers({ label: 'custom', charList: '◀'  }),
+			handlers: marginnoteHandlers({ label: 'custom', charList: '◀' }),
 		},
 	},
 
@@ -29,10 +29,10 @@ export default defineConfig({
 				default: new Date().toISOString(),
 			}),
 			CONTENT_DIR: envField.string({
-				context: "server",
-				access: "public",
-				default: './src/content'
-			})
+				context: 'server',
+				access: 'public',
+				default: './src/content',
+			}),
 		},
 	},
 });
