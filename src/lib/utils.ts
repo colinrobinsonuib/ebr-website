@@ -15,3 +15,16 @@ export const tailwindBreakpoints = {
 	md: '48rem',
 	lg: '64rem',
 };
+
+export async function extractWorksCited(markdownString: string | undefined) {
+	if (!markdownString) return;
+
+	const worksCitedIndex = markdownString.indexOf('## Works Cited');
+	if (worksCitedIndex === -1) return;
+
+	const afterWorksCited = markdownString.substring(worksCitedIndex);
+
+	return (
+		await unified().use(remarkParse).use(remarkRehype).use(rehypeStringify).process(afterWorksCited)
+	).toString();
+}

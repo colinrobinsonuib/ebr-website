@@ -94,9 +94,6 @@ body {
                 margin: 1.2em 0;
                 text-align: left;
             }
-            @variant lg {
-                text-indent: 1.5rem;
-            }
         }
         a {
             word-break: break-all;
@@ -110,7 +107,6 @@ body {
     font-size: 0.9rem;
     line-height: 1.2rem;
     margin: 1rem 1.5em 1.5rem 1.5em;
-    text-indent: 0;
     color: #333;
     float: left;
     clear: both;
@@ -130,7 +126,7 @@ body {
         float: right;
         width: calc(var(--spacing) * 60);
         margin-right: -45%;
-        padding: 2rem 1.5rem;
+        padding: 1rem 1.5rem 2rem;
         margin-bottom: 2rem;
         color: black;
         font-family: var(--font-mono);
@@ -146,11 +142,14 @@ body {
         .marginnote-number {
             display: block;
             font-weight: 600;
-            margin-top: -1rem;
+            font-size: 1.2rem;
+            position: relative;
+            left: -0.7rem;
+            padding-bottom: 0.5rem;
         }
 
         .marginnote-backref {
-            display: inline-block;
+            display: none;
         }
 
     }
@@ -163,8 +162,6 @@ body {
 
     @variant xl {
         display: inline;
-        top: revert-layer;
-        margin-left: 0.125em;
         cursor: pointer;
         transition: box-shadow 0.15s ease 0.05s;
 
@@ -185,6 +182,15 @@ body {
         text-decoration: none;
         font-weight: 500;
         line-height: 1;
-        text-indent: 0;
+        font-size: 1.5em;
+    }
+}
+
+.footnotes {
+    ol {
+        margin-left: 1rem;
+    }
+    li {
+        list-style: decimal;
     }
 }
