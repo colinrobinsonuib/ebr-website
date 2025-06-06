@@ -19,35 +19,112 @@ const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 ---
 
 <BaseLayout title={post.data.title}>
-	<div class="max-w-7xl mx-auto flex bg-white" style="border: 10px solid #54deff;">
+	<div class="mx-auto flex max-w-7xl bg-white" style="border: 10px solid #54deff;">
+		<aside class="border-black-200 hidden w-64 border-r lg:block">asd</aside>
 
-			<aside class="hidden lg:block w-64 border-r border-black-200 ">asd</aside>
-
-			<div class="relative flex-1 w-full lg:min-w-3xl ">
-				<div class="py-8 px-4 ">
-					<article class="prose text-lg m-auto">
-						<h1 class="mb-8 text-3xl font-semibold text-gray-900 dark:text-gray-50">
-							{post.data.title}
-						</h1>
-						<Content />
-					</article>
-				</div>
+		<div class="relative w-full flex-1 lg:min-w-3xl">
+			<div class="px-4 py-8">
+				<article class="prose m-auto text-lg">
+					<h1 class="mb-8 text-3xl font-semibold text-gray-900 dark:text-gray-50">
+						{post.data.title}
+					</h1>
+					<Content />
+				</article>
 			</div>
+		</div>
 
-			<!-- Right aside -->
-			<aside class="hidden xl:block w-64 border-l border-black-200 ">
-				<div class="p-4">
-					<div class="space-y-4">
-						<div class="text-sm text-gray-600">
-							<h4 class="mb-2 font-medium text-gray-900">Table of Contents</h4>
-							<ul class="space-y-1">
-								<li><a href="#" class="text-blue-600 hover:underline">Introduction</a></li>
-								<li><a href="#" class="text-blue-600 hover:underline">Material Letters</a></li>
-								<li><a href="#" class="text-blue-600 hover:underline">Digital Materiality</a></li>
-							</ul>
-						</div>
+		<!-- Right aside -->
+		<aside class="border-black-200 hidden w-64 border-l xl:block">
+			<div class="p-4">
+				<div class="space-y-4">
+					<div class="text-sm text-gray-600">
+						<h4 class="mb-2 font-medium text-gray-900">Table of Contents</h4>
+						<ul class="space-y-1">
+							<li><a href="#" class="text-blue-600 hover:underline">Introduction</a></li>
+							<li><a href="#" class="text-blue-600 hover:underline">Material Letters</a></li>
+							<li><a href="#" class="text-blue-600 hover:underline">Digital Materiality</a></li>
+						</ul>
 					</div>
 				</div>
-			</aside>
+			</div>
+		</aside>
 	</div>
 </BaseLayout>
+<script is:inline data-astro-rerun>
+	(() => {
+		// Get all margin note references and definitions
+		const refs = document.querySelectorAll('.marginnote-ref');
+		const defs = document.querySelectorAll('.marginnote-def');
+
+		// Create a map for quick lookup of related elements
+		const refToDefMap = new Map();
+		const defToRefsMap = new Map();
+
+		// Build the relationship maps
+		refs.forEach((ref) => {
+			const href = ref.getAttribute('href');
+			if (href && href.startsWith('#')) {
+				const defId = href.substring(1);
+				const def = document.getElementById(defId);
+				if (def) {
+					const refWrap = ref.parentNode;
+					refToDefMap.set(refWrap, def);
+
+					// Add this ref to the definition's refs array
+					if (!defToRefsMap.has(def)) {
+						defToRefsMap.set(def, []);
+					}
+					defToRefsMap.get(def).push(refWrap);
+				}
+			}
+		});
+
+		// Add hover effects for references
+		refs.forEach((ref) => {
+			const refWrap = ref.parentNode;
+			const relatedDef = refToDefMap.get(refWrap);
+			if (relatedDef) {
+				// When hovering over reference, apply hover effect to definition
+				refWrap.addEventListener('mouseenter', () => {
+					relatedDef.classList.add('hover-effect');
+				});
+
+				refWrap.addEventListener('mouseleave', () => {
+					relatedDef.classList.remove('hover-effect');
+				});
+
+				ref.addEventListener('click', (event) => {
+					relatedDef.classList.toggle('toggle-effect');
+
+					// Convert rem to px and compare to xl (80rem)
+					if (
+						window.innerWidth <=
+						80 * parseFloat(getComputedStyle(document.documentElement).fontSize)
+					) {
+						event.stopPropagation();
+						event.preventDefault();
+					}
+				});
+			}
+		});
+
+		// Add hover effects for definitions
+		defs.forEach((def) => {
+			const relatedRefs = defToRefsMap.get(def);
+			if (relatedRefs) {
+				// When hovering over definition, apply hover effect to all related references
+				def.addEventListener('mouseenter', () => {
+					relatedRefs.forEach((refWrap) => {
+						refWrap.classList.add('hover-effect');
+					});
+				});
+
+				def.addEventListener('mouseleave', () => {
+					relatedRefs.forEach((refWrap) => {
+						refWrap.classList.remove('hover-effect');
+					});
+				});
+			}
+		});
+	})();
+</script>

@@ -9,6 +9,13 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+    --font-sans: "Source Sans 3 Variable", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", "Liberation Mono", monospace;
+    --font-serif: "Source Serif 4 Variable", "Times New Roman", serif;
+    --color-electric-blue: #54deff;
+}
+
 @utility container {
     margin-inline: auto;
 }
@@ -41,29 +48,25 @@
     }
 }
 
-@theme {
-    --font-sans: "Source Sans 3 Variable", ui-sans-serif, system-ui, sans-serif;
-    --font-mono: "IBM Plex Mono", "Liberation Mono", monospace;
-    --font-serif: "Source Serif 4 Variable", "Times New Roman", serif;
-
-    --color-electric-blue: #54deff;
-    /*--container-7xl: 85rem;*/
+:root {
+    --cursor-pointer: url('/public/cursor-pointer.svg'), pointer
 }
 
 /*
 @media (hover: hover) and (pointer: fine) {
     body {
-        cursor: url('/cursor-default.svg'), auto;
+        cursor: url('/public/cursor-default.svg'), auto;
     }
 }
 @media (hover: hover) and (pointer: fine) {
     p, h1, h2, h3, h4, h5, h6, input[type=text], input[type=tel], input[type=email], input[type=search], textarea {
-        cursor: url('/cursor-text.svg'), auto;
+        cursor: url('/public/cursor-text.svg'), auto;
     }
 }
+
 @media (hover: hover) and (pointer: fine) {
     a, a *, button:not(.tooltip-btn), button:not(.tooltip-btn) *, select, input[type=checkbox] {
-        cursor: url('/cursor-pointer.svg'), auto;
+        cursor: var(--cursor-pointer);
     }
 }
 */
@@ -74,93 +77,11 @@
 }
 
 body {
-    background-image: url('/background.svg');
+    background-image: url('/public/background.svg');
     background-repeat: repeat;
     background-position-x: 18px;
     background-position-y: top;
     background-color: #ededed;
-}
-
-@layer components {
-    .article-prose {
-        font-size: var(--text-xl);
-        > * {
-            /*width: 75%;*/
-        }
-        a {
-            color: var(--color-blue-500);
-        }
-
-        .marginnote-ref-wrapper {
-            transition: box-shadow 0.15s ease 0.05s;
-        }
-        .marginnote-ref-wrapper:hover {
-            --o-v-o: 4px;
-            --o-p: 4px;
-            --o-h-s: 2px;
-            --background-color: #ffffff;
-            --highlighted-link-outline-color: #8b8b8b;
-            box-shadow: var(--o-h-s) var(--o-v-o) 0 var(--o-p) var(--background-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 var(--o-p) var(--background-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 1px) var(--highlighted-link-outline-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 1px) var(--highlighted-link-outline-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 2px) var(--background-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 2px) var(--background-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 3px) var(--highlighted-link-outline-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 3px) var(--highlighted-link-outline-color);
-        }
-        .marginnote-ref {
-            font-size: var(--text-sm);
-            color: var(--color-black)
-        }
-
-        /*.marginnote-def {*/
-        /*    float: right;*/
-        /*    clear: right;*/
-        /*    margin-right: -30%;*/
-        /*    width: 25%;*/
-        /*    margin-top: 0.3rem;*/
-        /*    line-height: 1.3;*/
-        /*    vertical-align: baseline;*/
-        /*    position: relative;*/
-        /*    padding-bottom: 0.5em;*/
-        /*    border-bottom: 1px dotted #666;*/
-        /*    margin-bottom: 2em;*/
-        /*    font-size: var(--text-sm);*/
-        /*    font-weight: var(--font-weight-normal);*/
-        /*}*/
-
-        .marginnote-def {
-            float: left;
-            margin-left: -33.333333%;
-            width: 25%;
-            clear: left;
-            font-size: 0.875rem;
-            line-height: 1.25rem;
-            color: #6b7280;
-            padding-right: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .marginnote-def::before {
-            content: "";
-            position: absolute;
-            top: calc(29px);
-            left: 0;
-            width: 100%;
-            height: 0;
-            border-bottom: 1px dotted #666;
-        }
-
-        .marginnote-number {
-            display: block;
-            width: 30px;
-            height: 30px;
-            line-height: 30px;
-            text-align: center;
-            border: 1px dotted #666;
-            border-bottom: 0;
-            margin-bottom: 0.5em;
-        }
-
-        .marginnote-backref {
-            margin-left: 0.5em;
-            text-decoration: none;
-        }
-    }
 }
 
 @layer components {
@@ -169,11 +90,12 @@ body {
         p {
             margin: 1em 0;
             @variant md {
-                hyphens: auto;
                 line-height: 2rem;
-                text-indent: 1.5rem;
                 margin: 1.2em 0;
                 text-align: left;
+            }
+            @variant lg {
+                text-indent: 1.5rem;
             }
         }
         a {
@@ -184,25 +106,32 @@ body {
 
 
 .marginnote-def {
-    display: block;
+    display: none;
     font-size: 0.9rem;
     line-height: 1.2rem;
     margin: 1rem 1.5em 1.5rem 1.5em;
     text-indent: 0;
     color: #333;
+    float: left;
+    clear: both;
+    width: 95%;
 
     .marginnote-number,
     .marginnote-backref {
         display: none;
     }
 
+    &.toggle-effect {
+        display: block;
+    }
+
     @variant xl {
+        display: block;
         float: right;
-        clear: right;
-        margin-right: -45%;
         width: calc(var(--spacing) * 60);
+        margin-right: -45%;
         padding: 2rem 1.5rem;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
         color: black;
         font-family: var(--font-mono);
         background: #54deff;
@@ -210,7 +139,7 @@ body {
         margin-top: -1rem;
         transition: box-shadow 0.15s ease 0.05s;
 
-        &:hover {
+        &:hover, &.hover-effect {
             box-shadow: inset 0 0 0 1px black, inset 0 0 0 10px #54deff, inset 0 0 0 12px black;
         }
 
@@ -229,19 +158,23 @@ body {
 }
 
 .marginnote-ref-wrapper {
-    display: none;
+    padding: 2px;
+    top: -0.2em;
+
     @variant xl {
         display: inline;
+        top: revert-layer;
         margin-left: 0.125em;
         cursor: pointer;
         transition: box-shadow 0.15s ease 0.05s;
 
-        &:hover {
+        &:hover, &.hover-effect {
             --o-v-o: 2px;
             --o-p: 4px;
             --o-h-s: 2px;
             box-shadow: var(--o-h-s) var(--o-v-o) 0 var(--o-p) var(--background-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 var(--o-p) var(--background-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 1px) var(--highlighted-link-outline-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 1px) var(--highlighted-link-outline-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 2px) var(--background-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 2px) var(--background-color), var(--o-h-s) var(--o-v-o) 0 calc(var(--o-p) + 3px) var(--highlighted-link-outline-color), calc(-1 * var(--o-h-s)) var(--o-v-o) 0 calc(var(--o-p) + 3px) var(--highlighted-link-outline-color);
         }
+
     }
 
     .marginnote-ref {

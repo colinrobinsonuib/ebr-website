@@ -10,3 +10,8 @@ export function capitalizeFirstLetter(val: string) {
 export async function processBlurb(blurb: string) {
 	return await unified().use(remarkParse).use(remarkRehype).use(rehypeStringify).process(blurb);
 }
+
+export const tailwindBreakpoints = {
+	md: '48rem',
+	lg: '64rem',
+};
