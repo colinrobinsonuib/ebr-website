@@ -24,12 +24,15 @@ const { Content } = await render(post);
 
 const threadColor = post.data.thread ? threadColors[post.data.thread] : '#000';
 ---
-<style>
+<style is:inline>
 	.bg-thread {
 		background-color: var(--threadColor);
 	}
 	.border-thread {
 		border-color: var(--threadColor);
+	}
+	#blurb p {
+		margin: 0 0 1em;
 	}
 </style>
 
@@ -70,7 +73,7 @@ const threadColor = post.data.thread ? threadColors[post.data.thread] : '#000';
 			</aside>
 
 			<main class=" relative w-full flex-1 lg:min-w-3xl px-4 py-8">
-					<article class="m-auto prose text-lg">
+					<article class="m-auto max-w-[75ch] text-lg">
 						<PostType type={post.data.type} />
 						<h1 class="text-3xl font-semibold dark:text-gray-50 mb-5" set:html={title}></h1>
 						<div class="text-red-500 w-fit italic text-xl font-mono border-b mb-5">
@@ -79,8 +82,16 @@ const threadColor = post.data.thread ? threadColors[post.data.thread] : '#000';
 								<a class="hover:text-black" href={'/authors/' + author.id}>{author.data.title}</a>
 							)).reduce((prev, curr) => [prev, ', ', curr])}
 						</div>
-						<div class="font-mono text-xl" title={'last modified: ' + post.data.modified_date.toISOString().split('T')[0]}>{post.data.publish_date.toISOString().split('T')[0]}</div>
-						<Content />
+						<div class="font-mono text-xl mb-5" title={'last modified: ' + post.data.modified_date.toISOString().split('T')[0]}>{post.data.publish_date.toISOString().split('T')[0]}</div>
+
+						<div class="flow-root my-5">
+							{post.data.image && <img alt="featured image" src={post.data.image} class="h-40 w-40 mt-2 mb-1 mr-5 float-left"  />}
+							{blurb && <div id="blurb" class="tracking-wide font-serif italic text-base" set:html={blurb}></div>}
+						</div>
+
+						<div class="prose">
+							<Content />
+						</div>
 					</article>
 			</main>
 
