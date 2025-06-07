@@ -1,8 +1,68 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { threadTitles } from '../lib/threads';
+import Tab from '../components/ui/Tab.astro';
 ---
-<BaseLayout title='A new start'>
-	<div class="container">
-		<h1 class="font-bold">It begins</h1>
+
+<BaseLayout title="ebr">
+	<div
+		class="mx-auto mt-10 flex min-h-96 max-w-7xl flex-col border bg-white"
+		style="border-radius: 4rem">
+		<header class="mx-auto mt-30 text-center">
+			<h1 class="text-7xl font-semibold text-black">electronic book review</h1>
+			<p class="mt-6 font-serif text-2xl font-light tracking-tight text-neutral-600">
+				digital futures of literature, theory, criticism, and the arts
+			</p>
+			<nav class="mt-20 items-center space-x-4 text-xl">
+				<a
+					href="/about"
+					class="border-b border-transparent text-black transition-colors hover:border-black">
+					about
+				</a>
+				<span class="text-gray-400">|</span>
+				<a
+					href="/submissions"
+					class="border-b border-transparent text-black transition-colors hover:border-black">
+					submissions
+				</a>
+				<span class="text-gray-400">|</span>
+				<a
+					href="/publications"
+					class="border-b border-transparent text-black transition-colors hover:border-black">
+					publications
+				</a>
+				<span class="text-gray-400">|</span>
+				<a
+					href="/gatherings"
+					class="border-b border-transparent text-black transition-colors hover:border-black">
+					gatherings
+				</a>
+				<span class="text-gray-400">|</span>
+				<a
+					href="/newsletters"
+					class="border-b border-transparent text-black transition-colors hover:border-black">
+					newsletters
+				</a>
+				<span class="text-gray-400">|</span>
+				<a
+					href="/subscribe"
+					class="border-b border-transparent text-black transition-colors hover:border-black">
+					subscribe
+				</a>
+			</nav>
+		</header>
+
+		<div>
+			<div class="flex flex-col">
+				<div class="flex flex-row">
+						<Tab />
+						<Tab />
+				</div>
+				<div class="flex flex-row">
+						<Tab />
+						<Tab />
+				</div>
+			</div>
+		</div>
 	</div>
 </BaseLayout>
