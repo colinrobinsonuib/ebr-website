@@ -13,7 +13,8 @@
     --font-sans: "Source Sans 3 Variable", ui-sans-serif, system-ui, sans-serif;
     --font-mono: "IBM Plex Mono", "Liberation Mono", monospace;
     --font-serif: "Source Serif 4 Variable", "Times New Roman", serif;
-    --color-electric-blue: #54deff;
+
+    --color-gathering: #24ccff;
 }
 
 @utility container {
@@ -74,6 +75,7 @@
 :root {
     --background-color: #ffffff;
     --highlighted-link-outline-color: #8b8b8b;
+    --threadColor: #000000;
 }
 
 body {
@@ -130,7 +132,7 @@ body {
         margin-bottom: 2rem;
         color: black;
         font-family: var(--font-mono);
-        background: #54deff;
+        background: var(--threadColor);
         hyphens: auto;
         margin-top: -1rem;
         transition: box-shadow 0.15s ease 0.05s;

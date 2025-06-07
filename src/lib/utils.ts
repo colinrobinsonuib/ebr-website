@@ -28,3 +28,10 @@ export async function extractWorksCited(markdownString: string | undefined) {
 		await unified().use(remarkParse).use(remarkRehype).use(rehypeStringify).process(afterWorksCited)
 	).toString();
 }
+
+export function hasGlosses(markdownString: string | undefined): boolean {
+	if (!markdownString) return false;
+
+	const worksCitedIndex = markdownString.indexOf('[+');
+	return worksCitedIndex !== -1;
+}

@@ -1,0 +1,82 @@
+---
+import { getCollection } from 'astro:content';
+import ContentLayout from '../../../../layouts/ContentLayout.astro';
+import { extractWorksCited } from '../../../../lib/utils';
+import { threadColors, threadDescriptions, threadTitles } from '../../../../lib/threads';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('posts');
+	return posts.map((post) => ({
+		params: { id: post.id, postType: post.data.type },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+
+const worksCited = await extractWorksCited(post.body);
+
+const threadColor = post.data.thread ? threadColors[post.data.thread] : '#000';
+const postTypeColor = '#12ff93';
+---
+<style define:vars={{ threadColor, postTypeColor }}>
+	.bg-thread {
+		background-color: var(--threadColor);
+	}
+	.border-thread {
+		border-color: var(--threadColor);
+	}
+	.bg-postType {
+		background-color: var(--postTypeColor);
+	}
+</style>
+
+<ContentLayout title={post.data.title}>
+	<div class="mx-auto mt-6 flex max-w-7xl flex-col">
+		{
+			post.data.thread && (
+				<div class="flex flex-row">
+					<div class="relative h-24 w-64">
+						<a
+							href={'/threads/' + post.data.thread}
+							class="bg-thread absolute bottom-0 flex w-64 translate-y-20 transform cursor-pointer flex-col rounded-t-4xl py-6 text-center font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-4">
+							<span class="text-black ">{threadTitles[post.data.thread]}</span>
+							<span class="mt-6 text-balance text-black">
+								read more in {threadTitles[post.data.thread]}
+							</span>
+						</a>
+					</div>
+					<a
+						href={Astro.url.pathname.replace('/works-cited', '')}
+						class="h-24 w-64 translate-y-5 cursor-pointer rounded-t-4xl bg-postType text-black py-6 text-center font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-3">
+						{post.data.type}
+					</a>
+				</div>
+			)
+		}
+		<div class="border-thread relative flex flex-row border-10 bg-white">
+			<aside class="border-neutral-500 mt-36 hidden w-64  lg:block">
+				<div>
+					{
+						post.data.thread && (
+							<p class="p-4 font-mono text-sm text-gray-500">
+								{threadDescriptions[post.data.thread].date}
+								<br />
+								<br />
+								{threadDescriptions[post.data.thread].text}
+							</p>
+						)
+					}
+				</div>
+			</aside>
+
+			<main class="bg-black text-white relative w-full flex-1 lg:min-w-3xl px-4 py-8">
+				<article class="prose m-auto text-lg" set:html={worksCited}>
+				</article>
+			</main>
+
+			<aside class="border-neutral-500 mt-36 hidden w-64 xl:block">
+			</aside>
+		</div>
+	</div>
+</ContentLayout>

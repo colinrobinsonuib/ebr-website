@@ -1,9 +1,10 @@
 ---
-import { getCollection, render } from 'astro:content';
-import ContentLayout from '../../layouts/ContentLayout.astro';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { extractWorksCited, processBlurb } from '../../lib/utils';
-import { threadTitles } from '../../lib/enums';
+import { getEntries, getCollection, render } from 'astro:content';
+import ContentLayout from '../../../layouts/ContentLayout.astro';
+import { hasGlosses, processBlurb } from '../../../lib/utils';
+import { threadColors, threadDescriptions, threadTitles } from '../../../lib/threads';
+import PostType from '../../../components/ui/PostType.astro';
+import { renderTitle } from '../../../lib/renderTitle';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('posts');
@@ -14,80 +15,91 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
 
-const worksCited = await extractWorksCited(post.body);
-console.log(worksCited)
+const authors = await getEntries(post.data.authors);
 
 const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
----
+const title = await renderTitle(post.data.title);
+const { Content } = await render(post);
 
-<ContentLayout title={post.data.title}>
-	<div class="mx-auto mt-6 flex max-w-7xl flex-col">
+const threadColor = post.data.thread ? threadColors[post.data.thread] : '#000';
+---
+<style>
+	.bg-thread {
+		background-color: var(--threadColor);
+	}
+	.border-thread {
+		border-color: var(--threadColor);
+	}
+</style>
+
+<ContentLayout title={title}>
+	<div class="mx-auto mt-6 flex max-w-7xl flex-col" style={'--threadColor: ' + threadColor}>
 		{
 			post.data.thread && (
 				<div class="flex flex-row">
 					<div class="relative h-24 w-64">
 						<a
 							href={'/threads/' + post.data.thread}
-							class="bg-electric-blue absolute bottom-0 flex w-64 translate-y-20 transform cursor-pointer flex-col rounded-t-4xl py-6 text-center font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-4">
+							class="bg-thread absolute bottom-0 flex w-64 translate-y-20 transform cursor-pointer flex-col rounded-t-4xl py-6 text-center font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-4">
 							<span class="text-white">{threadTitles[post.data.thread]}</span>
 							<span class="mt-6 text-balance text-black">
 								read more in {threadTitles[post.data.thread]}
 							</span>
 						</a>
 					</div>
-					<div id="works-cited-tab"
-						class="bg-black h-24 w-64 cursor-pointer rounded-t-4xl py-6 text-center translate-y-5 font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-3">
-						<span class="text-white">works cited</span>
-					</div>
+					<a
+						id="works-cited-tab"
+						href={Astro.url.pathname + '/works-cited'}
+						class="h-24 w-64 translate-y-5 cursor-pointer rounded-t-4xl bg-black text-white py-6 text-center font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-3">
+						works cited
+					</a>
 				</div>
 			)
 		}
-		<div class="border-electric-blue relative flex flex-row border-10 bg-white">
-			<aside class="border-black-200 hidden w-64 border-r lg:block">
-				<div>
-					<p class="p-4 font-mono text-sm text-gray-500">
-						ebr is an online, open access, peer-reviewed journal of critical writing produced and
-						published by the emergent digital literary network.
-					</p>
-				</div>
+		<div class="border-thread relative flex flex-row border-10 bg-white">
+			<aside class="border-neutral-500 mt-36 hidden w-64 border-r-2 lg:block">
+					{
+						post.data.thread && (
+							<div class="p-4 font-mono mt-[-9rem] text-sm text-gray-400">
+								<span class="italic">{threadDescriptions[post.data.thread].text}</span>
+								<div class="text-right">- {threadDescriptions[post.data.thread].date}</div>
+							</div>
+						)
+					}
 			</aside>
 
-			<div class="relative w-full flex-1 lg:min-w-3xl ">
-				<div class="px-4 py-8">
-					<article class="prose m-auto text-lg">
-						<h1 class="mb-8 text-3xl font-semibold dark:text-gray-50">
-							{post.data.title}
-						</h1>
-						<a href="">{post.data.title}</a>
+			<main class=" relative w-full flex-1 lg:min-w-3xl px-4 py-8">
+					<article class="m-auto prose text-lg">
+						<PostType type={post.data.type} />
+						<h1 class="text-3xl font-semibold dark:text-gray-50 mb-5" set:html={title}></h1>
+						<div class="text-red-500 w-fit italic text-xl font-mono border-b mb-5">
+							<span>by </span>
+							{authors.map(author => (
+								<a class="hover:text-black" href={'/authors/' + author.id}>{author.data.title}</a>
+							)).reduce((prev, curr) => [prev, ', ', curr])}
+						</div>
+						<div class="font-mono text-xl" title={'last modified: ' + post.data.modified_date.toISOString().split('T')[0]}>{post.data.publish_date.toISOString().split('T')[0]}</div>
 						<Content />
 					</article>
-
-					{worksCited && <article id="works-cited-article" class="prose  m-auto text-lg hidden" set:html={worksCited}></article>}
-				</div>
-			</div>
+			</main>
 
 			<!-- Right aside -->
-			<aside class="border-black-200 mt-20 hidden w-64 border-l xl:block">
-				<div class="bg-electric-blue float-right mr-[-0.5rem] w-[15rem] p-2 text-white">
-					<h4 class="font-medium tracking-wider">Glosses ▼</h4>
-				</div>
+			<aside class="border-neutral-500 mt-36 hidden w-64 border-l-2 xl:block">
+				{
+					hasGlosses(post.body) && (
+						<div class="bg-thread float-right mr-[-0.5rem] w-[15rem] p-2">
+							<h4 class="text-white font-medium tracking-wider">Glosses ▼</h4>
+						</div>
+					)
+				}
 			</aside>
 		</div>
 	</div>
 </ContentLayout>
 
 <script is:inline data-astro-rerun>
-
 	(() => {
-
-		document.getElementById("works-cited-tab").addEventListener("click", () => {
-			document.querySelectorAll("article").forEach((el) => {
-				el.classList.toggle("hidden");
-			});
-		});
-
 		// Get all margin note references and definitions
 		const refs = document.querySelectorAll('.marginnote-ref');
 		const defs = document.querySelectorAll('.marginnote-def');

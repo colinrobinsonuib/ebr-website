@@ -10,6 +10,7 @@ thread: electropoetics
 peer_reviewed: false
 authors:
 - john-zuern
+- lisa-swanstrom
 image: https://images.electronicbookreview.com/2012/01/Zuern2-150x150.jpg
 ---
 

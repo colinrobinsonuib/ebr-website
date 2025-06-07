@@ -1,0 +1,9 @@
+---
+import { type PostType, postTypeColors } from '../../lib/postTypes';
+const { type } = Astro.props;
+const postTypeColor = postTypeColors[type as PostType];
+
+const tooltip = (type==='article') ? 'Articles are peer reviewed' : '';
+---
+
+<a href={'/' + type + 's'} title={tooltip} class="mb-6 flex h-8 w-34 font-mono text-xl items-center justify-center" style={'background-color: '+postTypeColor}>{type}</a>
