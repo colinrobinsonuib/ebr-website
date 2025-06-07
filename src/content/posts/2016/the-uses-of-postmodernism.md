@@ -43,14 +43,14 @@ Just like modernism, postmodernism has been put to very different uses in differ
 
 At first glance, tracing the uses of the term *postmodernism* would seem only to reinforce a temporally and spatially hierarchical structure of origins in the United States in the 1970s, followed by development in Western Europe in the late 1970s and 1980s, before the term is adopted in more peripheral regions of the world literary-system in the late 1980s and 1990s. Indeed, the various Google Books n-grams of the term's use visualize waves of influence extending outwards from the Anglo-American center, with the peak in the crest rising and falling later in such semi-peripheries as Russia and China (compare figs. 1, 2, and 3). Postmodernism, then, would seem to be the perfect example of a wave-like process of global literary influence and change, as proposed by Franco Moretti in relation to the worldwide spread of the novel.
 
-[![](https://images.electronicbookreview.com/2016/09/fig-1-postmodernism-in-English.jpg)](http://dtc-wsuv.org/ebr/wp-content/uploads/2016/09/fig-1-postmodernism-in-English.jpg)
-[fig 1 postmodernism in English.jpg](http://dtc-wsuv.org/ebr/wp-content/uploads/2016/09/fig-1-postmodernism-in-English.jpg) (large version in separate window)
+[![](https://images.electronicbookreview.com/2016/09/fig-1-postmodernism-in-English.jpg)](https://images.electronicbookreview.com/2016/09/fig-1-postmodernism-in-English.jpg)
+[fig 1 postmodernism in English.jpg](https://images.electronicbookreview.com/2016/09/fig-1-postmodernism-in-English.jpg) (large version in separate window)
 
-[![](https://images.electronicbookreview.com/2016/09/fig-2-postmodernism-in-Russian.jpg)](http://dtc-wsuv.org/ebr/wp-content/uploads/2016/09/fig-2-postmodernism-in-Russian.jpg)
-[fig 2 postmodernism in Russian.jpg](http://dtc-wsuv.org/ebr/wp-content/uploads/2016/09/fig-2-postmodernism-in-Russian.jpg) (large version in separate window)
+[![](https://images.electronicbookreview.com/2016/09/fig-2-postmodernism-in-Russian.jpg)](https://images.electronicbookreview.com/2016/09/fig-2-postmodernism-in-Russian.jpg)
+[fig 2 postmodernism in Russian.jpg](https://images.electronicbookreview.com/2016/09/fig-2-postmodernism-in-Russian.jpg) (large version in separate window)
 
-[![](https://images.electronicbookreview.com/2016/09/fig-3-postmodernism-in-Chinese.jpg)](http://dtc-wsuv.org/ebr/wp-content/uploads/2016/09/fig-3-postmodernism-in-Chinese.jpg)
-[fig 3 postmodernism in Chinese.jpg](http://dtc-wsuv.org/ebr/wp-content/uploads/2016/09/fig-3-postmodernism-in-Chinese.jpg) (large version in separate window)
+[![](https://images.electronicbookreview.com/2016/09/fig-3-postmodernism-in-Chinese.jpg)](https://images.electronicbookreview.com/2016/09/fig-3-postmodernism-in-Chinese.jpg)
+[fig 3 postmodernism in Chinese.jpg](https://images.electronicbookreview.com/2016/09/fig-3-postmodernism-in-Chinese.jpg) (large version in separate window)
 
 Figures 1–3 use Google Books Ngram corpuses to compare the changes between 1975 and 2008 in the word frequency of the term *postmodernism* in English (fig. 1) and its cognates in Russian (fig. 2) and simplified Chinese (fig. 3).
 
