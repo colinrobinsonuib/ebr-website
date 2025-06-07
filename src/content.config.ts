@@ -7,8 +7,8 @@ import { CONTENT_DIR } from 'astro:env/server';
 export const baseSchema = z.object({
 	title: z.string().min(1, { message: 'Title is required.' }),
 	slug: z.string(),
-	publish_date: z.coerce.date().default(new Date()),
-	modified_date: z.coerce.date().default(new Date()),
+	publish_date: z.coerce.date().optional(),
+	modified_date: z.coerce.date(),
 });
 export type BaseItem = {
 	id: string;

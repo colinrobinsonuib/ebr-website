@@ -26,9 +26,12 @@ const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 	</div>
 	<div class="flex flex-col border-t-2 pt-2">
 		<h3 class="font-semibold underline" set:html={renderTitle(post.data.title)}></h3>
-		<div class="italic text-lg">by {authors.map(author => (
-			<a href={`/authors/${author.id}`}>{author.data.title}</a>
-		)).reduce((prev, curr) => [prev, ', ', curr])}</div>
+		{ authors &&
+			<div class="italic text-lg">by {authors.map(author => (
+					<a href={`/authors/${author.id}`}>{author.data.title}</a>
+				)).reduce((prev, curr) => [prev, ', ', curr]) }
+			</div>
+		}
 		<div class="my-2 blurb">{blurb}</div>
 	</div>
 	<div class="ml-20 min-w-[200px] items-center flex">
