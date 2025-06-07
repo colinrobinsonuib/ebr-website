@@ -1,19 +1,28 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { threadTitles } from '../lib/threads';
-import Tab from '../components/ui/Tab.astro';
+import { threads, threadTitles, threadColors } from '../lib/threads';
+import PostSnippet from '../components/widget/PostSnippet.astro';
+
+const allPosts = await getCollection('posts');
+allPosts.sort(
+	(a, b) => new Date(b.data.publish_date).getTime() - new Date(a.data.publish_date).getTime()
+);
+const latestPosts = allPosts.slice(0, 10);
+// Track last rendered year
+let latestPostsYear:number|null = null;
 ---
 
 <BaseLayout title="ebr">
 	<div
-		class="mx-auto mt-10 flex min-h-96 max-w-7xl flex-col border bg-white"
-		style="border-radius: 4rem">
+		class="mx-auto mt-10 flex min-h-96 max-w-7xl flex-col border bg-white overflow-hidden"
+		style="border-top-left-radius: 4rem; border-top-right-radius: 4rem;">
 		<header class="mx-auto mt-30 text-center">
 			<h1 class="text-7xl font-semibold text-black">electronic book review</h1>
 			<p class="mt-6 font-serif text-2xl font-light tracking-tight text-neutral-600">
 				digital futures of literature, theory, criticism, and the arts
 			</p>
-			<nav class="mt-20 items-center space-x-4 text-xl">
+			<nav class="mt-20 mb-30 items-center space-x-4 text-xl">
 				<a
 					href="/about"
 					class="border-b border-transparent text-black transition-colors hover:border-black">
@@ -52,17 +61,84 @@ import Tab from '../components/ui/Tab.astro';
 			</nav>
 		</header>
 
-		<div>
-			<div class="flex flex-col">
-				<div class="flex flex-row">
-						<Tab />
-						<Tab />
-				</div>
-				<div class="flex flex-row">
-						<Tab />
-						<Tab />
+		<div class="relative">
+			<div id="tabs-container" class="relative"></div>
+			<div id="sort_bar" class="flex flex-row text-lg font-mono px-6">
+				<span class="text-gray-200">Sort by:</span>
+				<div class="text-white ml-6">
+					<button class="text-red-500">latest</button>
+					<span class="text-gray-400">|</span>
+					<button>oldest</button>
 				</div>
 			</div>
 		</div>
+
+		<main class="bg-white z-50 px-6">
+			{latestPosts.map((post) => {
+				const year = new Date(post.data.publish_date).getFullYear();
+				const yearChanged = year !== latestPostsYear;
+				latestPostsYear = year;
+				return (
+					<>
+						{yearChanged && <h2 class="ml-41 my-6 text-5xl">{year}</h2>}
+						<PostSnippet post={post} />
+					</>
+				);
+			})}
+		</main>
+
 	</div>
+
+
+	<script is:inline define:vars={{ threads, threadTitles, threadColors }} data-astro-rerun>
+		(() => {
+
+			const container = document.getElementById('tabs-container');
+			let globalIndex = 0;
+			for (let rowIndex = 0; rowIndex < 3; rowIndex++) {
+				const row = document.createElement('div');
+				row.className = `tab-row-${rowIndex} flex relative z-${rowIndex * 10}`;
+
+				for (let tabIndex = 0; tabIndex < 5; tabIndex++) {
+					if (rowIndex === 0 && (tabIndex === 3 || tabIndex === 4)) continue;
+					const tabContainer = createTab(rowIndex, tabIndex, threads[globalIndex]);
+					row.appendChild(tabContainer);
+					globalIndex++;
+				}
+
+				container.appendChild(row);
+			}
+
+			function createTab(rowIndex, tabIndex, thread) {
+				const globalIndex = rowIndex * 5 + tabIndex;
+				const label = threadTitles[thread];
+				const color = threadColors[thread];
+				const description = `This is the content for Tab ${globalIndex + 1}. It contains important information and details about this particular tab.`;
+
+				const tabContainer = document.createElement('div');
+				tabContainer.className = `tab-container`;
+
+				const tab = document.createElement('div');
+				tab.className = `tab rounded-t-4xl  flex items-center justify-center shadow-md relative`;
+				tab.style.backgroundColor = color;
+				tab.innerHTML = `<span class="text-white font-medium text-lg">${label}</span>`;
+
+				const tabContent = document.createElement('div');
+				tabContent.className = `tab-content flex items-center justify-center px-4 shadow-md`;
+				tabContent.style.backgroundColor = color;
+				tabContent.innerHTML = `<span class="text-white text-xs text-center leading-tight">${description}</span>`;
+
+				setTimeout(() => {
+					const rect = tab.getBoundingClientRect();
+					tabContent.style.left = `${window.scrollX - rect.left}px`;
+				}, 1);
+
+				tabContainer.appendChild(tab);
+				tabContainer.appendChild(tabContent);
+
+				return tabContainer;
+			}
+
+		})();
+	</script>
 </BaseLayout>

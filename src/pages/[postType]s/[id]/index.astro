@@ -24,6 +24,7 @@ const { Content } = await render(post);
 
 const threadColor = post.data.thread ? threadColors[post.data.thread] : '#000';
 ---
+
 <style is:inline>
 	.bg-thread {
 		background-color: var(--threadColor);
@@ -51,56 +52,82 @@ const threadColor = post.data.thread ? threadColors[post.data.thread] : '#000';
 							</span>
 						</a>
 					</div>
-					<a
-						id="works-cited-tab"
-						href={Astro.url.pathname + '/works-cited'}
-						class="h-24 w-64 translate-y-5 cursor-pointer rounded-t-4xl bg-black text-white py-6 text-center font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-3">
-						works cited
-					</a>
+					<!--<a-->
+					<!--	id="works-cited-tab"-->
+					<!--	href={Astro.url.pathname + '/works-cited'}-->
+					<!--	class="h-24 w-64 translate-y-5 cursor-pointer rounded-t-4xl bg-black py-6 text-center font-mono text-lg text-white transition-transform duration-300 ease-in-out hover:translate-y-3">-->
+					<!--	works cited-->
+					<!--</a>-->
 				</div>
 			)
 		}
 		<div class="border-thread relative flex flex-row border-10 bg-white">
-			<aside class="border-neutral-500 mt-36 hidden w-64 border-r-2 lg:block">
-					{
-						post.data.thread && (
-							<div class="p-4 font-mono mt-[-9rem] text-sm text-gray-400">
-								<span class="italic">{threadDescriptions[post.data.thread].text}</span>
-								<div class="text-right">- {threadDescriptions[post.data.thread].date}</div>
-							</div>
-						)
-					}
+			<aside class="mt-36 hidden w-64 border-r-2 border-neutral-500 lg:block">
+				{
+					post.data.thread && (
+						<div class="mt-[-9rem] p-4 font-mono text-sm text-gray-400">
+							<span class="italic">{threadDescriptions[post.data.thread].text}</span>
+							<div class="text-right">- {threadDescriptions[post.data.thread].date}</div>
+						</div>
+					)
+				}
 			</aside>
 
-			<main class=" relative w-full flex-1 lg:min-w-3xl px-4 py-8">
-					<article class="m-auto max-w-[75ch] text-lg">
-						<PostType type={post.data.type} />
-						<h1 class="text-3xl font-semibold dark:text-gray-50 mb-5" set:html={title}></h1>
-						<div class="text-red-500 w-fit italic text-xl font-mono border-b mb-5">
-							<span>by </span>
-							{authors.map(author => (
-								<a class="hover:text-black" href={'/authors/' + author.id}>{author.data.title}</a>
-							)).reduce((prev, curr) => [prev, ', ', curr])}
-						</div>
-						<div class="font-mono text-xl mb-5" title={'last modified: ' + post.data.modified_date.toISOString().split('T')[0]}>{post.data.publish_date.toISOString().split('T')[0]}</div>
+			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
+				<article class="m-auto max-w-[75ch] text-lg">
+					<PostType type={post.data.type} />
+					<h1 class="mb-5 text-3xl font-semibold dark:text-gray-50" set:html={title} />
+					<div class="mb-5 w-fit border-b font-mono text-xl text-red-500 italic">
+						<span>by </span>
+						{
+							authors
+								.map((author) => (
+									<a class="hover:text-black" href={'/authors/' + author.id}>
+										{author.data.title}
+									</a>
+								))
+								.reduce((prev, curr) => [prev, ', ', curr])
+						}
+					</div>
+					<div
+						class="mb-5 font-mono text-xl"
+						title={'last modified: ' + post.data.modified_date.toISOString().split('T')[0]}>
+						{post.data.publish_date.toISOString().split('T')[0]}
+					</div>
 
-						<div class="flow-root my-5">
-							{post.data.image && <img alt="featured image" src={post.data.image} class="h-40 w-40 mt-2 mb-1 mr-5 float-left"  />}
-							{blurb && <div id="blurb" class="tracking-wide font-serif italic text-base" set:html={blurb}></div>}
-						</div>
+					<div class="my-5 flow-root">
+						{
+							post.data.image && (
+								<img
+									alt="featured image"
+									src={post.data.image}
+									class="float-left mt-2 mr-5 mb-1 h-40 w-40"
+								/>
+							)
+						}
+						{
+							blurb && (
+								<div
+									id="blurb"
+									class="font-serif text-base tracking-wide italic"
+									set:html={blurb}
+								/>
+							)
+						}
+					</div>
 
-						<div class="prose">
-							<Content />
-						</div>
-					</article>
+					<div class="prose">
+						<Content />
+					</div>
+				</article>
 			</main>
 
 			<!-- Right aside -->
-			<aside class="border-neutral-500 mt-36 hidden w-64 border-l-2 xl:block">
+			<aside class="mt-36 hidden w-64 border-l-2 border-neutral-500 xl:block">
 				{
 					hasGlosses(post.body) && (
 						<div class="bg-thread float-right mr-[-0.5rem] w-[15rem] p-2">
-							<h4 class="text-white font-medium tracking-wider">Glosses ▼</h4>
+							<h4 class="font-medium tracking-wider text-white">Glosses ▼</h4>
 						</div>
 					)
 				}

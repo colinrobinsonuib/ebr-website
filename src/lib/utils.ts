@@ -35,3 +35,12 @@ export function hasGlosses(markdownString: string | undefined): boolean {
 	const worksCitedIndex = markdownString.indexOf('[+');
 	return worksCitedIndex !== -1;
 }
+
+export function prettyDate(date: Date) {
+	let str = new Intl.DateTimeFormat('en-GB', {
+		day: '2-digit',
+		month: 'short',
+		year: 'numeric',
+	}).format(date);
+	return str.replace(/ /g, '-');
+}

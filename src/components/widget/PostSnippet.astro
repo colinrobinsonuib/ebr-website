@@ -1,0 +1,46 @@
+---
+import PostType from '../ui/PostType.astro';
+const { post } = Astro.props;
+import { renderTitle } from '../../lib/renderTitle';
+import { prettyDate, processBlurb } from '../../lib/utils';
+import { getEntries } from 'astro:content';
+
+const authors = await getEntries(post.data.authors);
+const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
+---
+<style>
+	.blurb {
+		max-height: 7.5rem;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-line-clamp: 5;
+		-webkit-box-orient: vertical;
+	}
+</style>
+<div class="flex flex-row font-mono mb-10 min-h-50">
+	<div class="text-xl min-w-33 border-t-2 pt-2">
+		{prettyDate(post.data.publish_date)}
+	</div>
+	<div class="px-8 border-t-2 pt-2">
+		<PostType type={post.data.type} />
+	</div>
+	<div class="flex flex-col border-t-2 pt-2">
+		<h3 class="font-semibold underline" set:html={renderTitle(post.data.title)}></h3>
+		<div class="italic text-lg">by {authors.map(author => (
+			<a href={`/authors/${author.id}`}>{author.data.title}</a>
+		)).reduce((prev, curr) => [prev, ', ', curr])}</div>
+		<div class="my-2 blurb">{blurb}</div>
+	</div>
+	<div class="ml-20 min-w-[200px] items-center flex">
+		{
+			post.data.image && (
+				<img
+					alt="featured image"
+					src={post.data.image}
+					class="mt-6"
+					style="width: 190px; height: 190px"
+				/>
+			)
+		}
+	</div>
+</div>

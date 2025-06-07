@@ -227,3 +227,62 @@ body {
         list-style: decimal;
     }
 }
+
+
+.tab-row-0 {
+    transform: translateY(0px);
+}
+.tab-row-1 {
+    transform: translateY(-25px);
+}
+.tab-row-2 {
+    transform: translateY(-50px);
+}
+.tab-row-0, .tab-row-1 {
+    span {
+        margin-top: -10px;
+    }
+}
+
+.tab {
+    width: 256px;
+    height: 96px;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+    transform: translateY(1px);
+}
+
+.tab-container:hover {
+    transform: translateY(-96px);
+    z-index: 5;
+}
+
+.tab-content {
+    width: 100vw;
+    height: 96px;
+    position: absolute;
+    left: 0;
+    top: 96px;
+    transition: transform 0.3s ease-in-out;
+}
+
+
+.tab-container {
+    position: relative;
+    display: inline-block;
+    transition: transform 0.3s ease-in-out;
+}
+
+.z-20 {
+    z-index: 20;
+}
+
+#sort_bar {
+    z-index: 9999;
+    width: 100%;
+    bottom: 0;
+    height: 65px;
+    position: absolute;
+    background: black;
+    line-height: 65px;
+}
