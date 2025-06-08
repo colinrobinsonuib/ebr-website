@@ -1,10 +1,17 @@
 ---
 import { getEntries, getCollection, render } from 'astro:content';
 import ContentLayout from '../../../layouts/ContentLayout.astro';
-import { hasGlosses, processBlurb } from '../../../lib/utils';
+import { hasGlosses, prettyDate, prettyDateLong, extractWorksCited } from '../../../lib/utils';
 import { threadColors, threadDescriptions, threadTitles } from '../../../lib/threads';
-import PostType from '../../../components/ui/PostType.astro';
+
 import { renderTitle } from '../../../lib/renderTitle';
+
+import PostTabs from '../../../components/widget/PostTabs.svelte';
+import TabContent from '../../../components/widget/TabContent.svelte';
+import ByAuthors from '../../../components/ui/ByAuthors.astro';
+import PostType from '../../../components/ui/PostType.astro';
+import PostArticle from '../../../components/widget/PostArticle.astro';
+import { postTypeColors } from '../../../lib/postTypes';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('posts');
@@ -16,50 +23,18 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 
-const authors = await getEntries(post.data.authors);
-
-const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 const title = await renderTitle(post.data.title);
-const { Content } = await render(post);
+const authors = await getEntries(post.data.authors);
+const worksCited = await extractWorksCited(post.body);
 
 const threadColor = post.data.thread ? threadColors[post.data.thread] : '#000';
+const postTypeColor = postTypeColors[post.data.type] || '#000';
 ---
-
-<style is:inline>
-	.bg-thread {
-		background-color: var(--threadColor);
-	}
-	.border-thread {
-		border-color: var(--threadColor);
-	}
-	#blurb p {
-		margin: 0 0 1em;
-	}
-</style>
-
 <ContentLayout title={title}>
-	<div class="mx-auto mt-6 flex max-w-7xl flex-col" style={'--threadColor: ' + threadColor}>
+	<div class="mx-auto mt-6 flex max-w-7xl flex-col" style={'--threadColor: ' + threadColor + '; --postTypeColor: ' + postTypeColor}>
 		{
-			post.data.thread && (
-				<div class="flex flex-row">
-					<div class="relative h-24 w-64">
-						<a
-							href={'/threads/' + post.data.thread}
-							class="bg-thread absolute bottom-0 flex w-64 translate-y-20 transform cursor-pointer flex-col rounded-t-4xl py-6 text-center font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-4">
-							<span class="text-white">{threadTitles[post.data.thread]}</span>
-							<span class="mt-6 text-balance text-black">
-								read more in {threadTitles[post.data.thread]}
-							</span>
-						</a>
-					</div>
-					<!--<a-->
-					<!--	id="works-cited-tab"-->
-					<!--	href={Astro.url.pathname + '/works-cited'}-->
-					<!--	class="h-24 w-64 translate-y-5 cursor-pointer rounded-t-4xl bg-black py-6 text-center font-mono text-lg text-white transition-transform duration-300 ease-in-out hover:translate-y-3">-->
-					<!--	works cited-->
-					<!--</a>-->
-				</div>
-			)
+			post.data.thread &&
+			<PostTabs client:load postType={post.data.type} thread={post.data.thread} threadTitle={threadTitles[post.data.thread]}  />
 		}
 		<div class="border-thread relative flex flex-row border-10 bg-white">
 			<aside class="mt-36 hidden w-64 border-r-2 border-neutral-500 lg:block">
@@ -74,52 +49,12 @@ const threadColor = post.data.thread ? threadColors[post.data.thread] : '#000';
 			</aside>
 
 			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
-				<article class="m-auto max-w-[75ch] text-lg">
-					<PostType type={post.data.type} />
-					<h1 class="mb-5 text-3xl font-semibold dark:text-gray-50" set:html={title} />
-					<div class="mb-5 w-fit border-b font-mono text-xl text-red-500 italic">
-						<span>by </span>
-						{
-							authors
-								.map((author) => (
-									<a class="hover:text-black" href={'/authors/' + author.id}>
-										{author.data.title}
-									</a>
-								))
-								.reduce((prev, curr) => [prev, ', ', curr])
-						}
-					</div>
-					<div
-						class="mb-5 font-mono text-xl"
-						title={'last modified: ' + post.data.modified_date.toISOString().split('T')[0]}>
-						{post.data.publish_date.toISOString().split('T')[0]}
-					</div>
-
-					<div class="my-5 flow-root">
-						{
-							post.data.image && (
-								<img
-									alt="featured image"
-									src={post.data.image}
-									class="float-left mt-2 mr-5 mb-1 h-40 w-40"
-								/>
-							)
-						}
-						{
-							blurb && (
-								<div
-									id="blurb"
-									class="font-serif text-base tracking-wide italic"
-									set:html={blurb}
-								/>
-							)
-						}
-					</div>
-
-					<div class="prose">
-						<Content />
-					</div>
-				</article>
+				<TabContent client:load index={0}>
+					<PostArticle post={post} authors={authors} title={title} />
+				</TabContent>
+				<TabContent client:load index={1}>
+					<article class="m-auto max-w-[75ch] text-lg" set:html={worksCited} />
+				</TabContent>
 			</main>
 
 			<!-- Right aside -->

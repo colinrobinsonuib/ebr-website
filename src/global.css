@@ -76,6 +76,7 @@
     --background-color: #ffffff;
     --highlighted-link-outline-color: #8b8b8b;
     --threadColor: #000000;
+    --postTypeColor: #000000;
 }
 
 body {
@@ -285,4 +286,14 @@ body {
     position: absolute;
     background: black;
     line-height: 65px;
+}
+
+.bg-thread {
+    background-color: var(--threadColor);
+}
+.border-thread {
+    border-color: var(--threadColor);
+}
+.bg-postType {
+    background-color: var(--postTypeColor);
 }

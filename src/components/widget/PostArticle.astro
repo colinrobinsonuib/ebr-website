@@ -1,0 +1,54 @@
+---
+import { prettyDate, prettyDateLong, processBlurb } from '../../lib/utils';
+import PostType from '../ui/PostType.astro';
+import ByAuthors from '../ui/ByAuthors.astro';
+import { render } from 'astro:content';
+
+const {post, authors, title} = Astro.props;
+const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
+const { Content } = await render(post);
+---
+<style is:inline>
+	.blurb p {
+		margin: 1em 0;
+	}
+</style>
+<article class="m-auto max-w-[75ch] text-lg">
+	<PostType type={post.data.type} />
+	<h1 class="mb-5 text-3xl font-semibold dark:text-gray-50" set:html={title} />
+	<div class="mb-5 w-fit border-b font-mono text-xl text-red-500 italic">
+		{
+			<ByAuthors authors={authors} />
+		}
+	</div>
+	<div
+		class="mb-5 font-mono text-xl"
+		title={'last modified: ' + prettyDate(post.data.modified_date)}>
+		{prettyDateLong(post.data.publish_date)}
+	</div>
+
+	<div class="my-5 flow-root">
+		{
+			post.data.image && (
+				<img
+					alt="featured image"
+					src={post.data.image}
+					class="float-left mt-2 mr-5 mb-1 h-40 w-40"
+				/>
+			)
+		}
+		{
+			blurb && (
+				<div
+					class="blurb font-serif text-base tracking-wide italic"
+					set:html={blurb}
+				/>
+			)
+		}
+	</div>
+
+	<div class="prose">
+		<Content />
+	</div>
+
+</article>

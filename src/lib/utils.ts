@@ -20,6 +20,7 @@ export async function extractWorksCited(markdownString: string | undefined) {
 	if (!markdownString) return;
 
 	const worksCitedIndex = markdownString.indexOf('## Works Cited');
+	console.log(worksCitedIndex);
 	if (worksCitedIndex === -1) return;
 
 	const afterWorksCited = markdownString.substring(worksCitedIndex);
@@ -43,4 +44,24 @@ export function prettyDate(date: Date) {
 		year: 'numeric',
 	}).format(date);
 	return str.replace(/ /g, '-');
+}
+
+export function prettyDateLong(date: Date) {
+	const weekday = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(date);
+	const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(date);
+	const day = date.getDate();
+	const year = date.getFullYear();
+
+	// Helper to get ordinal suffix
+	function ordinal(n: number) {
+		if (n > 3 && n < 21) return n + 'th';
+		switch (n % 10) {
+			case 1: return n + 'st';
+			case 2: return n + 'nd';
+			case 3: return n + 'rd';
+			default: return n + 'th';
+		}
+	}
+
+	return `${weekday}, ${month} ${ordinal(day)} ${year}`;
 }

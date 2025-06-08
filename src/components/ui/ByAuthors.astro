@@ -1,0 +1,12 @@
+---
+const {authors} = Astro.props;
+---
+<span>by </span>
+{
+	authors.map((author) => (
+		<a class="hover:text-black" href={'/authors/' + author.id}>
+			{author.data.title}
+		</a>
+	))
+	.reduce((prev, curr) => [prev, ', ', curr])
+}

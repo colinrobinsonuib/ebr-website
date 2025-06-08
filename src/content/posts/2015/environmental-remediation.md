@@ -117,7 +117,7 @@ While not all games feature natural environments and only a few engage openly wi
 
 In closing, my hope is that juxtaposing remediation in its techno-aesthetic and ecological contexts will prompt us to resituate technology use and theory in a world shared, happily or no, by Superfund sites and PlayStation 4s. Fortunately, the movements currently afoot in studies of media infrastructure, ecomedia, and forensic media or media archaeology appear to be related intellectual enterprises, joined toward unraveling the seams of definitional boundaries between media and world. Like the sea-floor vents present at continental margins, these ruptures in the concepts of media and environment still indicate both proximity and distance, but also offer zones of surprising productivity in what might otherwise seem remote and lifeless places.
 
-Works Cited
+## Works Cited
 
 Bolter, Jay David, and Richard Grusin. Remediation: Understanding New Media. Cambridge, MA: MIT Press, 1999. Print.
 
