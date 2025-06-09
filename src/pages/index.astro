@@ -167,7 +167,7 @@ let latestPostsYear: number | null = null;
 				const tab = document.createElement('div');
 				tab.className = `tab rounded-t-4xl  flex items-center justify-center shadow-md relative`;
 				tab.style.backgroundColor = color;
-				tab.innerHTML = `<span class="text-white font-medium text-lg">${label}</span>`;
+				tab.innerHTML = `<a href="/threads/${thread}" class="text-white font-medium text-lg">${label}</a>`;
 
 				const tabContent = document.createElement('div');
 				tabContent.className = `tab-content flex items-center justify-center px-4 shadow-md`;

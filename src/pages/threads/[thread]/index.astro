@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import { threads } from '../../../lib/threads';
+import ContentLayout from '../../../layouts/ContentLayout.astro';
+
+export async function getStaticPaths() {
+	return threads.map((thread) => ({
+		params: { thread: thread },
+	}));
+}
+
+const { thread } = Astro.params;
+
+const posts = await getCollection('posts', ({ data }) => {
+	return data.thread === thread;
+});
+
+const title = thread;
+---
+
+<ContentLayout title={title}>
+	<h1>{title}</h1>
+	<ul>
+		{
+			posts.map((item) => (
+				<li>
+					<a href={`/${item.data.type}s/${item.id}`}>{item.data.title}</a>
+				</li>
+			))
+		}
+	</ul>
+</ContentLayout>
