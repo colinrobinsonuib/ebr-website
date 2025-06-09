@@ -1,4 +1,4 @@
-import { defineCollection, reference, z } from 'astro:content';
+import { type CollectionEntry, defineCollection, reference, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { threads } from './lib/threads.ts';
 import { postTypes } from './lib/postTypes.ts';
@@ -27,6 +27,13 @@ export const postSchema = baseSchema.extend({
 	riposte_to: z.string().optional(),
 	image: z.string().optional(),
 });
+type Post = CollectionEntry<'posts'>;
+type PublishedPost = Post & { data: Post['data'] & { draft: false, publish_date: Date } };
+export function isPublished(
+	item: Post
+): item is PublishedPost {
+	return !item.data.draft && item.data.publish_date instanceof Date;
+}
 
 export const gatheringSchema = baseSchema.extend({
 	draft: z.boolean().default(true),
@@ -59,3 +66,4 @@ const authors = defineCollection({
 });
 
 export const collections = { posts, gatherings, authors };
+

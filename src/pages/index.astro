@@ -1,16 +1,43 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
+import { type ReferenceDataEntry, getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { threads, threadTitles, threadColors } from '../lib/threads';
 import PostSnippet from '../components/widget/PostSnippet.astro';
+import { isPublished } from '../content.config';
 
-let allPosts = await getCollection('posts');
-allPosts = allPosts.filter((item) => !item.data.draft);
-allPosts.sort(
-	(a, b) => new Date(b.data.publish_date).getTime() - new Date(a.data.publish_date).getTime(),
+const allPosts = await getCollection('posts');
+
+
+const publishedPosts = allPosts.filter(isPublished);
+publishedPosts.sort(
+	(a, b) => {
+		return b.data.publish_date.getTime() - a.data.publish_date.getTime();
+	},
 );
-const latestPosts = allPosts.slice(0, 15);
-// Track last rendered year
+const latestPosts = publishedPosts.slice(0, 15);
+
+type ThreadSummary = {
+	slug: string;
+	title: string;
+	authors: ReferenceDataEntry<'authors'>[];
+	publish_date: Date;
+};
+const latestPostByThread = publishedPosts.reduce<
+	Record<string, ThreadSummary>
+>((acc, post) => {
+	const { thread, slug, title, authors, publish_date } = post.data;
+	// skip any posts without a thread
+	if (!thread) return acc;
+
+	const existing = acc[thread];
+	// if first time seeing this thread, or this post is newer…
+	if (!existing || publish_date > existing.publish_date) {
+		acc[thread] = { slug, title, authors, publish_date };
+	}
+
+	return acc;
+}, {});
+
 let latestPostsYear: number | null = null;
 ---
 
@@ -77,7 +104,7 @@ let latestPostsYear: number | null = null;
 		<main class="z-50 bg-white px-6">
 			{
 				latestPosts.map((post) => {
-					const year = new Date(post.data.publish_date).getFullYear();
+					const year = post.data.publish_date.getFullYear();
 					const yearChanged = year !== latestPostsYear;
 					latestPostsYear = year;
 					return (
@@ -91,7 +118,7 @@ let latestPostsYear: number | null = null;
 		</main>
 	</div>
 
-	<script is:inline define:vars={{ threads, threadTitles, threadColors }} data-astro-rerun>
+	<script is:inline define:vars={{ threads, threadTitles, threadColors, latestPostByThread }} data-astro-rerun>
 		(() => {
 			const container = document.getElementById('tabs-container');
 			let globalIndex = 0;
@@ -113,7 +140,26 @@ let latestPostsYear: number | null = null;
 				const globalIndex = rowIndex * 5 + tabIndex;
 				const label = threadTitles[thread];
 				const color = threadColors[thread];
-				const description = `This is the content for Tab ${globalIndex + 1}. It contains important information and details about this particular tab.`;
+
+				let description = 'Placeholder';
+
+				if(latestPostByThread[thread]) {
+					description = '<div class="flex flex-row justify-between w-full mx-10">' +
+						`<a class="italic text-2xl font-semibold hover:underline" href="/essays/${latestPostByThread[thread].slug}">Read the latest post &gt;</a>` +
+						'<div class="flex flex-col">';
+
+					description += '<span class="text-2xl">' + latestPostByThread[thread].title + '</span>';
+					const authors = latestPostByThread[thread].authors.map((author) => {
+						return author.id.replace('-', ' ');
+					}).reduce((prev, curr) => [prev, ', ', curr])
+					const publish_date = new Intl.DateTimeFormat('en-GB', {
+						day: '2-digit',
+						month: 'short',
+						year: 'numeric',
+					}).format(new Date(latestPostByThread[thread].publish_date)).replace(/ /g, '-');
+					description += '<span class="capitalize">by ' + authors + ', ' + publish_date + '</span>';
+					description += '</div></div>';
+				}
 
 				const tabContainer = document.createElement('div');
 				tabContainer.className = `tab-container`;
@@ -126,7 +172,7 @@ let latestPostsYear: number | null = null;
 				const tabContent = document.createElement('div');
 				tabContent.className = `tab-content flex items-center justify-center px-4 shadow-md`;
 				tabContent.style.backgroundColor = color;
-				tabContent.innerHTML = `<span class="text-white text-xs text-center leading-tight">${description}</span>`;
+				tabContent.innerHTML = description;
 
 				tabContainer.appendChild(tab);
 				tabContainer.appendChild(tabContent);
