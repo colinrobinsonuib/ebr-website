@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { threads, threadTitles, threadColors } from '../lib/threads';
 import PostSnippet from '../components/widget/PostSnippet.astro';
@@ -127,11 +127,6 @@ let latestPostsYear: number | null = null;
 				tabContent.className = `tab-content flex items-center justify-center px-4 shadow-md`;
 				tabContent.style.backgroundColor = color;
 				tabContent.innerHTML = `<span class="text-white text-xs text-center leading-tight">${description}</span>`;
-
-				setTimeout(() => {
-					const rect = tab.getBoundingClientRect();
-					tabContent.style.left = `${window.scrollX - rect.left}px`;
-				}, 1);
 
 				tabContainer.appendChild(tab);
 				tabContainer.appendChild(tabContent);

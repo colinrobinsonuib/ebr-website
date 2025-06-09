@@ -253,26 +253,28 @@ body {
     transform: translateY(1px);
 }
 
-.tab-container:hover {
+.tab-container {
+    display: inline-block;
+    transition: transform 0.3s ease-in-out;
+}
+
+.tab-container:hover .tab {
+    transform: translateY(-95px);
+}
+.tab-container:hover .tab-content {
     transform: translateY(-96px);
-    z-index: 5;
 }
 
 .tab-content {
-    width: 100vw;
+    width: var(--container-7xl);
     height: 96px;
     position: absolute;
     left: 0;
     top: 96px;
     transition: transform 0.3s ease-in-out;
+    z-index: 1;
 }
 
-
-.tab-container {
-    position: relative;
-    display: inline-block;
-    transition: transform 0.3s ease-in-out;
-}
 
 .z-20 {
     z-index: 20;
