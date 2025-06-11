@@ -1,0 +1,40 @@
+---
+import { getCollection, render } from 'astro:content';
+import SimplePageLayout from '../../layouts/SimplePageLayout.astro';
+import { getPublishedPosts } from '../../lib/getPosts';
+import PostTable from '../../components/widget/PostTable.astro';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+
+export async function getStaticPaths() {
+	const authors = await getCollection('authors');
+	return authors.map((author) => ({
+		params: { id: author.id },
+		props: { author },
+	}));
+}
+const { author } = Astro.props;
+const { Content } = await render(author);
+
+const postsByAuthor = (await getPublishedPosts())
+	.filter(post =>  post.data.authors.some(item => item.id === author.id))
+---
+
+<ContentLayout title={author.data.title}>
+	<div class="mx-auto mt-30 w-full max-w-7xl grow">
+		<div class="border-sky-600 relative flex flex-row border-10 bg-white">
+			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
+				<article class="m-auto max-w-5xl text-lg">
+					<h1 class="mb-5 text-3xl font-semibold dark:text-gray-50" set:html={author.data.title} />
+					{author.data.qid && <h2 class="text-xl">CELL Project: <a href={`https://cellproject.net/person/${author.data.qid}`}>{author.data.qid}</a></h2>}
+					<div class="prose">
+						<Content />
+					</div>
+					<PostTable posts={postsByAuthor} />
+				</article>
+			</main>
+		</div>
+	</div>
+</ContentLayout>
+
+
+

@@ -3,17 +3,9 @@ import { type ReferenceDataEntry, getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { threads, threadTitles, threadColors } from '../lib/threads';
 import PostSnippet from '../components/widget/PostSnippet.astro';
-import { isPublished } from '../content.config';
+import { getPublishedPosts } from '../lib/getPosts';
 
-const allPosts = await getCollection('posts');
-
-
-const publishedPosts = allPosts.filter(isPublished);
-publishedPosts.sort(
-	(a, b) => {
-		return b.data.publish_date.getTime() - a.data.publish_date.getTime();
-	},
-);
+const publishedPosts = await getPublishedPosts();
 const latestPosts = publishedPosts.slice(0, 15);
 
 type ThreadSummary = {
@@ -22,15 +14,13 @@ type ThreadSummary = {
 	authors: ReferenceDataEntry<'authors'>[];
 	publish_date: Date;
 };
-const latestPostByThread = publishedPosts.reduce<
-	Record<string, ThreadSummary>
->((acc, post) => {
+const latestPostByThread = publishedPosts.reduce<Record<string, ThreadSummary>>((acc, post) => {
 	const { thread, slug, title, authors, publish_date } = post.data;
 	// skip any posts without a thread
 	if (!thread) return acc;
 
 	const existing = acc[thread];
-	// if first time seeing this thread, or this post is newer…
+	// if first time seeing this thread, or this post is newer
 	if (!existing || publish_date > existing.publish_date) {
 		acc[thread] = { slug, title, authors, publish_date };
 	}
@@ -109,7 +99,7 @@ let latestPostsYear: number | null = null;
 					latestPostsYear = year;
 					return (
 						<>
-							{yearChanged && <h2 class="my-6 ml-41 text-5xl">{year}</h2>}
+							{yearChanged && <h2 class="my-6 ml-41 text-5xl font-black">{year}</h2>}
 							<PostSnippet post={post} />
 						</>
 					);
@@ -118,7 +108,11 @@ let latestPostsYear: number | null = null;
 		</main>
 	</div>
 
-	<script is:inline define:vars={{ threads, threadTitles, threadColors, latestPostByThread }} data-astro-rerun>
+	<script
+		is:inline
+		define:vars={{ threads, threadTitles, threadColors, latestPostByThread }}
+		data-astro-rerun
+	>
 		(() => {
 			const container = document.getElementById('tabs-container');
 			let globalIndex = 0;
@@ -143,20 +137,25 @@ let latestPostsYear: number | null = null;
 
 				let description = 'Placeholder';
 
-				if(latestPostByThread[thread]) {
-					description = '<div class="flex flex-row justify-between w-full mx-10">' +
+				if (latestPostByThread[thread]) {
+					description =
+						'<div class="flex flex-row justify-between w-full mx-10">' +
 						`<a class="italic text-2xl font-semibold hover:underline" href="/essays/${latestPostByThread[thread].slug}">Read the latest post &gt;</a>` +
 						'<div class="flex flex-col">';
 
 					description += '<span class="text-2xl">' + latestPostByThread[thread].title + '</span>';
-					const authors = latestPostByThread[thread].authors.map((author) => {
-						return author.id.replace('-', ' ');
-					}).reduce((prev, curr) => [prev, ', ', curr])
+					const authors = latestPostByThread[thread].authors
+						.map((author) => {
+							return author.id.replace('-', ' ');
+						})
+						.reduce((prev, curr) => [prev, ', ', curr]);
 					const publish_date = new Intl.DateTimeFormat('en-GB', {
 						day: '2-digit',
 						month: 'short',
 						year: 'numeric',
-					}).format(new Date(latestPostByThread[thread].publish_date)).replace(/ /g, '-');
+					})
+						.format(new Date(latestPostByThread[thread].publish_date))
+						.replace(/ /g, '-');
 					description += '<span class="capitalize">by ' + authors + ', ' + publish_date + '</span>';
 					description += '</div></div>';
 				}

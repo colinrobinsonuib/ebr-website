@@ -31,12 +31,12 @@ const threadColor = post.data.thread ? threadColors[post.data.thread] : '#000';
 const postTypeColor = postTypeColors[post.data.type] || '#000';
 ---
 <ContentLayout title={title}>
-	<div class="mx-auto mt-6 flex max-w-7xl flex-col" style={'--threadColor: ' + threadColor + '; --postTypeColor: ' + postTypeColor}>
+	<div class="mx-auto mt-6 w-full max-w-7xl" style={'--threadColor: ' + threadColor + '; --postTypeColor: ' + postTypeColor}>
 		{
 			post.data.thread &&
 			<PostTabs client:load postType={post.data.type} thread={post.data.thread} threadTitle={threadTitles[post.data.thread]}  />
 		}
-		<div class="border-thread relative flex flex-row border-10 bg-white">
+		<div class="border-thread relative flex flex-row md:border-10 bg-white">
 			<aside class="mt-36 hidden w-64 border-r-2 border-neutral-500 lg:block">
 				{
 					post.data.thread && (

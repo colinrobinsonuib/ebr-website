@@ -28,12 +28,7 @@ export const postSchema = baseSchema.extend({
 	image: z.string().optional(),
 });
 type Post = CollectionEntry<'posts'>;
-type PublishedPost = Post & { data: Post['data'] & { draft: false, publish_date: Date } };
-export function isPublished(
-	item: Post
-): item is PublishedPost {
-	return !item.data.draft && item.data.publish_date instanceof Date;
-}
+export type PublishedPost = Post & { data: Post['data'] & { draft: false; publish_date: Date } };
 
 export const gatheringSchema = baseSchema.extend({
 	draft: z.boolean().default(true),
@@ -66,4 +61,3 @@ const authors = defineCollection({
 });
 
 export const collections = { posts, gatherings, authors };
-

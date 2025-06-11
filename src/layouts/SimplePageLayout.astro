@@ -1,0 +1,19 @@
+---
+import ContentLayout from './ContentLayout.astro';
+const { title } = Astro.props;
+---
+
+<ContentLayout title={title}>
+	<div class="mx-auto mt-6 w-full max-w-7xl grow">
+		<div class="border-sky-600 relative flex flex-row border-10 bg-white">
+			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
+				<article class="m-auto max-w-[75ch] text-lg">
+					<h1 class="mb-5 text-3xl font-semibold dark:text-gray-50" set:html={title} />
+					<div class="prose">
+						<slot />
+					</div>
+				</article>
+			</main>
+		</div>
+	</div>
+</ContentLayout>

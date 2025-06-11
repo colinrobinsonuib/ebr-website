@@ -1,0 +1,26 @@
+---
+import PostType from '../ui/PostType.astro';
+const { posts } = Astro.props;
+import { renderTitle } from '../../lib/renderTitle';
+import { prettyDate } from '../../lib/utils';
+
+---
+
+{posts.map(post => (
+	<div class="flex flex-row font-mono py-5 border-t-2 items-center">
+		<div class="min-w-30">{prettyDate(post.data.publish_date)}</div>
+		<div class="px-8">
+			<PostType type={post.data.type} />
+		</div>
+		<a href={`/${post.data.type}s/${post.id}`} set:html={renderTitle(post.data.title)} class="text-xl grow hover:underline"></a>
+		{
+			post.data.image && (
+				<img
+					alt="featured image"
+					src={post.data.image}
+					style="width: 100px; height: 100px"
+				/>
+			)
+		}
+	</div>
+))}

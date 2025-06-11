@@ -14,7 +14,9 @@ const { Content } = await render(post);
 	}
 </style>
 <article class="m-auto max-w-[75ch] text-lg">
-	<PostType type={post.data.type} />
+	<div class="mb-6">
+		<PostType type={post.data.type} />
+	</div>
 	<h1 class="mb-5 text-3xl font-semibold dark:text-gray-50" set:html={title} />
 	<div class="mb-5 w-fit border-b font-mono text-xl text-red-500 italic">
 		{
