@@ -1,0 +1,44 @@
+---
+import { capitalizeFirstLetter } from '../../../lib/utils';
+import { getPublishedPosts } from '../../../lib/getPosts';
+
+import Pagination from '../../../components/ui/Pagination.astro';
+import PostTable from '../../../components/widget/PostTable.astro';
+import { threadColors, threads } from '../../../lib/threads';
+import ContentLayout from '../../../layouts/ContentLayout.astro';
+
+export async function getStaticPaths({ paginate }) {
+	const allPosts = await getPublishedPosts();
+	return threads.flatMap((thread) => {
+		const filteredPosts = allPosts.filter((post) => post.data.thread === thread);
+		return paginate(filteredPosts, {
+			params: { thread },
+			pageSize: 20,
+		});
+	});
+}
+
+const { page } = Astro.props;
+const { thread }: { thread: (typeof threads)[number] } = Astro.params;
+const title = capitalizeFirstLetter(thread) + 's';
+
+const threadColor = threadColors[thread] || '#000';
+---
+
+<ContentLayout title={title}>
+	<div class="mx-auto mt-30 w-full max-w-7xl grow" style={'--threadColor: ' + threadColor}>
+		<div class="border-thread relative flex flex-row bg-white md:border-10">
+			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
+				<article class="m-auto max-w-5xl text-sm md:text-lg">
+					<h1 class="mb-2 text-3xl">{title}</h1>
+					<p class="mb-8 text-slate-500">Page {page.currentPage} of {page.lastPage}</p>
+					<PostTable posts={page.data} />
+				</article>
+
+				<div class="mt-16">
+					<Pagination page={page} />
+				</div>
+			</main>
+		</div>
+	</div>
+</ContentLayout>

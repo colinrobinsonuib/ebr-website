@@ -1,19 +1,11 @@
----
-import ContentLayout from '../../layouts/ContentLayout.astro';
-import { getCollection } from 'astro:content';
-
-const posts = await getCollection('posts');
----
-
-<ContentLayout title="Publications">
-	<h1>Publications</h1>
-	<ul>
-		{
-			posts.map((item) => (
-				<li>
-					<a href={`/${item.data.type}s/${item.id}`}>{item.data.title}</a>
-				</li>
-			))
-		}
-	</ul>
-</ContentLayout>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>publications</title>
+	<meta http-equiv="refresh" content="0;url=/publications/1" />
+	<link rel="canonical" href="/publications/1" />
+</head>
+<body>
+<p>Redirecting to <a href="/publications/1">/publications/1</a>…</p>
+</body>
+</html>

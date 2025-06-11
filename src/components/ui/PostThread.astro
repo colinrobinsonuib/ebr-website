@@ -1,0 +1,9 @@
+---
+import { type Thread, threadColors } from '../../lib/threads';
+const { thread } = Astro.props;
+const threadColor = threadColors[thread as Thread];
+const threadName = (thread) ? thread.replaceAll('-', ' ') : 'no thread';
+---
+{thread &&
+	<a href={'/threads/' + thread + '/1'} class="flex text-balance text-center leading-3 h-8 w-34 font-mono text-xs no-underline text-black items-center justify-center" style={'background-color: '+threadColor}>{threadName}</a>
+|| <span class="flex text-balance text-center leading-3 h-8 w-34 font-mono text-xs no-underline text-black items-center justify-center bg-gray-200">{threadName}</span>}

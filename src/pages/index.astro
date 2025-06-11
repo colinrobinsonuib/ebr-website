@@ -140,15 +140,15 @@ let latestPostsYear: number | null = null;
 				if (latestPostByThread[thread]) {
 					description =
 						'<div class="flex flex-row justify-between w-full mx-10">' +
-						`<a class="italic text-2xl font-semibold hover:underline" href="/essays/${latestPostByThread[thread].slug}">Read the latest post &gt;</a>` +
-						'<div class="flex flex-col">';
+						`<a class="italic w-1/5 text-2xl font-semibold hover:underline" href="/essays/${latestPostByThread[thread].slug}">Read the latest post &gt;</a>` +
+						'<div class="flex text-right flex-col w-4/5">';
 
-					description += '<span class="text-2xl">' + latestPostByThread[thread].title + '</span>';
+					description += '<span class="ml-5 text-2xl overflow-ellipsis whitespace-nowrap overflow-hidden">' + latestPostByThread[thread].title + '</span>';
 					const authors = latestPostByThread[thread].authors
 						.map((author) => {
-							return author.id.replace('-', ' ');
-						})
-						.reduce((prev, curr) => [prev, ', ', curr]);
+							return author.id.replaceAll('-', ' ');
+						}).join(', ');
+
 					const publish_date = new Intl.DateTimeFormat('en-GB', {
 						day: '2-digit',
 						month: 'short',
@@ -156,7 +156,7 @@ let latestPostsYear: number | null = null;
 					})
 						.format(new Date(latestPostByThread[thread].publish_date))
 						.replace(/ /g, '-');
-					description += '<span class="capitalize">by ' + authors + ', ' + publish_date + '</span>';
+					description += '<span class="capitalize">by ' + authors + '&nbsp;&nbsp;&nbsp;' + publish_date + '</span>';
 					description += '</div></div>';
 				}
 
@@ -166,7 +166,7 @@ let latestPostsYear: number | null = null;
 				const tab = document.createElement('div');
 				tab.className = `tab rounded-t-4xl  flex items-center justify-center shadow-md relative`;
 				tab.style.backgroundColor = color;
-				tab.innerHTML = `<a href="/threads/${thread}" class="text-white font-medium text-lg">${label}</a>`;
+				tab.innerHTML = `<a href="/threads/${thread}/1" class="text-white font-medium text-lg">${label}</a>`;
 
 				const tabContent = document.createElement('div');
 				tabContent.className = `tab-content flex items-center justify-center px-4 shadow-md`;

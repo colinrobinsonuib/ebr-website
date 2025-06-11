@@ -1,26 +1,39 @@
 ---
 import PostType from '../ui/PostType.astro';
-const { posts } = Astro.props;
+const { posts, showThread = false } = Astro.props;
 import { renderTitle } from '../../lib/renderTitle';
 import { prettyDate } from '../../lib/utils';
-
+import PostThread from '../ui/PostThread.astro';
 ---
 
-{posts.map(post => (
-	<div class="flex flex-row font-mono py-5 border-t-2 items-center">
-		<div class="min-w-30">{prettyDate(post.data.publish_date)}</div>
-		<div class="px-8">
-			<PostType type={post.data.type} />
-		</div>
-		<a href={`/${post.data.type}s/${post.id}`} set:html={renderTitle(post.data.title)} class="text-xl grow hover:underline"></a>
-		{
-			post.data.image && (
-				<img
-					alt="featured image"
-					src={post.data.image}
-					style="width: 100px; height: 100px"
+{
+	posts.map((post) => (
+		<div class="flex flex-row items-center border-t-2 py-5 font-mono">
+			<div class="min-w-30">{prettyDate(post.data.publish_date)}</div>
+			<div class="px-8">
+				{!showThread && <PostType type={post.data.type} />}
+				{showThread && <PostThread thread={post.data.thread} />}
+			</div>
+			<div class="mx-1 flex grow flex-col">
+				<a
+					href={`/${post.data.type}s/${post.id}`}
+					set:html={renderTitle(post.data.title)}
+					class="font-semibold text-pretty hover:underline md:text-xl"
 				/>
-			)
-		}
-	</div>
-))}
+				<span class="text-xs text-gray-800 md:text-base">
+					by
+					<span class="capitalize">
+						{post.data.authors
+							.map((author) => {
+								return author.id.replaceAll('-', ' ');
+							})
+							.reduce((prev, curr) => [prev, ', ', curr])}
+					</span>
+				</span>
+			</div>
+			{post.data.image && (
+				<img alt="featured image" src={post.data.image} style="width: 100px; height: 100px" />
+			)}
+		</div>
+	))
+}

@@ -62,6 +62,7 @@
 }
 
 body {
+    /*noinspection CssUnknownTarget*/
     background-image: url('/background.svg');
     background-repeat: repeat;
     background-position-x: 18px;

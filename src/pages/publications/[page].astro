@@ -1,0 +1,40 @@
+---
+import { postTypeColors } from '../../lib/postTypes';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import PostTable from '../../components/widget/PostTable.astro';
+import { getPublishedPosts } from '../../lib/getPosts';
+
+import Pagination from '../../components/ui/Pagination.astro';
+import { type Page } from 'astro';
+
+export async function getStaticPaths({ paginate }) {
+	const allPosts = await getPublishedPosts();
+	return paginate(allPosts, {
+		pageSize: 20
+	});
+}
+
+const { page }: {page:Page} = Astro.props;
+const { postType } = Astro.params;
+
+const postTypeColor = postTypeColors[postType] || '#000';
+---
+
+<ContentLayout title="Publications">
+	<div class="mx-auto mt-30 w-full max-w-7xl grow" style={'--postTypeColor: ' + postTypeColor}>
+		<div class="relative flex flex-row md:border-10 border-postType bg-white">
+			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
+				<article class="m-auto max-w-5xl text-sm md:text-lg">
+					<h1 class="mb-2 text-3xl">Publications</h1>
+					<p class="text-slate-500 mb-8">Page {page.currentPage} of {page.lastPage}</p>
+					<PostTable posts={page.data} />
+				</article>
+
+				<div class="mt-16">
+					<Pagination page={page} />
+				</div>
+
+			</main>
+		</div>
+	</div>
+</ContentLayout>
