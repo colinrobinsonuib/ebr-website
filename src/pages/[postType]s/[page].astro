@@ -1,0 +1,77 @@
+---
+// This top part remains mostly the same
+import { postTypeColors, postTypes } from '../../lib/postTypes';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import { getCollection } from 'astro:content';
+import { capitalizeFirstLetter, prettyDate } from '../../lib/utils';
+import PostTable from '../../components/widget/PostTable.astro';
+import PostType from '../../components/ui/PostType.astro';
+import { renderTitle } from '../../lib/renderTitle';
+import { getPublishedPosts } from '../../lib/getPosts';
+
+// Import our new component
+import Pagination from '../../components/ui/Pagination.astro';
+
+export async function getStaticPaths({ paginate }) {
+	const allPosts = await getPublishedPosts();
+	return postTypes.flatMap((postType) => {
+		const filteredPosts = allPosts.filter((post) => post.data.type === postType);
+		return paginate(filteredPosts, {
+			params: { postType },
+			pageSize: 50
+		});
+	});
+}
+
+const { page } = Astro.props;
+const { postType } = Astro.params;
+const title = capitalizeFirstLetter(postType) + 's';
+
+const postTypeColor = postTypeColors[postType] || '#000';
+---
+
+<ContentLayout title={title}>
+	<div class="mx-auto mt-30 w-full max-w-7xl grow" style={'--postTypeColor: ' + postTypeColor}>
+		<div class="relative flex flex-row md:border-10 border-postType bg-white">
+			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
+				<article class="m-auto max-w-5xl text-sm md:text-lg">
+					<h1 class="mb-2 text-3xl">{title}</h1>
+					<p class="text-slate-500 mb-8">Page {page.currentPage} of {page.lastPage}</p>
+					{
+						page.data.map((post) => (
+							<div class="flex flex-row items-center border-t-2 py-5 font-mono">
+								<div class="min-w-24 md:min-w-30">{prettyDate(post.data.publish_date)}</div>
+								<div class="grow mx-5 flex flex-col">
+									<a
+										href={`/${post.data.type}s/${post.id}`}
+										set:html={renderTitle(post.data.title)}
+										class="md:text-xl hover:underline"
+									/>
+									<span class="text-xs md:text-base">by
+										<span class="capitalize">{post.data.authors.map((author) => {
+											return author.id.replace('-', ' ');
+										}).reduce((prev, curr) => [prev, ', ', curr])
+									}</span></span>
+								</div>
+								{post.data.image && (
+									<img
+										alt="featured image"
+										src={post.data.image}
+										style="width: 100px; height: 100px; object-fit: cover;"
+										class="hidden md:block"
+									/>
+								) || (<div style="width:100px; min-width: 100px; height:100px; background: #efefef;" class="hidden md:block"></div>)}
+							</div>
+						))
+					}
+				</article>
+
+				<!-- All the old pagination code is replaced by this single line -->
+				<div class="mt-16">
+					<Pagination page={page} />
+				</div>
+
+			</main>
+		</div>
+	</div>
+</ContentLayout>

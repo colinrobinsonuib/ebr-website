@@ -24,6 +24,7 @@
 @layer base {
     h1, h2, h3, h4, h5 {
         font-family: var(--font-mono);
+        font-weight: bold;
     }
     p {
         font-family: var(--font-serif);
@@ -61,7 +62,7 @@
 }
 
 body {
-    background-image: url('/public/background.svg');
+    background-image: url('/background.svg');
     background-repeat: repeat;
     background-position-x: 18px;
     background-position-y: top;
@@ -70,6 +71,21 @@ body {
 
 @layer components {
     .prose {
+        h1 {
+            font-size: var(--text-3xl);
+        }
+        h2 {
+            font-size: var(--text-3xl);
+        }
+        h3 {
+            font-size: var(--text-2xl);
+        }
+        h4 {
+            font-size: var(--text-3xl);
+        }
+        h5 {
+            font-size: var(--text-lg);
+        }
         p {
             margin: 1em 0;
             @variant md {
@@ -79,7 +95,7 @@ body {
             }
         }
         a {
-            word-break: break-all;
+            word-break: auto-phrase;
             color: var(--color-red-500);
             text-decoration: underline;
             &:hover {
@@ -151,7 +167,7 @@ body {
         transition: box-shadow 0.15s ease 0.05s;
 
         &:hover, &.hover-effect {
-            box-shadow: inset 0 0 0 1px black, inset 0 0 0 10px #54deff, inset 0 0 0 12px black;
+            box-shadow: inset 0 0 0 1px black, inset 0 0 0 10px var(--threadColor), inset 0 0 0 12px black;
         }
 
         .marginnote-number {
@@ -167,7 +183,11 @@ body {
             display: none;
         }
 
+        a, a:visited {
+            color: black;
+        }
     }
+
 
 }
 
@@ -190,7 +210,7 @@ body {
     }
 
     .marginnote-ref {
-        color: #54deff;
+        color: var(--threadColor);
         text-shadow: -2px -2px 0 black;
         transform: rotate(180deg);
         display: inline-block;
@@ -279,4 +299,7 @@ body {
 }
 .bg-postType {
     background-color: var(--postTypeColor);
+}
+.border-postType {
+    border-color: var(--postTypeColor);
 }

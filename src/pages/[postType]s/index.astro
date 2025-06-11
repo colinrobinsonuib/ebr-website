@@ -1,8 +1,12 @@
 ---
-import { postTypes } from '../../lib/postTypes';
+import { postTypeColors, postTypes } from '../../lib/postTypes';
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import { getCollection } from 'astro:content';
-import { capitalizeFirstLetter } from '../../lib/utils';
+import { capitalizeFirstLetter, prettyDate } from '../../lib/utils';
+import PostTable from '../../components/widget/PostTable.astro';
+import PostType from '../../components/ui/PostType.astro';
+import { renderTitle } from '../../lib/renderTitle';
+import { getPublishedPosts } from '../../lib/getPosts';
 
 export async function getStaticPaths() {
 	return postTypes.map((type) => ({
@@ -12,22 +16,39 @@ export async function getStaticPaths() {
 
 const { postType } = Astro.params;
 
-const posts = await getCollection('posts', ({ data }) => {
-	return data.type === postType;
-});
-
+const posts = (await getPublishedPosts()).filter((post) => post.data.type == postType);
 const title = capitalizeFirstLetter(postType) + 's';
+
+const postTypeColor = postTypeColors[postType] || '#000';
 ---
 
 <ContentLayout title={title}>
-	<h1>{title}</h1>
-	<ul>
-		{
-			posts.map((item) => (
-				<li>
-					<a href={`/${postType}s/${item.id}`}>{item.data.title}</a>
-				</li>
-			))
-		}
-	</ul>
+	<div class="mx-auto mt-30 w-full max-w-7xl grow" style={'--postTypeColor: ' + postTypeColor}>
+		<div class="relative flex flex-row border-10 border-postType bg-white">
+			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
+				<article class="m-auto max-w-5xl text-lg">
+					<h1 class="mb-2 text-3xl">{title}</h1>
+					{
+						posts.map((post) => (
+							<div class="flex flex-row items-center border-t-2 py-5 font-mono">
+								<div class="min-w-30">{prettyDate(post.data.publish_date)}</div>
+								<a
+									href={`/${post.data.type}s/${post.id}`}
+									set:html={renderTitle(post.data.title)}
+									class="grow mx-5 text-xl hover:underline"
+								/>
+								{post.data.image && (
+									<img
+										alt="featured image"
+										src={post.data.image}
+										style="width: 100px; height: 100px"
+									/>
+								) || (<div style="width:100px; min-width: 100px; height:100px; background: #efefef;"></div>)}
+							</div>
+						))
+					}
+				</article>
+			</main>
+		</div>
+	</div>
 </ContentLayout>

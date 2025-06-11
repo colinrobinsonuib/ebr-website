@@ -1,0 +1,142 @@
+---
+// src/components/ui/Pagination.astro
+import type { Page } from 'astro';
+
+interface Props {
+	page: Page;
+}
+
+const { page } = Astro.props;
+
+// --- Logic for creating the list of page numbers ---
+const pagesToDisplay = [];
+const siblingCount = 1; // How many pages to show on each side of the current page
+const totalVisibleSlots = siblingCount * 2 + 5; // Siblings + current + first + last + 2 ellipses
+
+// If there are enough pages to warrant a compact view
+if (page.lastPage > totalVisibleSlots) {
+	const leftSiblingIndex = Math.max(page.currentPage - siblingCount, 1);
+	const rightSiblingIndex = Math.min(page.currentPage + siblingCount, page.lastPage);
+
+	const shouldShowLeftEllipsis = leftSiblingIndex > 2;
+	const shouldShowRightEllipsis = rightSiblingIndex < page.lastPage - 1;
+
+	// Always show the first page
+	pagesToDisplay.push(1);
+
+	// Show left ellipsis
+	if (shouldShowLeftEllipsis) {
+		pagesToDisplay.push('...');
+	}
+
+	// Show pages around the current page
+	for (let i = leftSiblingIndex; i <= rightSiblingIndex; i++) {
+		// Don't repeat page 1 or lastPage if they are part of the sibling range
+		if (i > 1 && i < page.lastPage) {
+			pagesToDisplay.push(i);
+		}
+	}
+
+	// Show right ellipsis
+	if (shouldShowRightEllipsis) {
+		pagesToDisplay.push('...');
+	}
+
+	// Always show the last page
+	pagesToDisplay.push(page.lastPage);
+
+} else {
+	// If there aren't many pages, just show them all
+	for (let i = 1; i <= page.lastPage; i++) {
+		pagesToDisplay.push(i);
+	}
+}
+
+// --- Helper to build the correct URL for a given page number ---
+// This robustly handles different base paths (e.g., /essays, /notes)
+function getPageUrl(pageNumber: number): string {
+	if (pageNumber === 1) return page.url.first;
+	// Replace the last part of the path (the current page number) with the new one
+	return page.url.current.replace(/\/\d+$/, `/${pageNumber}`);
+}
+---
+
+{page.lastPage > 1 && (
+<nav aria-label="Pagination" class="flex items-center justify-center gap-2 text-base sm:gap-4">
+	<!-- First and Previous Buttons -->
+	<a
+		href={page.url.first ?? '#'}
+		class:list={[
+			'hidden items-center justify-center rounded-lg p-2.5 text-slate-600 transition-colors hover:bg-slate-100 sm:flex',
+			{ 'pointer-events-none text-slate-400': !page.url.first },
+		]}
+		aria-label="Go to first page"
+		title="First Page"
+	>
+		<!-- Double chevron left icon -->
+		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-left"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg>
+	</a>
+	<a
+		href={page.url.prev ?? '#'}
+		class:list={[
+			'flex items-center justify-center rounded-lg p-2.5 text-slate-600 transition-colors hover:bg-slate-100',
+			{ 'pointer-events-none text-slate-400': !page.url.prev },
+		]}
+		aria-label="Go to previous page"
+		title="Previous Page"
+	>
+		<!-- Chevron left icon -->
+		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+	</a>
+
+	<!-- Page Numbers -->
+	<div class="flex items-center gap-1 sm:gap-2">
+		{pagesToDisplay.map((p) => (
+			<>
+				{typeof p === 'number' ? (
+					<a
+						href={getPageUrl(p)}
+						aria-label={`Go to page ${p}`}
+						aria-current={page.currentPage === p ? 'page' : false}
+						class:list={[
+							"flex h-10 w-10 items-center justify-center rounded-lg text-center font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2",
+							{ "bg-sky-600 text-white pointer-events-none": page.currentPage === p },
+							{ "hover:bg-sky-100 text-slate-600": page.currentPage !== p }
+						]}
+					>
+						{p}
+					</a>
+				) : (
+					<span class="px-1 text-slate-400 select-none">...</span>
+				)}
+			</>
+		))}
+	</div>
+
+	<!-- Next and Last Buttons -->
+	<a
+		href={page.url.next ?? '#'}
+		class:list={[
+			'flex items-center justify-center rounded-lg p-2.5 text-slate-600 transition-colors hover:bg-slate-100',
+			{ 'pointer-events-none text-slate-400': !page.url.next },
+		]}
+		aria-label="Go to next page"
+		title="Next Page"
+	>
+		<!-- Chevron right icon -->
+		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+	</a>
+	<a
+		href={page.url.last ?? '#'}
+		class:list={[
+			'hidden items-center justify-center rounded-lg p-2.5 text-slate-600 transition-colors hover:bg-slate-100 sm:flex',
+			{ 'pointer-events-none text-slate-400': !page.url.next },
+		]}
+		aria-label="Go to last page"
+		title="Last Page"
+	>
+		<!-- Double chevron right icon -->
+		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-right"><path d="m6 17 5-5-5-5"/><path d="m13 17 5-5-5-5"/></svg>
+	</a>
+</nav>
+	)}

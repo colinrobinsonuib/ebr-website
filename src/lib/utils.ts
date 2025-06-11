@@ -14,10 +14,21 @@ export async function processBlurb(blurb: string) {
 export async function extractWorksCited(markdownString: string | undefined) {
 	if (!markdownString) return;
 
-	const worksCitedIndex = markdownString.indexOf('## Works Cited');
-	if (worksCitedIndex === -1) return;
+	const sectionTitles = ['## Works Cited', '## Works consulted', '## References'];
+	let worksCitedIndex = -1;
+	let sectionTitle = '';
+	for (sectionTitle of sectionTitles) {
+		worksCitedIndex = markdownString.indexOf(sectionTitle);
+		if (worksCitedIndex !== -1) {
+			break;
+		}
+	}
+	if (worksCitedIndex === -1) {
+		return;
+	}
 
-	const afterWorksCited = markdownString.substring(worksCitedIndex);
+	const afterWorksCited =
+		'## Works Cited' + '\n' + markdownString.substring(worksCitedIndex + sectionTitle.length);
 
 	return (
 		await unified().use(remarkParse).use(remarkRehype).use(rehypeStringify).process(afterWorksCited)
@@ -31,13 +42,17 @@ export function hasGlosses(markdownString: string | undefined): boolean {
 	return worksCitedIndex !== -1;
 }
 
-export function prettyDate(date: Date) {
-	let str = new Intl.DateTimeFormat('en-GB', {
+export function prettyDate(date: Date): string {
+	const parts = new Intl.DateTimeFormat('en-GB', {
 		day: '2-digit',
 		month: 'short',
 		year: 'numeric',
-	}).format(date);
-	return str.replace(/ /g, '-');
+	}).formatToParts(date);
+	const day = parts.find((p) => p.type === 'day')?.value ?? '00';
+	let month = parts.find((p) => p.type === 'month')?.value ?? '';
+	const year = parts.find((p) => p.type === 'year')?.value ?? '0000';
+	month = month.replace(/\./g, '').slice(0, 3);
+	return `${day}-${month}-${year}`;
 }
 
 export function prettyDateLong(date: Date) {
