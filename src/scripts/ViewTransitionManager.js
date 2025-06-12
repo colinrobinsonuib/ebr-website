@@ -7,12 +7,9 @@ export class ViewTransitionManager {
 	}
 
 	init() {
-		console.log("ViewTransitionManager initialized");
-
 		// Create intersection observer to track visible elements
 		this.observer = new IntersectionObserver((entries) => {
 			entries.forEach(entry => {
-				console.log(entry)
 				if (entry.isIntersecting) {
 					this.visibleElements.add(entry.target);
 				} else {
@@ -38,7 +35,6 @@ export class ViewTransitionManager {
 
 	markVisibilityState() {
 		document.removeEventListener('astro:before-preparation', this.beforePreparationListener);
-		console.log(this.visibleElements);
 		document.querySelectorAll('[data-astro-transition-scope]').forEach(el => {
 			if (!this.visibleElements.has(el)) {
 				el.setAttribute('data-astro-transition-scope', 'false');
@@ -47,7 +43,6 @@ export class ViewTransitionManager {
 	}
 
 	destroy() {
-		console.log("destroy");
 		if (this.observer) {
 			this.observer.disconnect();
 		}

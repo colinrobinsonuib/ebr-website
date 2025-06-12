@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { threads, threadTitles, threadColors } from '../lib/threads';
 import PostSnippet from '../components/widget/PostSnippet.astro';
 import { getPublishedPosts } from '../lib/getPosts';
+import Footer from '../components/core/Footer.astro';
 
 const publishedPosts = await getPublishedPosts();
 const latestPosts = publishedPosts.slice(0, 15);
@@ -140,7 +141,8 @@ let latestPostsYear: number | null = null;
 				if (latestPostByThread[thread]) {
 					description =
 						'<div class="flex flex-row justify-between w-full mx-10">' +
-						`<a class="italic w-1/5 text-2xl font-semibold hover:underline" href="/essays/${latestPostByThread[thread].slug}">Read the latest post &gt;</a>` +
+						`<a onclick="document.querySelectorAll('img[data-astro-transition-scope]').forEach(img => img.removeAttribute('data-astro-transition-scope'));"
+						class="italic w-1/5 text-2xl font-semibold hover:underline" href="/essays/${latestPostByThread[thread].slug}">Read the latest post &gt;</a>` +
 						'<div class="flex text-right flex-col w-4/5">';
 
 					description += '<span class="ml-5 text-2xl overflow-ellipsis whitespace-nowrap overflow-hidden">' + latestPostByThread[thread].title + '</span>';
@@ -180,4 +182,5 @@ let latestPostsYear: number | null = null;
 			}
 		})();
 	</script>
+	<Footer />
 </BaseLayout>
