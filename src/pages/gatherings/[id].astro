@@ -1,11 +1,12 @@
 ---
 import ContentLayout from '../../layouts/ContentLayout.astro';
-import formatAuthorCitation from '../../lib/authorCitation.js';
-import { getCollection, getEntries, render } from 'astro:content';
-import PostLink from '../../components/ui/PostLink.astro';
+import { getCollection, getEntries } from 'astro:content';
 import { strict as assert } from 'assert';
+import PostArticle from '../../components/widget/PostArticle.astro';
+import { renderTitle } from '../../lib/renderTitle';
+import PostLink from '../../components/ui/PostLink.astro';
+import PostTable from '../../components/widget/PostTable.astro';
 
-// 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
 	const gatherings = await getCollection('gatherings');
 	return gatherings.map((gathering) => ({
@@ -14,7 +15,7 @@ export async function getStaticPaths() {
 	}));
 }
 const { gathering } = Astro.props;
-if(!gathering.data.publish_date && gathering.data.draft) {
+if (!gathering.data.publish_date && gathering.data.draft) {
 	gathering.data.publish_date = new Date();
 }
 
@@ -29,54 +30,31 @@ const postsByGathering = (await getCollection('posts')).filter((post) =>
 	gathering.data.posts?.some((item) => item.id === post.id),
 );
 
-const authorCitation = formatAuthorCitation(authors);
-
-const { Content } = await render(gathering);
+const title = await renderTitle(gathering.data.title);
 ---
 
 <ContentLayout title={gathering.data.title}>
-	<article>
-		<h1>{gathering.data.title}</h1>
-
-		<a href={'https://electronicbookreview.com/gathering/' + gathering.data.slug} target="_blank"
-			>EBR Link</a
-		>
-
-		<p>
-			By: {
-			authors
-					.map((author) => <a href={`/authors/${author.id}`}>{author.data.title}</a>)
-					.join(', ')
-			}
-		</p>
-
-		<p>Published: {gathering.data.publish_date.toISOString().split('T')[0]}</p>
-
-		<div>
-			Essays:
-			<ul class="ml-4 list-disc">
-				{
-					postsByGathering.map((post) => (
-						<li>
-							<PostLink id={post.id} />
-						</li>
-					))
-				}
-			</ul>
+	<div class="mx-auto mt-6 w-full max-w-7xl">
+		<div class="flex flex-row">
+			<div class="relative h-24 w-64">
+				<a href="/gatherings/1"
+					class="bg-black block text-white h-24 w-64 cursor-pointer rounded-t-4xl py-6 text-center translate-y-5 font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-3">
+					gatherings
+				</a>
+			</div>
 		</div>
+		<div class="border-thread relative flex flex-row bg-white md:border-10">
+			<aside class="mt-36 hidden w-64 border-r-2 border-neutral-500 lg:block"></aside>
 
-		<hr />
-		<Content />
+			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
+				<PostArticle post={gathering} authors={authors} title={title} />
+				<div class="m-auto max-w-[75ch] text-lg">
+					<h2 class="text-3xl">Contents:</h2>
+					<PostTable posts={postsByGathering} />
+				</div>
+			</main>
 
-		<h3>Cite this Gathering:</h3>
-		<p>
-			{authorCitation}. "{gathering.data.title}" <span class="italic">Electronic Book Review</span>, {
-				gathering.data.publish_date.toLocaleDateString('en-GB', {
-					year: 'numeric',
-					month: 'long',
-					day: 'numeric',
-				})
-			}, {'https://electronicbookreview.com/gathering/' + gathering.data.slug}
-		</p>
-	</article>
+			<aside class="mt-36 hidden w-64 border-l-2 border-neutral-500 xl:block"></aside>
+		</div>
+	</div>
 </ContentLayout>

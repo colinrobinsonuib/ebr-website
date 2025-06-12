@@ -3,14 +3,16 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
 
 import Pagination from '../../components/ui/Pagination.astro';
 import { type Page } from 'astro';
-import { getCollection } from 'astro:content';
-import { prettyDate } from '../../lib/utils';
+import { getCollection, getEntries } from 'astro:content';
 import { renderTitle } from '../../lib/renderTitle';
+import { processBlurb } from '../../lib/utils';
 
 export async function getStaticPaths({ paginate }) {
-	let allPosts = await getCollection('gatherings');
+	let allPosts = await getCollection('gatherings', ({ data }) => {;
+		return data.publish_date && data.draft === false;
+	});
 	allPosts.sort((a, b) => {
-		return b.data.publish_date.getTime() - a.data.publish_date.getTime();
+		return b.data.publish_date!.getTime() - a.data.publish_date!.getTime();
 	});
 	return paginate(allPosts, {
 		pageSize: 20,
@@ -18,49 +20,43 @@ export async function getStaticPaths({ paginate }) {
 }
 
 const { page }: { page: Page } = Astro.props;
-
 ---
 
-<ContentLayout title="Gatherings">
-	<div class="mx-auto mt-30 w-full max-w-7xl grow">
-		<div class="border-postType relative flex flex-row bg-white md:border-10">
-			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
-				<article class="m-auto max-w-5xl text-sm md:text-lg">
-					<h1 class="mb-2 text-3xl">Gatherings</h1>
-					<p class="mb-8 text-slate-500">Page {page.currentPage} of {page.lastPage}</p>
-					{
-						page.data.map((gathering) => (
-							<div class="flex flex-row items-center border-t-2 py-5 font-mono">
-								<div class="min-w-30">{prettyDate(gathering.data.publish_date)}</div>
-								<div class="mx-1 flex grow flex-col">
-									<a
-										href={`/gatherings/${gathering.id}`}
-										set:html={renderTitle(gathering.data.title)}
-										class="font-semibold text-pretty hover:underline md:text-xl"
-									/>
-									<span class="text-xs text-gray-800 md:text-base">
-										by
-										<span class="capitalize">
-											{gathering.data.authors
-												.map((author) => {
-													return author.id.replaceAll('-', ' ');
-												})
-												.reduce((prev, curr) => [prev, ', ', curr])}
-										</span>
-									</span>
-								</div>
-								{gathering.data.image && (
-									<img
-										alt="featured image"
-										src={gathering.data.image}
-										style="width: 100px; height: 100px"
-									/>
-								)}
+<ContentLayout title="publications">
+	<div class="mx-auto mt-6 w-full max-w-7xl grow" >
+		<div class="flex flex-row">
+			<div class="relative h-24 w-64">
+				<div
+					class="bg-postType absolute bottom-0 flex w-64 translate-y-13 transform  flex-col rounded-t-4xl py-6 text-center font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-4">
+					<span class="text-white">publications</span>
+					<span class="mt-6 text-balance text-white">
+						Page {page.currentPage} of {page.lastPage}
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="border-postType md:border-10 relative px-6 bg-white">
+			<main class="py-8">
+				{
+					page.data.map(async (post) => {
+						const authors = await getEntries(post.data.authors);
+						const blurb = (await processBlurb(post.body)).toString();
+						const paragraphMatch = blurb.match(/<p[^>]*>(.*?)<\/p>/s);
+						const blurbText = (paragraphMatch) ? paragraphMatch[0] : blurb.substring(0, 200);
+						return (
+							<div class="flex flex-col pt-2">
+								<a href={`/gatherings/${post.id}`} set:html={renderTitle(post.data.title)} class="text-3xl font-semibold underline hover:no-underline"></a>
+								{ authors &&
+									<div class="italic text-lg">by {authors.map(author => (
+										<a href={`/authors/${author.id}`} class="hover:underline">{author.data.title}</a>
+									)).reduce((prev, curr) => [prev, ', ', curr]) }
+									</div>
+								}
+								<div class="my-2 blurb" set:html={blurbText}></div>
 							</div>
-						))
-					}
-				</article>
-
+						);
+					})
+				}
 				<div class="mt-16">
 					<Pagination page={page} />
 				</div>

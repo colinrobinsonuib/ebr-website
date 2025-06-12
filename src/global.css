@@ -73,7 +73,7 @@ body {
 @layer components {
     .prose {
         h1 {
-            font-size: var(--text-3xl);
+            font-size: var(--text-4xl);
         }
         h2 {
             font-size: var(--text-3xl);

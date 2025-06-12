@@ -104,7 +104,7 @@ But while the novel offers no single solution for complex and catastrophic probl
 
 By forcing us to have a sustained engagement with our possible future, *The Peripheral* defers the eschatological tendency that dominates so much of our conversation about the environment. This gathering on the topic of digital and natural ecologies for *ebr* has emerged from a similar impulse. This is, namely, a desire to contain questions about the present and possibilities for the future in the same conversation, without falling prey to narratives about eschatological finality or transcendent intervention. We can no longer pretend that digital technology doesn't exist or that it is not, somehow, "natural" or that it, somehow, exists outside of material culture. The techno-fetishism that dominated both popular and critical discourse of the 90s and early 00s has run its course. But so too has the conception of nature as something that ceases to exist outside of the boundaries of a national park or an arbitrarily constructed notion of wilderness. The essays in this cluster highlight juxtapositions and adjacencies between the here and the now, in the overlaps between the natural and the technological, between the human and the nonhuman, between the virtual and the real, and in the hair-line divisions that exists between our vulnerable present and our nearly-present peripheral future.
 
-### Works Cited
+## Works Cited
 
 Altizer, Thomas J.J. "The Revolutionary Vision of William Blake." *The Journal of Religious Ethics* 37.1 (Mar., 2009): 33-38. Print.
 
