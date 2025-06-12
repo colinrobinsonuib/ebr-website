@@ -1,11 +1,13 @@
 ---
 import PostType from '../ui/PostType.astro';
-const { post } = Astro.props;
 import { renderTitle } from '../../lib/renderTitle';
 import { prettyDate, processBlurb } from '../../lib/utils';
-import { getEntries } from 'astro:content';
+import { type CollectionEntry, getEntries } from 'astro:content';
+import PostThread from '../ui/PostThread.astro';
 
-const authors = await getEntries(post.data.authors);
+const { post, showThread=false } = Astro.props;
+
+const authors: CollectionEntry<'authors'>[] = await getEntries(post.data.authors);
 const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 ---
 <style>
@@ -22,7 +24,8 @@ const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 		{prettyDate(post.data.publish_date)}
 	</div>
 	<div class="px-8 border-t-2 pt-2">
-		<PostType type={post.data.type} />
+		{!showThread && <PostType type={post.data.type} />}
+		{showThread && <PostThread thread={post.data.thread} />}
 	</div>
 	<div class="flex flex-col border-t-2 pt-2">
 		<a href={`/${post.data.type}s/${post.id}`} set:html={renderTitle(post.data.title)} class="text-2xl font-semibold underline hover:no-underline"></a>

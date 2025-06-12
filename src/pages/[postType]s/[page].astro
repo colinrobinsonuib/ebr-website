@@ -51,7 +51,7 @@ let latestPostsYear: number | null = null;
 							return (
 								<>
 									{yearChanged && <h2 class="my-6 ml-41 text-5xl font-black">{year}</h2>}
-									<PostSnippet post={post} />
+									<PostSnippet post={post} showThread={true} />
 								</>
 							);
 						})
