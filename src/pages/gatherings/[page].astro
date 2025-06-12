@@ -1,0 +1,70 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+
+import Pagination from '../../components/ui/Pagination.astro';
+import { type Page } from 'astro';
+import { getCollection } from 'astro:content';
+import { prettyDate } from '../../lib/utils';
+import { renderTitle } from '../../lib/renderTitle';
+
+export async function getStaticPaths({ paginate }) {
+	let allPosts = await getCollection('gatherings');
+	allPosts.sort((a, b) => {
+		return b.data.publish_date.getTime() - a.data.publish_date.getTime();
+	});
+	return paginate(allPosts, {
+		pageSize: 20,
+	});
+}
+
+const { page }: { page: Page } = Astro.props;
+
+---
+
+<ContentLayout title="Gatherings">
+	<div class="mx-auto mt-30 w-full max-w-7xl grow">
+		<div class="border-postType relative flex flex-row bg-white md:border-10">
+			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
+				<article class="m-auto max-w-5xl text-sm md:text-lg">
+					<h1 class="mb-2 text-3xl">Gatherings</h1>
+					<p class="mb-8 text-slate-500">Page {page.currentPage} of {page.lastPage}</p>
+					{
+						page.data.map((gathering) => (
+							<div class="flex flex-row items-center border-t-2 py-5 font-mono">
+								<div class="min-w-30">{prettyDate(gathering.data.publish_date)}</div>
+								<div class="mx-1 flex grow flex-col">
+									<a
+										href={`/gatherings/${gathering.id}`}
+										set:html={renderTitle(gathering.data.title)}
+										class="font-semibold text-pretty hover:underline md:text-xl"
+									/>
+									<span class="text-xs text-gray-800 md:text-base">
+										by
+										<span class="capitalize">
+											{gathering.data.authors
+												.map((author) => {
+													return author.id.replaceAll('-', ' ');
+												})
+												.reduce((prev, curr) => [prev, ', ', curr])}
+										</span>
+									</span>
+								</div>
+								{gathering.data.image && (
+									<img
+										alt="featured image"
+										src={gathering.data.image}
+										style="width: 100px; height: 100px"
+									/>
+								)}
+							</div>
+						))
+					}
+				</article>
+
+				<div class="mt-16">
+					<Pagination page={page} />
+				</div>
+			</main>
+		</div>
+	</div>
+</ContentLayout>

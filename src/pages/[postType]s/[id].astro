@@ -34,7 +34,7 @@ const postTypeColor = postTypeColors[post.data.type] || '#000';
 				<div class="flex flex-row">
 					<div class="relative h-24 w-64">
 						<a
-							href={'/threads/' + post.data.thread}
+							href={'/threads/' + post.data.thread + '/1'}
 							class="bg-thread absolute bottom-0 flex w-64 translate-y-20 transform cursor-pointer flex-col rounded-t-4xl py-6 text-center font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-4">
 							<span class="text-white">{threadTitles[post.data.thread]}</span>
 							<span class="mt-6 text-balance text-black">

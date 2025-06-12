@@ -36,6 +36,8 @@ const { Content } = await render(post);
 					alt="featured image"
 					src={post.data.image}
 					class="float-left mt-2 mr-5 mb-1 h-40 w-40"
+					transition:name=`image-${post.id}`
+					onclick="window.history.back()"
 				/>
 			)
 		}

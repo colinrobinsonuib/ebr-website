@@ -28,7 +28,7 @@ const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 		<a href={`/${post.data.type}s/${post.id}`} set:html={renderTitle(post.data.title)} class="text-2xl font-semibold underline hover:no-underline"></a>
 		{ authors &&
 			<div class="italic text-lg">by {authors.map(author => (
-					<a href={`/authors/${author.id}`}>{author.data.title}</a>
+					<a href={`/authors/${author.id}`} class="hover:text-red-500">{author.data.title}</a>
 				)).reduce((prev, curr) => [prev, ', ', curr]) }
 			</div>
 		}
@@ -37,12 +37,12 @@ const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 	<div class="ml-20 min-w-[200px] items-center flex">
 		{
 			post.data.image && (
-				<img
+				<a href={`/${post.data.type}s/${post.id}`} class="mt-6"><img
 					alt="featured image"
 					src={post.data.image}
-					class="mt-6"
 					style="width: 190px; height: 190px"
-				/>
+					transition:name=`image-${post.id}`
+				/></a>
 			)
 		}
 	</div>

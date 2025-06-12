@@ -20,7 +20,13 @@ const postsByAuthor = (await getPublishedPosts())
 ---
 
 <ContentLayout title={author.data.title}>
-	<div class="mx-auto mt-30 w-full max-w-7xl grow">
+	<div class="mx-auto mt-6 w-full max-w-7xl grow">
+		<div class="flex flex-row">
+			<div class="relative h-24 w-64">
+				<a href="/authors/1"
+						 class="bg-sky-600 block text-white h-24 w-64 cursor-pointer rounded-t-4xl py-6 text-center translate-y-5 font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-3">authors</a>
+			</div>
+		</div>
 		<div class="border-sky-600 relative flex flex-row border-10 bg-white">
 			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
 				<article class="m-auto max-w-5xl text-lg">

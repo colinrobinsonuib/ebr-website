@@ -1,8 +1,9 @@
 ---
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import formatAuthorCitation from '../../lib/authorCitation.js';
-import { getCollection, render } from 'astro:content';
+import { getCollection, getEntries, render } from 'astro:content';
 import PostLink from '../../components/ui/PostLink.astro';
+import { strict as assert } from 'assert';
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -13,16 +14,22 @@ export async function getStaticPaths() {
 	}));
 }
 const { gathering } = Astro.props;
+if(!gathering.data.publish_date && gathering.data.draft) {
+	gathering.data.publish_date = new Date();
+}
 
-const authorsByGathering = (await getCollection('authors')).filter((author) =>
-	gathering.data.authors.some((item) => item.id === author.id),
-);
+const authors = await getEntries(gathering.data.authors);
+assert(authors, 'Gathering must have at least one author');
+
+if (!authors || !authors[0]) {
+	throw new Error('authors must be defined');
+}
 
 const postsByGathering = (await getCollection('posts')).filter((post) =>
 	gathering.data.posts?.some((item) => item.id === post.id),
 );
 
-const authorCitation = formatAuthorCitation(authorsByGathering);
+const authorCitation = formatAuthorCitation(authors);
 
 const { Content } = await render(gathering);
 ---
@@ -37,9 +44,9 @@ const { Content } = await render(gathering);
 
 		<p>
 			By: {
-				authorsByGathering
+			authors
 					.map((author) => <a href={`/authors/${author.id}`}>{author.data.title}</a>)
-					.reduce((prev, curr) => [prev, ', ', curr])
+					.join(', ')
 			}
 		</p>
 

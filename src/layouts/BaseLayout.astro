@@ -1,12 +1,12 @@
 ---
 import '../global.css';
 import { ClientRouter } from 'astro:transitions';
-import Navbar from '../components/core/Navbar.astro';
 
 const { title } = Astro.props;
 
-function stripTagsRegex(title: string = 'MISSING TITLE') {
-	return title.replace(/<[^>]*>/g, '');
+function stripTagsRegex(title: string|undefined): string {
+	if(!title) return 'electronic book review';
+	return title.replace(/<[^>]*>/g, '') + ' | ebr';
 }
 ---
 
@@ -16,10 +16,28 @@ function stripTagsRegex(title: string = 'MISSING TITLE') {
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
-		<title>{stripTagsRegex(title)} | ebr</title>
+		<title>{stripTagsRegex(title)}</title>
 		<ClientRouter />
 	</head>
 	<body class="min-h-screen flex flex-col pt-1">
 		<slot />
 	</body>
+
+	<script>
+		import { ViewTransitionManager } from '../scripts/ViewTransitionManager';
+		let transitionManager: ViewTransitionManager;
+
+		// Clean up on page unload
+		document.addEventListener('astro:before-preparation', () => {
+			if (transitionManager) {
+				transitionManager.destroy();
+			}
+		});
+
+		// Reinitialize after page load
+		document.addEventListener('astro:page-load', () => {
+			transitionManager = new ViewTransitionManager();
+		});
+	</script>
+
 </html>

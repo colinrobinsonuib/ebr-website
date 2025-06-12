@@ -4,8 +4,9 @@ import { getPublishedPosts } from '../../../lib/getPosts';
 
 import Pagination from '../../../components/ui/Pagination.astro';
 import PostTable from '../../../components/widget/PostTable.astro';
-import { threadColors, threads } from '../../../lib/threads';
+import { threadColors, threads, threadTitles } from '../../../lib/threads';
 import ContentLayout from '../../../layouts/ContentLayout.astro';
+import PostSnippet from '../../../components/widget/PostSnippet.astro';
 
 export async function getStaticPaths({ paginate }) {
 	const allPosts = await getPublishedPosts();
@@ -20,21 +21,40 @@ export async function getStaticPaths({ paginate }) {
 
 const { page } = Astro.props;
 const { thread }: { thread: (typeof threads)[number] } = Astro.params;
-const title = capitalizeFirstLetter(thread) + 's';
+const title = threadTitles[thread];
 
 const threadColor = threadColors[thread] || '#000';
+let latestPostsYear: number | null = null;
 ---
 
 <ContentLayout title={title}>
-	<div class="mx-auto mt-30 w-full max-w-7xl grow" style={'--threadColor: ' + threadColor}>
-		<div class="border-thread relative flex flex-row bg-white md:border-10">
-			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
-				<article class="m-auto max-w-5xl text-sm md:text-lg">
-					<h1 class="mb-2 text-3xl">{title}</h1>
-					<p class="mb-8 text-slate-500">Page {page.currentPage} of {page.lastPage}</p>
-					<PostTable posts={page.data} />
-				</article>
-
+	<div class="mx-auto mt-6 w-full max-w-7xl grow" style={'--threadColor: ' + threadColor}>
+		<div class="flex flex-row">
+			<div class="relative h-24 w-64">
+				<div
+					class="bg-thread absolute bottom-0 flex w-64 translate-y-13 transform  flex-col rounded-t-4xl py-6 text-center font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-4">
+					<span class="text-white">{title}</span>
+					<span class="mt-6 text-balance text-black">
+						Page {page.currentPage} of {page.lastPage}
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="border-thread md:border-10 relative px-6 bg-white">
+			<main class="py-8">
+				{
+					page.data.map((post) => {
+						const year = post.data.publish_date.getFullYear();
+						const yearChanged = year !== latestPostsYear;
+						latestPostsYear = year;
+						return (
+							<>
+								{yearChanged && <h2 class="my-6 ml-41 text-5xl font-black">{year}</h2>}
+								<PostSnippet post={post} />
+							</>
+						);
+					})
+				}
 				<div class="mt-16">
 					<Pagination page={page} />
 				</div>
