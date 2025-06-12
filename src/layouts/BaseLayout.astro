@@ -23,21 +23,4 @@ function stripTagsRegex(title: string|undefined): string {
 		<slot />
 	</body>
 
-	<script>
-		import { ViewTransitionManager } from '../scripts/ViewTransitionManager';
-		let transitionManager: ViewTransitionManager;
-
-		// Clean up on page unload
-		document.addEventListener('astro:before-preparation', () => {
-			if (transitionManager) {
-				transitionManager.destroy();
-			}
-		});
-
-		// Reinitialize after page load
-		document.addEventListener('astro:page-load', () => {
-			transitionManager = new ViewTransitionManager();
-		});
-	</script>
-
 </html>
