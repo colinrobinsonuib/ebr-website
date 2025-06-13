@@ -172,7 +172,7 @@ body {
         color: black;
         font-family: var(--font-mono);
         background: var(--threadColor);
-        hyphens: auto;
+        word-wrap: break-word;
         margin-top: -1rem;
         transition: box-shadow 0.15s ease 0.05s;
 
