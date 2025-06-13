@@ -26,7 +26,15 @@ const worksCited = await extractWorksCited(post.body);
 const threadColor = post.data.thread ? threadColors[post.data.thread] : '#000';
 const postTypeColor = postTypeColors[post.data.type] || '#000';
 ---
-
+<style is:inline>
+	.spotify-sticky {
+		position: fixed !important;
+		bottom: 0 !important;
+		top: unset !important;
+		background: #005c5c !important;
+		height: 80px !important;
+	}
+</style>
 <ContentLayout title={title}>
 	<div
 		class="mx-auto mt-6 w-full max-w-7xl"
@@ -192,5 +200,41 @@ const postTypeColor = postTypeColors[post.data.type] || '#000';
 				});
 			}
 		});
+
+		if (postType === 'interview') {
+			const spotifyPlayer = document.querySelector('iframe[src*="spotify.com"]');
+
+			if (spotifyPlayer) {
+				let userHasInteracted = false;
+				let isPlayerInView = true;
+
+				// Only make sticky if the user has clicked it AND it's scrolled out of view
+				const updateStickyState = () => {
+					if (userHasInteracted && !isPlayerInView) {
+						spotifyPlayer.classList.add('spotify-sticky');
+					} else {
+						spotifyPlayer.classList.remove('spotify-sticky');
+					}
+				};
+
+				const scrollTrigger = document.createElement('div');
+				scrollTrigger.className = 'spotify-scroll-trigger';
+				spotifyPlayer.parentNode.insertBefore(scrollTrigger, spotifyPlayer);
+
+				const observer = new IntersectionObserver((entries) => {
+					isPlayerInView = entries[0].isIntersecting;
+					updateStickyState();
+				}, { threshold: 0 });
+
+				observer.observe(scrollTrigger);
+
+				window.addEventListener('blur', () => {
+					if (document.activeElement === spotifyPlayer) {
+						userHasInteracted = true;
+						updateStickyState();
+					}
+				});
+			}
+		}
 	})();
 </script>
