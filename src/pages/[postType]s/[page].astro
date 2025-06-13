@@ -5,9 +5,7 @@ import { capitalizeFirstLetter } from '../../lib/utils';
 import { getPublishedPosts } from '../../lib/getPosts';
 
 import Pagination from '../../components/ui/Pagination.astro';
-import PostTable from '../../components/widget/PostTable.astro';
 import PostSnippet from '../../components/widget/PostSnippet.astro';
-import { threadTitles } from '../../lib/threads';
 
 export async function getStaticPaths({ paginate }) {
 	const allPosts = await getPublishedPosts();

@@ -3,12 +3,11 @@ import { prettyDate, prettyDateLong, processBlurb } from '../../lib/utils';
 import PostType from '../ui/PostType.astro';
 import ByAuthors from '../ui/ByAuthors.astro';
 import { render } from 'astro:content';
-import formatAuthorCitation from '../../lib/authorCitation';
+import CiteThis from '../ui/CiteThis.astro';
 
 const {post, authors, title} = Astro.props;
 const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 const { Content } = await render(post);
-const authorCitation = formatAuthorCitation(authors);
 ---
 <style is:inline>
 	.blurb p {
@@ -19,7 +18,7 @@ const authorCitation = formatAuthorCitation(authors);
 	<div class="mb-6">
 		<PostType type={post.data.type} />
 	</div>
-	<h1 class="mb-5 text-4xl font-semibold dark:text-gray-50" set:html={title} />
+	<h1 class="mb-5 text-3xl md:text-4xl font-semibold dark:text-gray-50" set:html={title} />
 	<div class="mb-5 w-fit border-b font-mono text-xl text-red-500 italic">
 		{
 			<ByAuthors authors={authors} />
@@ -55,8 +54,7 @@ const authorCitation = formatAuthorCitation(authors);
 
 	<div class="prose">
 		<Content />
-		<h2>Cite this Essay</h2>
-		<p>{authorCitation}. "{post.data.title}" <span class="italic">Electronic Book Review</span>, {post.data.publish_date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}, {post.data.doi || 'https://electronicbookreview.com/essay/'+post.data.slug+'/' }</p>
+		<CiteThis {post} {authors} {title} />
 	</div>
 
 </article>

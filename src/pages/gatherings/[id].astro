@@ -1,11 +1,13 @@
 ---
 import ContentLayout from '../../layouts/ContentLayout.astro';
-import { getCollection, getEntries } from 'astro:content';
+import { getCollection, getEntries, render } from 'astro:content';
 import { strict as assert } from 'assert';
-import PostArticle from '../../components/widget/PostArticle.astro';
 import { renderTitle } from '../../lib/renderTitle';
-import PostLink from '../../components/ui/PostLink.astro';
 import PostTable from '../../components/widget/PostTable.astro';
+import { prettyDate, prettyDateLong, processBlurb } from '../../lib/utils';
+import ByAuthors from '../../components/ui/ByAuthors.astro';
+import formatAuthorCitation from '../../lib/authorCitation';
+import CiteThis from '../../components/ui/CiteThis.astro';
 
 export async function getStaticPaths() {
 	const gatherings = await getCollection('gatherings');
@@ -14,14 +16,13 @@ export async function getStaticPaths() {
 		props: { gathering },
 	}));
 }
+
 const { gathering } = Astro.props;
 if (!gathering.data.publish_date && gathering.data.draft) {
 	gathering.data.publish_date = new Date();
 }
 
 const authors = await getEntries(gathering.data.authors);
-assert(authors, 'Gathering must have at least one author');
-
 if (!authors || !authors[0]) {
 	throw new Error('authors must be defined');
 }
@@ -31,6 +32,8 @@ const postsByGathering = (await getCollection('posts')).filter((post) =>
 );
 
 const title = await renderTitle(gathering.data.title);
+const { Content } = await render(gathering);
+const authorCitation = formatAuthorCitation(authors);
 ---
 
 <ContentLayout title={gathering.data.title}>
@@ -38,23 +41,64 @@ const title = await renderTitle(gathering.data.title);
 		<div class="flex flex-row">
 			<div class="relative h-24 w-64">
 				<a href="/gatherings/1"
-					class="bg-black block text-white h-24 w-64 cursor-pointer rounded-t-4xl py-6 text-center translate-y-5 font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-3">
+					class="bg-gathering block text-black h-24 w-64 cursor-pointer rounded-t-4xl py-6 text-center translate-y-5 font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-3">
 					gatherings
 				</a>
 			</div>
 		</div>
-		<div class="border-thread relative flex flex-row bg-white md:border-10">
+		<div class="border-gathering relative flex flex-row bg-white md:border-10 md:border-b-0">
+
 			<aside class="mt-36 hidden w-64 border-r-2 border-neutral-500 lg:block"></aside>
 
 			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
-				<PostArticle post={gathering} authors={authors} title={title} />
-				<div class="m-auto max-w-[75ch] text-lg">
-					<h2 class="text-3xl">Contents:</h2>
-					<PostTable posts={postsByGathering} />
-				</div>
+
+				<article class="m-auto max-w-[75ch] text-lg">
+					<h1 class="mb-5 text-4xl font-semibold dark:text-gray-50" set:html={title} />
+					<div class="mb-5 w-fit border-b font-mono text-xl text-red-500 italic">
+						{
+							<ByAuthors authors={authors} />
+						}
+					</div>
+					<div
+						class="mb-5 font-mono text-xl"
+						title={'last modified: ' + prettyDate(gathering.data.modified_date)}>
+						{prettyDateLong(gathering.data.publish_date!)}
+					</div>
+
+					<div class="my-5 flow-root">
+						{
+							gathering.data.image && (
+								<img
+									alt="featured image"
+									src={gathering.data.image}
+									class="float-left mt-2 mr-5 mb-1 h-40 w-40"
+									transition:name=`image-${gathering.id}`
+									onclick="window.history.back()"
+								/>
+							)
+						}
+					</div>
+
+					<div class="prose">
+						<Content />
+						<CiteThis post={gathering} {authors} {title} />
+					</div>
+
+				</article>
+
 			</main>
 
 			<aside class="mt-36 hidden w-64 border-l-2 border-neutral-500 xl:block"></aside>
+
 		</div>
+
+		<div class="border-gathering bg-white md:border-10 md:border-t-0">
+			<div class="m-auto px-4 text-lg">
+				<h2 class="text-3xl">Contents:</h2>
+				<PostTable posts={postsByGathering} />
+
+			</div>
+		</div>
+
 	</div>
 </ContentLayout>

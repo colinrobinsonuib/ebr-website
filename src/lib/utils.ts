@@ -14,7 +14,7 @@ export async function processBlurb(blurb: string) {
 export async function extractWorksCited(markdownString: string | undefined) {
 	if (!markdownString) return;
 
-	const sectionTitles = ['## Works Cited', '## Works consulted', '## References'];
+	const sectionTitles = ['## Works Cited', '## Works cited', '## Works consulted', '## References'];
 	let worksCitedIndex = -1;
 	let sectionTitle = '';
 	for (sectionTitle of sectionTitles) {
@@ -28,7 +28,7 @@ export async function extractWorksCited(markdownString: string | undefined) {
 	}
 
 	const afterWorksCited =
-		'## Works Cited' + '\n' + markdownString.substring(worksCitedIndex + sectionTitle.length);
+		'# Works Cited' + '\n' + markdownString.substring(worksCitedIndex + sectionTitle.length);
 
 	return (
 		await unified().use(remarkParse).use(remarkRehype).use(rehypeStringify).process(afterWorksCited)

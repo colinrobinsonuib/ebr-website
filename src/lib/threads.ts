@@ -12,6 +12,7 @@ export const threads = [
 	'image-narrative',
 	'music-sound-noise',
 	'writing-under-constraint',
+	'enfolded',
 ] as const;
 
 export type Thread = (typeof threads)[number];
@@ -30,6 +31,7 @@ export const threadTitles: Record<Thread, string> = {
 	'image-narrative': 'image + narrative',
 	'music-sound-noise': 'music/sound/noise',
 	'writing-under-constraint': 'writing under constraint',
+	enfolded: 'enfolded',
 } as const;
 
 export const threadColors: Record<Thread, string> = {
@@ -46,6 +48,7 @@ export const threadColors: Record<Thread, string> = {
 	'image-narrative': '#999900',
 	'music-sound-noise': '#CCCC33',
 	'writing-under-constraint': '#9999cc',
+	enfolded: '#94b85c',
 } as const;
 
 export const threadDescriptions: Record<Thread, { text: string; date: string }> = {
@@ -100,5 +103,9 @@ export const threadDescriptions: Record<Thread, { text: string; date: string }> 
 	'writing-under-constraint': {
 		text: 'The count-down is complete; the line has served its time. In this spirit of millennial closure, the Winter 1999/2000 issue of ebr will be the last written under the constraint of periodical publication.',
 		date: 'December 31, 1999',
+	},
+	enfolded: {
+		text: 'Unique among ebr ‘threads,’ this one is composed of essays that reside apart from ebr. The ‘enfolded’ essays retain their origin and identity, but they become available through the ebr interface. The resulting network of affiliated essays brings ebr a step closer to a literary semantic web, whose content can be collected, tagged, and interlinked among a consortium of federated sites.',
+		date: 'March 23, 2007',
 	},
 } as const;

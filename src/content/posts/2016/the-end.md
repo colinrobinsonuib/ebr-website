@@ -14,6 +14,8 @@ blurb: 'The closing keynote at the Summer 2015 University of Otag0 symposium, "W
 image: https://images.electronicbookreview.com/2016/11/Screen-Shot-2018-04-29-at-3.38.51-PM-150x150.png
 ---
 
+`vimeo:868917719`
+
 Dunedin, home of the University of Otago, facing the Pacific on the southeast corner of the South Island of New Zealand, used to be far from everywhere - if not exactly the end of the world, then (as they say) you could it see from there. Nowadays, of course, it is as close to everywhere as anywhere else, and much closer than some places, wired into the world-wide web and served by online forums of intellectual life such as the *ebr*. No longer "peripheral" relative to the metropolitan "centers" (if it ever was), no longer out of synch, lagging behind intellectual developments in the metropoles (if it ever did), Dunedin is as likely a place as any to produce timely reflection on the present condition of postmodernism worldwide, and perhaps even to pronounce on its end.
 
 What did we conclude, back in June 2015 in Dunedin, about postmodernism? Nothing. But we did find ourselves circling around several gnarly, perhaps irresolvable questions that, if they prevented us from concluding, also prevented us from concluding *prematurely*. Let me pick three of them.[^1]

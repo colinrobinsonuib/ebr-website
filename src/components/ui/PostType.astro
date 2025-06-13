@@ -1,9 +1,19 @@
 ---
 import { type PostType, postTypeColors } from '../../lib/postTypes';
-const { type } = Astro.props;
-const postTypeColor = postTypeColors[type as PostType];
 
-const tooltip = (type==='article') ? 'Articles are peer reviewed' : '';
+interface Props {
+	type: PostType|'gathering';
+}
+const { type }: Props = Astro.props;
+
+const postTypeColor = (type==='gathering') ? '#24ccff' : postTypeColors[type];
+
+const tooltip = type === 'article' ? 'Articles are peer reviewed' : '';
 ---
 
-<a href={'/' + type + 's/1'} title={tooltip} class="flex h-8 w-34 font-mono text-xl no-underline text-black items-center justify-center" style={'background-color: '+postTypeColor}>{type}</a>
+<a
+	href={'/' + type + 's/1'}
+	title={tooltip}
+	class="flex h-8 w-34 items-center justify-center font-mono text-black no-underline text-xl"
+	style={'background-color: ' + postTypeColor}>{type}</a
+>

@@ -103,6 +103,15 @@ body {
                 text-decoration: none;
             }
         }
+        ul {
+            list-style-type: disc;
+            list-style-position: inside;
+            margin-left: 1em;
+        }
+        ol {
+            list-style-type: decimal;
+            list-style-position: inside;
+        }
         blockquote {
             color: #333;
             line-height: 1.7;

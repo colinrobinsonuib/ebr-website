@@ -2,10 +2,11 @@ import { defineConfig, envField } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import rehypeImageCaption from 'rehype-image-caption';
 import { remarkMarginnotesPlugin, marginnoteHandlers } from 'remark-marginnotes';
+import { remarkYoutubeVimeo } from './src/lib/remarkYoutubeVimeo.js';
 
 export default defineConfig({
 	markdown: {
-		remarkPlugins: [remarkMarginnotesPlugin],
+		remarkPlugins: [remarkMarginnotesPlugin, remarkYoutubeVimeo],
 		rehypePlugins: [[rehypeImageCaption, { wrapImagesWithoutCaptions: false }]],
 		remarkRehype: {
 			handlers: marginnoteHandlers({ label: 'custom', charList: '⏴' }),

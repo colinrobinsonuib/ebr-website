@@ -36,6 +36,7 @@ export const gatheringSchema = baseSchema.extend({
 	authors: z.array(reference('authors')),
 	posts: z.array(reference('posts')).optional(),
 	image: z.string().optional(),
+	type: z.string().default('gathering'),
 });
 
 export const authorSchema = baseSchema.extend({
@@ -59,5 +60,7 @@ const authors = defineCollection({
 	loader: glob({ pattern: '**/*.md', base: CONTENT_DIR + '/authors' }),
 	schema: authorSchema,
 });
+
+export type Author = CollectionEntry<'authors'>;
 
 export const collections = { posts, gatherings, authors };

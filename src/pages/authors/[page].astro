@@ -1,0 +1,50 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+
+import Pagination from '../../components/ui/Pagination.astro';
+import { type Page } from 'astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths({ paginate }) {
+	let allPosts = (await getCollection('authors')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+	return paginate(allPosts, {
+		pageSize: 60,
+	});
+}
+
+const { page }: { page: Page } = Astro.props;
+---
+
+<ContentLayout title="authors">
+	<div class="mx-auto mt-6 w-full max-w-7xl grow" >
+		<div class="flex flex-row">
+			<div class="relative h-24 w-64">
+				<div
+					class="bg-sky-600 absolute bottom-0 flex w-64 translate-y-13 transform  flex-col rounded-t-4xl py-6 text-center font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-4">
+					<span class="text-white">authors</span>
+					<span class="mt-6 text-balance text-white">
+						Page {page.currentPage} of {page.lastPage}
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="border-sky-600 md:border-10 border relative px-6 bg-white">
+			<main class="py-8 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2 text-lg ">
+				{page.data.map((author) => (
+					<a
+						key={author.id}
+						href={`/authors/${author.id}`}
+						class="block underline hover:text-red-500 "
+					>
+						{author.data.title}
+					</a>
+				))}
+
+				<div class="mt-16 col-span-full">
+					<Pagination page={page} />
+				</div>
+			</main>
+
+		</div>
+	</div>
+</ContentLayout>

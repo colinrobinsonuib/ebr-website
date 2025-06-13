@@ -1,12 +1,19 @@
 ---
-const {authors} = Astro.props;
+import type { Author } from '../../content.config';
+interface Props {
+	authors: Author[]
+}
+
+const { authors }: Props = Astro.props;
 ---
+
 <span>by </span>
 {
-	authors.map((author) => (
-		<a class="hover:text-black" href={'/authors/' + author.id}>
-			{author.data.title}
-		</a>
-	))
-	.reduce((prev, curr) => [prev, ', ', curr])
+	authors
+		.map((author) => (
+			<a class="hover:text-black" href={'/authors/' + author.id}>
+				{author.data.title}
+			</a>
+		))
+		.reduce((prev, curr) => [prev, ', ', curr])
 }

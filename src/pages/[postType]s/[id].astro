@@ -5,7 +5,6 @@ import { threadColors, threadDescriptions, threadTitles } from '../../lib/thread
 
 import { renderTitle } from '../../lib/renderTitle';
 
-
 import { postTypeColors } from '../../lib/postTypes';
 import PostArticle from '../../components/widget/PostArticle.astro';
 import ContentLayout from '../../layouts/ContentLayout.astro';
@@ -27,8 +26,11 @@ const worksCited = await extractWorksCited(post.body);
 const threadColor = post.data.thread ? threadColors[post.data.thread] : '#000';
 const postTypeColor = postTypeColors[post.data.type] || '#000';
 ---
+
 <ContentLayout title={title}>
-	<div class="mx-auto mt-6 w-full max-w-7xl" style={'--threadColor: ' + threadColor + '; --postTypeColor: ' + postTypeColor}>
+	<div
+		class="mx-auto mt-6 w-full max-w-7xl"
+		style={'--threadColor: ' + threadColor + '; --postTypeColor: ' + postTypeColor}>
 		{
 			post.data.thread && (
 				<div class="flex flex-row">
@@ -42,12 +44,17 @@ const postTypeColor = postTypeColors[post.data.type] || '#000';
 							</span>
 						</a>
 					</div>
-					{worksCited && <div id="works-cited-tab"
-							 class="bg-black text-white h-24 w-64 cursor-pointer rounded-t-4xl py-6 text-center translate-y-5 font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-3">works cited</div>}
+					{worksCited && (
+						<div
+							id="works-cited-tab"
+							class="hidden h-24 w-64 translate-y-5 cursor-pointer rounded-t-4xl bg-black py-6 text-center font-mono text-lg text-white transition-transform duration-300 ease-in-out hover:translate-y-3 sm:block">
+							works cited
+						</div>
+					)}
 				</div>
 			)
 		}
-		<div class="border-thread relative flex flex-row md:border-10 bg-white">
+		<div class="border-thread relative flex flex-row bg-white md:border-10">
 			<aside class="mt-36 hidden w-64 border-r-2 border-neutral-500 lg:block">
 				{
 					post.data.thread && (
@@ -61,7 +68,14 @@ const postTypeColor = postTypeColors[post.data.type] || '#000';
 
 			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
 				<PostArticle post={post} authors={authors} title={title} />
-				{worksCited && <article id="works-cited-article" class="m-auto max-w-[75ch] text-lg prose hidden" set:html={worksCited}></article>}
+				{
+					worksCited && (
+						<article
+							class="prose m-auto hidden max-w-[75ch] text-lg text-white"
+							set:html={worksCited}
+						/>
+					)
+				}
 			</main>
 
 			<!-- Right aside -->
@@ -78,29 +92,32 @@ const postTypeColor = postTypeColors[post.data.type] || '#000';
 	</div>
 </ContentLayout>
 
-<script is:inline data-astro-rerun define:vars={{postType: post.data.type}}>
+<script is:inline data-astro-rerun define:vars={{ postType: post.data.type }}>
 	(() => {
-		const worksCitedTab = document.getElementById("works-cited-tab");
-		worksCitedTab.addEventListener("click", () => {
-
-			if( worksCitedTab.innerText === 'works cited' ) {
-				worksCitedTab.innerText = postType;
-				worksCitedTab.classList.remove('bg-black');
-				worksCitedTab.classList.remove('text-white');
-				worksCitedTab.classList.add('bg-postType');
-				worksCitedTab.classList.add('text-black');
-			} else {
-				worksCitedTab.innerText = 'works cited'
-				worksCitedTab.classList.add('bg-black');
-				worksCitedTab.classList.add('text-white');
-				worksCitedTab.classList.remove('bg-postType');
-				worksCitedTab.classList.remove('text-black');
-			}
-
-			document.querySelectorAll("article").forEach((el) => {
-				el.classList.toggle("hidden");
-			});
-		});
+		const worksCitedTab = document.getElementById('works-cited-tab');
+		if(worksCitedTab) {
+			worksCitedTab.addEventListener('click', () => {
+				const main = document.querySelector('main');
+				if (worksCitedTab.innerText === 'works cited') {
+					worksCitedTab.innerText = postType;
+					worksCitedTab.classList.remove('bg-black');
+					worksCitedTab.classList.remove('text-white');
+					worksCitedTab.classList.add('bg-postType');
+					worksCitedTab.classList.add('text-black');
+					main.classList.add('bg-black');
+					} else {
+					worksCitedTab.innerText = 'works cited';
+					worksCitedTab.classList.add('bg-black');
+					worksCitedTab.classList.add('text-white');
+					worksCitedTab.classList.remove('bg-postType');
+					worksCitedTab.classList.remove('text-black');
+					main.classList.remove('bg-black');
+					}
+				document.querySelectorAll('article').forEach((el) => {
+					el.classList.toggle('hidden');
+					})
+				});
+		}
 
 		// Get all margin note references and definitions
 		const refs = document.querySelectorAll('.marginnote-ref');

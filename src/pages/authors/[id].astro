@@ -1,6 +1,5 @@
 ---
 import { getCollection, render } from 'astro:content';
-import SimplePageLayout from '../../layouts/SimplePageLayout.astro';
 import { getPublishedPosts } from '../../lib/getPosts';
 import PostTable from '../../components/widget/PostTable.astro';
 import ContentLayout from '../../layouts/ContentLayout.astro';
@@ -17,6 +16,10 @@ const { Content } = await render(author);
 
 const postsByAuthor = (await getPublishedPosts())
 	.filter(post =>  post.data.authors.some(item => item.id === author.id))
+
+let gatheringsByAuthor = await getCollection('gatherings', ({ data }) => {;
+	return data.authors.some(item => item.id === author.id);
+});
 ---
 
 <ContentLayout title={author.data.title}>
@@ -30,12 +33,19 @@ const postsByAuthor = (await getPublishedPosts())
 		<div class="border-sky-600 relative flex flex-row border-10 bg-white">
 			<main class="relative w-full flex-1 px-4 py-8 lg:min-w-3xl">
 				<article class="m-auto max-w-5xl text-lg">
-					<h1 class="mb-5 text-3xl font-semibold dark:text-gray-50" set:html={author.data.title} />
+					<h1 class="text-4xl font-semibold dark:text-gray-50" set:html={author.data.title} />
 					{author.data.qid && <span class="text-xl">CELL Project: <a class="text-red-500 underline hover:no-underline" href={`https://cellproject.net/person/${author.data.qid}`}>{author.data.qid}</a></span>}
-					<div class="prose mt-10">
+					<div class="prose mb-4">
 						<Content />
 					</div>
-					<PostTable posts={postsByAuthor} />
+					{postsByAuthor.length > 0 && (
+						<h2 class="text-3xl font-semibold">Posts</h2>
+						<PostTable posts={postsByAuthor} />
+					)}
+					{gatheringsByAuthor.length > 0 && (
+						<h2 class="text-3xl font-semibold">Gatherings</h2>
+						<PostTable posts={gatheringsByAuthor} />
+					)}
 				</article>
 			</main>
 		</div>

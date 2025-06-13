@@ -1,0 +1,13 @@
+---
+import formatAuthorCitation from '../../lib/authorCitation';
+
+const {post, authors, title} = Astro.props;
+
+const authorCitation = post.data.citation_override ? post.data.citation_override: formatAuthorCitation(authors);
+
+const cleanTitle = title.replace(/<[^>]*>/g, '');
+const publishedDate = post.data.publish_date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+const refUrl = post.data.doi ? post.data.doi : `https://electronicbookreview.com/${post.data.type}s/${post.data.slug}/`
+---
+<h2>Cite this Essay</h2>
+<p>{authorCitation}. "{cleanTitle}" <span class="italic">Electronic Book Review</span>, {publishedDate}, <a class="break-all" href={refUrl}>{refUrl}</a></p>

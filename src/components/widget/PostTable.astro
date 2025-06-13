@@ -5,12 +5,12 @@ import { renderTitle } from '../../lib/renderTitle';
 import { prettyDate } from '../../lib/utils';
 import PostThread from '../ui/PostThread.astro';
 ---
-
+<div>
 {
 	posts.map((post) => (
-		<div class="flex flex-row items-center border-t-2 py-5 font-mono">
-			<div class="min-w-30">{prettyDate(post.data.publish_date)}</div>
-			<div class="px-8">
+		<div class="flex flex-row items-center last:border-b-0 border-b-2 py-5 font-mono">
+			<div class="min-w-30 hidden lg:block">{prettyDate(post.data.publish_date)}</div>
+			<div class="pr-4 lg:px-8 hidden sm:block">
 				{!showThread && <PostType type={post.data.type} />}
 				{showThread && <PostThread thread={post.data.thread} />}
 			</div>
@@ -20,7 +20,7 @@ import PostThread from '../ui/PostThread.astro';
 					set:html={renderTitle(post.data.title)}
 					class="font-semibold text-pretty hover:underline md:text-xl"
 				/>
-				<span class="text-xs text-gray-800 md:text-base">
+				<span class="text-sm text-gray-800 md:text-base">
 					by
 					<span class="capitalize">
 						{post.data.authors
@@ -29,11 +29,13 @@ import PostThread from '../ui/PostThread.astro';
 							})
 							.reduce((prev, curr) => [prev, ', ', curr])}
 					</span>
+					<span class="lg:hidden">{prettyDate(post.data.publish_date)}</span>
 				</span>
 			</div>
 			{post.data.image && (
-				<img alt="featured image" src={post.data.image} style="width: 100px; height: 100px" />
+				<img alt="featured image" src={post.data.image} class="w-18 h-18 sm:w-24 sm:h-24" />
 			)}
 		</div>
 	))
 }
+</div>

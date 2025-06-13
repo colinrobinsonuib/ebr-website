@@ -1,11 +1,4 @@
-// authorCitation.ts
-
-export interface Author {
-	/** Full name, e.g. "Jane Ann Doe" */
-	data: {
-		title: string
-	};
-}
+import type { Author } from '../content.config.ts';
 
 /**
  * Splits a full name into given/middle names and last name.
