@@ -1,0 +1,42 @@
+---
+import { type Thread, threadColors, threadTitles } from '../../lib/threads';
+import type { PublishedPost } from '../../content.config';
+import { prettyDate } from '../../lib/utils';
+
+
+interface Props {
+	thread: Thread,
+	latest: PublishedPost|undefined
+}
+const { thread, latest }: Props = Astro.props;
+const threadTitle = threadTitles[thread];
+const threadColor = threadColors[thread];
+---
+<div class="tab-container">
+	<div
+		class="tab relative flex items-center justify-center rounded-t-4xl shadow-md"
+		style={`background-color: ${threadColor}`}>
+		<a href={`/threads/${thread}/1`} class="text-lg font-medium text-white">{threadTitle}</a>
+	</div>
+	<div
+		class="tab-content flex items-center justify-center px-4 shadow-md" style={`background-color: ${threadColor}`}>
+		{latest && (
+			<div class="mx-10 flex w-full flex-row justify-between">
+				<a
+					onclick="document.querySelectorAll('img[data-astro-transition-scope]').forEach(img => img.removeAttribute('data-astro-transition-scope'));"
+					class="w-1/5 text-2xl font-semibold"
+					href={`/${latest.data.type}s/${latest.id}`}
+				><span class="hover:underline">Read the latest post</span><span>⏵</span></a>
+				<div class="flex w-4/5 flex-col text-right">
+						<a href={`/${latest.data.type}s/${latest.id}`} class="ml-5 hover:underline overflow-hidden text-2xl overflow-ellipsis whitespace-nowrap"
+						>{latest.data.title}</a>
+					<div class="-mt-2">
+						<span class="capitalize">by john zuern</span>
+						<span>{prettyDate(latest.data.publish_date)}</span>
+					</div>
+				</div>
+			</div>
+		)}
+		{!latest && 'no posts found in this thread'}
+	</div>
+</div>

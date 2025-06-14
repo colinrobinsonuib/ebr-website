@@ -1,0 +1,40 @@
+---
+import { getPublishedPosts } from '../../lib/getPosts';
+import HomeTab from './HomeTab.astro';
+import { type PublishedPost } from '../../content.config';
+import { threads } from '../../lib/threads';
+
+const publishedPosts = await getPublishedPosts();
+
+const latestPostByThread = publishedPosts.reduce<Record<string, PublishedPost>>((acc, post) => {
+	const { thread, publish_date } = post.data;
+	// skip any posts without a thread
+	if (!thread) return acc;
+
+	const existing = acc[thread];
+	// if first time seeing this thread, or this post is newer
+	if (!existing || publish_date > existing.data.publish_date) {
+		acc[thread] = post;
+	}
+
+	return acc;
+}, {});
+
+---
+<div id="new-tabs-container" class="relative">
+	<div class="tab-row-0 relative z-0 flex">
+		{
+			threads.slice(0, 3).map(thread => <HomeTab thread={thread} latest={latestPostByThread[thread]} />)
+		}
+	</div>
+	<div class="tab-row-1 relative z-10 flex">
+		{
+			threads.slice(3, 8).map(thread => <HomeTab thread={thread} latest={latestPostByThread[thread]} />)
+		}
+	</div>
+	<div class="tab-row-2 relative z-20 flex">
+		{
+			threads.slice(8, 13).map(thread => <HomeTab thread={thread} latest={latestPostByThread[thread]} />)
+		}
+	</div>
+</div>

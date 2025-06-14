@@ -1,34 +1,12 @@
 ---
-import { type ReferenceDataEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { threads, threadTitles, threadColors } from '../lib/threads';
 import PostSnippet from '../components/widget/PostSnippet.astro';
 import { getPublishedPosts } from '../lib/getPosts';
 import Footer from '../components/core/Footer.astro';
-import HomeTabs from '../components/core/HomeTabs.astro';
+import HomeTabs from '../components/widget/HomeTabs.astro';
 
 const publishedPosts = await getPublishedPosts();
 const latestPosts = publishedPosts.slice(0, 15);
-
-type ThreadSummary = {
-	slug: string;
-	title: string;
-	authors: ReferenceDataEntry<'authors'>[];
-	publish_date: Date;
-};
-const latestPostByThread = publishedPosts.reduce<Record<string, ThreadSummary>>((acc, post) => {
-	const { thread, slug, title, authors, publish_date } = post.data;
-	// skip any posts without a thread
-	if (!thread) return acc;
-
-	const existing = acc[thread];
-	// if first time seeing this thread, or this post is newer
-	if (!existing || publish_date > existing.publish_date) {
-		acc[thread] = { slug, title, authors, publish_date };
-	}
-
-	return acc;
-}, {});
 
 let latestPostsYear: number | null = null;
 ---
@@ -83,7 +61,7 @@ let latestPostsYear: number | null = null;
 
 
 		<div class="relative">
-			<div id="tabs-container" class="relative"></div>
+			<HomeTabs />
 			<div id="sort_bar" class="flex flex-row px-6 font-mono text-lg">
 				<span class="text-gray-200">Sort by:</span>
 				<div class="ml-6 text-white">
@@ -111,77 +89,5 @@ let latestPostsYear: number | null = null;
 		</main>
 	</div>
 
-	<script
-		is:inline
-		define:vars={{ threads, threadTitles, threadColors, latestPostByThread }}
-		data-astro-rerun
-	>
-		(() => {
-			const container = document.getElementById('tabs-container');
-			let globalIndex = 0;
-			for (let rowIndex = 0; rowIndex < 3; rowIndex++) {
-				const row = document.createElement('div');
-				row.className = `tab-row-${rowIndex} flex relative z-${rowIndex * 10}`;
-
-				for (let tabIndex = 0; tabIndex < 5; tabIndex++) {
-					if (rowIndex === 0 && (tabIndex === 3 || tabIndex === 4)) continue;
-					const tabContainer = createTab(rowIndex, tabIndex, threads[globalIndex]);
-					row.appendChild(tabContainer);
-					globalIndex++;
-				}
-
-				container.appendChild(row);
-			}
-
-			function createTab(rowIndex, tabIndex, thread) {
-				const label = threadTitles[thread];
-				const color = threadColors[thread];
-
-				let description = 'Placeholder';
-
-				if (latestPostByThread[thread]) {
-					description =
-						'<div class="flex flex-row justify-between w-full mx-10">' +
-						`<a onclick="document.querySelectorAll('img[data-astro-transition-scope]').forEach(img => img.removeAttribute('data-astro-transition-scope'));"
-						class="italic w-1/5 text-2xl font-semibold hover:underline" href="/essays/${latestPostByThread[thread].slug}">Read the latest post &gt;</a>` +
-						'<div class="flex text-right flex-col w-4/5">';
-
-					description += '<span class="ml-5 text-2xl overflow-ellipsis whitespace-nowrap overflow-hidden">' + latestPostByThread[thread].title + '</span>';
-					const authors = latestPostByThread[thread].authors
-						.map((author) => {
-							return author.id.replaceAll('-', ' ');
-						}).join(', ');
-
-					const publish_date = new Intl.DateTimeFormat('en-GB', {
-						day: '2-digit',
-						month: 'short',
-						year: 'numeric',
-					})
-						.format(new Date(latestPostByThread[thread].publish_date))
-						.replace(/ /g, '-');
-					description += '<span class="capitalize">by ' + authors + '&nbsp;&nbsp;&nbsp;' + publish_date + '</span>';
-					description += '</div></div>';
-				}
-
-				const tabContainer = document.createElement('div');
-				tabContainer.className = `tab-container`;
-
-				const tab = document.createElement('div');
-				tab.className = `tab rounded-t-4xl  flex items-center justify-center shadow-md relative`;
-				tab.style.backgroundColor = color;
-				tab.innerHTML = `<a href="/threads/${thread}/1" class="text-white font-medium text-lg">${label}</a>`;
-
-				const tabContent = document.createElement('div');
-				tabContent.className = `tab-content flex items-center justify-center px-4 shadow-md`;
-				tabContent.style.backgroundColor = color;
-				tabContent.innerHTML = description;
-
-				tabContainer.appendChild(tab);
-				tabContainer.appendChild(tabContent);
-
-				return tabContainer;
-			}
-		})();
-	</script>
 	<Footer />
 </BaseLayout>
