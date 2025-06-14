@@ -1,10 +1,11 @@
 ---
-import { type ReferenceDataEntry, getCollection } from 'astro:content';
+import { type ReferenceDataEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { threads, threadTitles, threadColors } from '../lib/threads';
 import PostSnippet from '../components/widget/PostSnippet.astro';
 import { getPublishedPosts } from '../lib/getPosts';
 import Footer from '../components/core/Footer.astro';
+import HomeTabs from '../components/core/HomeTabs.astro';
 
 const publishedPosts = await getPublishedPosts();
 const latestPosts = publishedPosts.slice(0, 15);
@@ -80,6 +81,7 @@ let latestPostsYear: number | null = null;
 			</nav>
 		</header>
 
+
 		<div class="relative">
 			<div id="tabs-container" class="relative"></div>
 			<div id="sort_bar" class="flex flex-row px-6 font-mono text-lg">
@@ -132,7 +134,6 @@ let latestPostsYear: number | null = null;
 			}
 
 			function createTab(rowIndex, tabIndex, thread) {
-				const globalIndex = rowIndex * 5 + tabIndex;
 				const label = threadTitles[thread];
 				const color = threadColors[thread];
 

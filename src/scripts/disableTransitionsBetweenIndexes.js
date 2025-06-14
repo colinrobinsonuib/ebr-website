@@ -1,4 +1,4 @@
-(function(){
+export function disableTransitionsBetweenIndexs(){
 	let beforePreparationListener = (event) => {
 		const isPost = (path) => {
 			const pathparts = path.split('/');
@@ -15,4 +15,4 @@
 		document.removeEventListener('astro:before-preparation', beforePreparationListener);
 	};
 	document.addEventListener('astro:before-preparation', beforePreparationListener);
-})();
+}

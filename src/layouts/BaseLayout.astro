@@ -22,9 +22,10 @@ function stripTagsRegex(title: string|undefined): string {
 	<body class="min-h-screen flex flex-col pt-1">
 		<slot />
 	</body>
-	<script src="/scripts/disableTransitionsBetweenIndexes.js" is:inline data-astro-rerun />
 	<script>
+		import {disableTransitionsBetweenIndexs} from '../scripts/disableTransitionsBetweenIndexes.js';
 		import { ViewTransitionManager } from '../scripts/ViewTransitionManager';
+
 		let transitionManager: ViewTransitionManager;
 
 		document.addEventListener('astro:before-preparation', () => {
@@ -35,6 +36,7 @@ function stripTagsRegex(title: string|undefined): string {
 
 		document.addEventListener('astro:page-load', () => {
 			transitionManager = new ViewTransitionManager();
+			disableTransitionsBetweenIndexs();
 		});
 	</script>
 </html>
