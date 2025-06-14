@@ -7,7 +7,7 @@ const authorCitation = post.data.citation_override ? post.data.citation_override
 
 const cleanTitle = title.replace(/<[^>]*>/g, '');
 const publishedDate = post.data.publish_date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
-const refUrl = post.data.doi ? post.data.doi : `https://electronicbookreview.com/${post.data.type}s/${post.data.slug}/`
+const refUrl = post.data.doi ? post.data.doi : `https://electronicbookreview.com/publications/${post.data.slug}/`
 ---
 <h2 class="capitalize">Cite this {post.data.type}</h2>
 <p>{authorCitation}. "{cleanTitle}" <span class="italic">Electronic Book Review</span>, {publishedDate}, <a class="break-all" href={refUrl}>{refUrl}</a></p>

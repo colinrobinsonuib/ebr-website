@@ -5,4 +5,4 @@ const { id } = Astro.props;
 const post = await getEntry('posts', id);
 ---
 
-{post && <a href={`/${post.data.type}s/${post.id}`} set:html={renderTitle(post.data.title)} />}
+{post && <a href={`/publications/${post.id}`} set:html={renderTitle(post.data.title)} />}

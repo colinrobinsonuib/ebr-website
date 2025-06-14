@@ -24,7 +24,7 @@ const { Content } = await render(post);
 	<div class="mb-6">
 		<PostType type={post.data.type} />
 	</div>
-	<h1 class="mb-5 text-3xl md:text-4xl font-semibold dark:text-gray-50" set:html={title} />
+	<h1 class="mb-5 text-3xl md:text-4xl tracking-tighter text-pretty font-semibold dark:text-gray-50" set:html={title} />
 	<div class="mb-5 w-fit border-b font-mono text-xl text-red-500 italic">
 		{
 			<ByAuthors authors={authors} />
@@ -51,7 +51,7 @@ const { Content } = await render(post);
 		{
 			blurb && (
 				<div
-					class="blurb font-serif text-base tracking-wide italic"
+					class="blurb font-serif text-base tracking-wide italic dark:text-gray-100"
 					set:html={blurb}
 				/>
 			)

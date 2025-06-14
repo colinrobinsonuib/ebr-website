@@ -16,7 +16,7 @@ import PostThread from '../ui/PostThread.astro';
 			</div>
 			<div class="mx-1 flex grow flex-col">
 				<a
-					href={`/${post.data.type}s/${post.id}`}
+					href={`/publications/${post.id}`}
 					set:html={renderTitle(post.data.title)}
 					class="font-semibold text-pretty hover:underline md:text-xl"
 				/>

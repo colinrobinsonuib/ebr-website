@@ -28,7 +28,7 @@ const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 		{showThread && <PostThread thread={post.data.thread} />}
 	</div>
 	<div class="flex flex-col border-t-2 pt-2">
-		<a href={`/${post.data.type}s/${post.id}`} set:html={renderTitle(post.data.title)} class="text-2xl font-semibold underline hover:no-underline"></a>
+		<a href={`/publications/${post.id}`} set:html={renderTitle(post.data.title)} class="text-2xl font-semibold underline hover:no-underline"></a>
 		{ authors &&
 			<div class="italic text-lg">by {authors.map(author => (
 					<a href={`/authors/${author.id}`} class="hover:text-red-500">{author.data.title}</a>
@@ -40,7 +40,7 @@ const blurb = post.data.blurb ? processBlurb(post.data.blurb) : '';
 	<div class="ml-20 min-w-[200px] items-center flex">
 		{
 			post.data.image && (
-				<a href={`/${post.data.type}s/${post.id}`} class="mt-6"><img
+				<a href={`/publications/${post.id}`} class="mt-6"><img
 					alt="featured image"
 					src={post.data.image}
 					style="width: 190px; height: 190px"

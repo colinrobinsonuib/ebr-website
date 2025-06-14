@@ -7,6 +7,8 @@
 @import "@fontsource-variable/source-serif-4";
 @import '@fontsource-variable/source-sans-3';
 
+@import './prose.css';
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -70,79 +72,6 @@ body {
     background-color: #ededed;
 }
 
-@layer components {
-    .prose {
-        h1 {
-            font-size: var(--text-4xl);
-        }
-        h2 {
-            font-size: var(--text-3xl);
-        }
-        h3 {
-            font-size: var(--text-2xl);
-        }
-        h4 {
-            font-size: var(--text-3xl);
-        }
-        h5 {
-            font-size: var(--text-lg);
-        }
-        p {
-            margin: 1em 0;
-            @variant md {
-                line-height: 2rem;
-                margin: 1.2em 0;
-                text-align: left;
-            }
-        }
-        a {
-            word-break: auto-phrase;
-            color: var(--color-red-500);
-            text-decoration: underline;
-            &:hover {
-                text-decoration: none;
-            }
-        }
-        ul {
-            list-style-type: disc;
-            list-style-position: inside;
-            margin-left: 1em;
-        }
-        ol {
-            list-style-type: decimal;
-            list-style-position: inside;
-        }
-        blockquote {
-            color: #333;
-            line-height: 1.7;
-            font-weight: normal;
-            background: #f9f9f9;
-            border-left: 5px solid #ccc;
-            padding-left: 10px;
-            margin: 1em 0;
-            p {
-                margin: 0;
-                padding: 0;
-                white-space: pre-line;
-            }
-        }
-
-        figure {
-            img {
-                margin: 0 auto;
-            }
-            figcaption {
-                font-size: var(--text-base);
-                color: #666;
-                text-align: center;
-                margin: 0.5em auto 0;
-                width: 80%;
-            }
-        }
-    }
-}
-
-
 .marginnote-def {
     display: none;
     font-size: 0.9rem;
@@ -152,6 +81,7 @@ body {
     float: left;
     clear: both;
     width: 95%;
+    font-weight: normal;
 
     .marginnote-number,
     .marginnote-backref {
@@ -203,7 +133,7 @@ body {
 
 .marginnote-ref-wrapper {
     padding: 2px;
-    top: -0.2em;
+    top: -0.2rem;
 
     @variant xl {
         display: inline;
@@ -227,7 +157,7 @@ body {
         text-decoration: none;
         font-weight: 500;
         line-height: 1;
-        font-size: 1.5em;
+        font-size: 1.5rem;
     }
 }
 

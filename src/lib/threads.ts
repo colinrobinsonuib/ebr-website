@@ -40,7 +40,7 @@ export const threadColors: Record<Thread, string> = {
 	'first-person': '#729FFF',
 	technocapitalism: '#52bf77',
 	'writing-postfeminism': '#ff3300',
-	electropoetics: '#54deff',
+	electropoetics: '#55bbee',
 	'internet-nation': '#CC9966',
 	'critical-ecologies': '#669933',
 	webarts: '#FF6633',
