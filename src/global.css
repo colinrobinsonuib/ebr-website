@@ -17,6 +17,7 @@
     --font-serif: "Source Serif 4 Variable", "Times New Roman", serif;
 
     --color-gathering: #24ccff;
+    --color-newsletter: #ff7474;
 }
 
 @utility container {

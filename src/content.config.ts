@@ -39,6 +39,12 @@ export const gatheringSchema = baseSchema.extend({
 	type: z.string().default('gathering'),
 });
 
+export const newsletterSchema = baseSchema.extend({
+	draft: z.boolean().default(true),
+	authors: z.array(reference('authors')),
+	type: z.string().default('newsletter'),
+});
+
 export const authorSchema = baseSchema.extend({
 	qid: z
 		.string()
@@ -56,6 +62,11 @@ const gatherings = defineCollection({
 	schema: gatheringSchema,
 });
 
+const newsletters = defineCollection({
+	loader: glob({ pattern: '**/*.md', base: CONTENT_DIR + '/newsletters' }),
+	schema: newsletterSchema,
+});
+
 const authors = defineCollection({
 	loader: glob({ pattern: '**/*.md', base: CONTENT_DIR + '/authors' }),
 	schema: authorSchema,
@@ -63,4 +74,4 @@ const authors = defineCollection({
 
 export type Author = CollectionEntry<'authors'>;
 
-export const collections = { posts, gatherings, authors };
+export const collections = { posts, gatherings, newsletters, authors };

@@ -1,6 +1,6 @@
 ---
-import { getEntries, getCollection, render } from 'astro:content';
-import { hasGlosses, prettyDate, prettyDateLong, extractWorksCited } from '../../lib/utils';
+import { getEntries, getCollection } from 'astro:content';
+import { hasGlosses, extractWorksCited } from '../../lib/utils';
 import { threadColors, threadDescriptions, threadTitles } from '../../lib/threads';
 
 import { renderTitle } from '../../lib/renderTitle';
@@ -8,7 +8,6 @@ import { renderTitle } from '../../lib/renderTitle';
 import { postTypeColors } from '../../lib/postTypes';
 import PostArticle from '../../components/widget/PostArticle.astro';
 import ContentLayout from '../../layouts/ContentLayout.astro';
-import { disableTransitionsBetweenIndexs } from '../../scripts/disableTransitionsBetweenIndexes';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('posts');

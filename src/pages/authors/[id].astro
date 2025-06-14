@@ -20,6 +20,10 @@ const postsByAuthor = (await getPublishedPosts())
 let gatheringsByAuthor = await getCollection('gatherings', ({ data }) => {;
 	return data.authors.some(item => item.id === author.id);
 });
+
+const newslettersByAuthor = await getCollection('newsletters', ({ data }) => {;
+	return data.authors.some(item => item.id === author.id);
+});
 ---
 
 <ContentLayout title={author.data.title}>
@@ -45,6 +49,10 @@ let gatheringsByAuthor = await getCollection('gatherings', ({ data }) => {;
 					{gatheringsByAuthor.length > 0 && (
 						<h2 class="text-3xl font-semibold">Gatherings</h2>
 						<PostTable posts={gatheringsByAuthor} />
+					)}
+					{newslettersByAuthor.length > 0 && (
+						<h2 class="text-3xl font-semibold">Newsletters</h2>
+						<PostTable posts={newslettersByAuthor} />
 					)}
 				</article>
 			</main>

@@ -1,0 +1,66 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+
+import Pagination from '../../components/ui/Pagination.astro';
+import { type Page } from 'astro';
+import { getCollection, getEntries, getEntry } from 'astro:content';
+import { renderTitle } from '../../lib/renderTitle';
+import { processBlurb } from '../../lib/utils';
+
+export async function getStaticPaths({ paginate }) {
+	let allPosts = await getCollection('newsletters', ({ data }) => {;
+		return data.publish_date && data.draft === false;
+	});
+	allPosts.sort((a, b) => {
+		return b.data.publish_date!.getTime() - a.data.publish_date!.getTime();
+	});
+	return paginate(allPosts, {
+		pageSize: 20,
+	});
+}
+
+const { page }: { page: Page } = Astro.props;
+---
+
+<ContentLayout title="newsletters">
+	<div class="mx-auto mt-6 w-full max-w-7xl grow" >
+		<div class="flex flex-row">
+			<div class="relative h-24 w-64">
+				<div
+					class="bg-newsletter absolute bottom-0 flex w-64 translate-y-13 transform  flex-col rounded-t-4xl py-6 text-center font-mono text-lg transition-transform duration-300 ease-in-out hover:translate-y-4">
+					<span class="text-white">newsletters</span>
+					<span class="mt-6 text-balance text-white">
+						Page {page.currentPage} of {page.lastPage}
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="border-newsletter md:border-10 relative px-6 bg-white">
+			<main class="py-8">
+				{
+					page.data.map(async (post) => {
+						const authors = await getEntries(post.data.authors);
+						const blurb = (await processBlurb(post.body)).toString();
+						const paragraphMatch = blurb.match(/<p[^>]*>(.*?)<\/p>/s);
+						const blurbText = (paragraphMatch) ? paragraphMatch[0] : blurb.substring(0, 200);
+						return (
+							<div class="flex flex-col pt-2">
+								<a href={`/newsletters/${post.id}`} set:html={renderTitle(post.data.title)} class="text-3xl font-semibold underline hover:no-underline"></a>
+								{ authors &&
+									<div class="italic text-lg">by {authors.map(author => (
+										<a href={`/authors/${author.id}`} class="hover:underline">{author.data.title}</a>
+									)).reduce((prev, curr) => [prev, ', ', curr]) }
+									</div>
+								}
+								<div class="my-2 blurb" set:html={blurbText}></div>
+							</div>
+						);
+					})
+				}
+				<div class="mt-16">
+					<Pagination page={page} />
+				</div>
+			</main>
+		</div>
+	</div>
+</ContentLayout>

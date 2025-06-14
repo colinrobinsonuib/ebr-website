@@ -1,12 +1,10 @@
 ---
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import { getCollection, getEntries, render } from 'astro:content';
-import { strict as assert } from 'assert';
 import { renderTitle } from '../../lib/renderTitle';
 import PostTable from '../../components/widget/PostTable.astro';
-import { prettyDate, prettyDateLong, processBlurb } from '../../lib/utils';
+import { prettyDate, prettyDateLong } from '../../lib/utils';
 import ByAuthors from '../../components/ui/ByAuthors.astro';
-import formatAuthorCitation from '../../lib/authorCitation';
 import CiteThis from '../../components/ui/CiteThis.astro';
 
 export async function getStaticPaths() {
@@ -33,7 +31,6 @@ const postsByGathering = (await getCollection('posts')).filter((post) =>
 
 const title = await renderTitle(gathering.data.title);
 const { Content } = await render(gathering);
-const authorCitation = formatAuthorCitation(authors);
 ---
 
 <ContentLayout title={gathering.data.title}>
