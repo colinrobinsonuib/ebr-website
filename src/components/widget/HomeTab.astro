@@ -28,7 +28,10 @@ const threadColor = threadColors[thread];
 					href={`/publications/${latest.id}`}
 				><span class="hover:underline">Read the latest post</span><span>⏵</span></a>
 				<div class="flex w-4/5 flex-col text-right">
-						<a href={`/publications/${latest.id}`} class="ml-5 hover:underline overflow-hidden text-2xl overflow-ellipsis whitespace-nowrap"
+						<a
+							href={`/publications/${latest.id}`}
+							onclick="document.querySelectorAll('img[data-astro-transition-scope]').forEach(img => img.removeAttribute('data-astro-transition-scope'));"
+							class="ml-5 hover:underline overflow-hidden text-2xl overflow-ellipsis whitespace-nowrap"
 						>{latest.data.title}</a>
 					<div class="-mt-2">
 						<span class="capitalize">by john zuern</span>

@@ -14,6 +14,6 @@ const tooltip = type === 'article' ? 'Articles are peer reviewed' : '';
 <a
 	href={'/' + type + 's/1'}
 	title={tooltip}
-	class="flex h-8 w-34 items-center justify-center font-mono text-black no-underline text-xl"
+	class="flex h-8 w-34 items-center justify-center font-mono text-black no-underline text-xl hover:shadow-[4px_4px] transition-shadow duration-200 ease-linear"
 	style={'background-color: ' + postTypeColor}>{type}</a
 >
