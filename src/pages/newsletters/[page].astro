@@ -39,18 +39,19 @@ const { page }: { page: Page } = Astro.props;
 			<main class="py-8">
 				{
 					page.data.map(async (post) => {
-						const authors = await getEntries(post.data.authors);
+						const authors = post.data.authors ? await getEntries(post.data.authors) : [];
 						const blurb = (await processBlurb(post.body)).toString();
 						const paragraphMatch = blurb.match(/<p[^>]*>(.*?)<\/p>/s);
 						const blurbText = (paragraphMatch) ? paragraphMatch[0] : blurb.substring(0, 200);
 						return (
 							<div class="flex flex-col pt-2">
 								<a href={`/newsletters/${post.id}`} set:html={renderTitle(post.data.title)} class="text-3xl font-semibold underline hover:no-underline"></a>
-								{ authors &&
+								{ /* TODO: Fix
+								authors &&
 									<div class="italic text-lg">by {authors.map(author => (
 										<a href={`/authors/${author.id}`} class="hover:underline">{author.data.title}</a>
 									)).reduce((prev, curr) => [prev, ', ', curr]) }
-									</div>
+									</div>*/
 								}
 								<div class="my-2 blurb" set:html={blurbText}></div>
 							</div>

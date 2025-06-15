@@ -22,7 +22,11 @@ let gatheringsByAuthor = await getCollection('gatherings', ({ data }) => {;
 });
 
 const newslettersByAuthor = await getCollection('newsletters', ({ data }) => {;
-	return data.authors.some(item => item.id === author.id);
+	if(data.authors) {
+		return data.authors.some(item => item.id === author.id);
+	} else {
+		return false;
+	}
 });
 ---
 

@@ -4,7 +4,7 @@ import { getCollection, getEntries, render } from 'astro:content';
 import { renderTitle } from '../../lib/renderTitle';
 import { prettyDate, prettyDateLong, processBlurb } from '../../lib/utils';
 import ByAuthors from '../../components/ui/ByAuthors.astro';
-import CiteThis from '../../components/ui/CiteThis.astro';
+import type { Author } from '../../content.config';
 
 export async function getStaticPaths() {
 	const newsletters = await getCollection('newsletters');
@@ -22,10 +22,14 @@ if (!newsletter.data.publish_date && newsletter.data.draft) {
 const title = await renderTitle(newsletter.data.title);
 const { Content } = await render(newsletter);
 
-const authors = await getEntries(newsletter.data.authors);
-if (!authors || !authors[0]) {
-	throw new Error('authors must be defined');
+let authors:Author[] = [];
+if(newsletter.data.authors && newsletter.data.authors.length) {
+	authors = await getEntries(newsletter.data.authors);
+	if (!authors || !authors[0]) {
+		throw new Error('authors must be defined');
+	}
 }
+
 
 ---
 <ContentLayout title={newsletter.data.title}>
@@ -47,11 +51,9 @@ if (!authors || !authors[0]) {
 				<article class="m-auto max-w-[75ch] text-lg">
 					<h1 class="mb-5 text-4xl font-semibold dark:text-gray-50" set:html={title} />
 					<div class="mb-5 w-fit border-b font-mono text-xl text-red-500 italic">
-						<ByAuthors authors={authors} />
+						<!--<ByAuthors authors={authors} />-->
 					</div>
-					<div
-						class="mb-5 font-mono text-xl"
-						title={'last modified: ' + prettyDate(newsletter.data.modified_date)}>
+					<div class="mb-5 font-mono text-xl">
 						{prettyDateLong(newsletter.data.publish_date!)}
 					</div>
 

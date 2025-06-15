@@ -41,8 +41,9 @@ export const gatheringSchema = baseSchema.extend({
 
 export const newsletterSchema = baseSchema.extend({
 	draft: z.boolean().default(true),
-	authors: z.array(reference('authors')),
+	authors: z.array(reference('authors')).optional(), // TODO: fix
 	type: z.string().default('newsletter'),
+	modified_date: z.coerce.date().optional(),
 });
 
 export const authorSchema = baseSchema.extend({
