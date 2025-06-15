@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "index:meili": "node meilisearch-indexer.js"
   },
   "dependencies": {
     "@fontsource-variable/source-sans-3": "^5.2.8",
@@ -15,6 +16,7 @@
     "@types/hast": "^3.0.4",
     "astro": "^5.8.1",
     "hast-util-to-string": "^3.0.1",
+    "meilisearch": "^0.51.0",
     "phosphor-astro": "^2.1.0",
     "prettier-plugin-tailwindcss": "^0.6.12",
     "rehype": "^13.0.2",
@@ -24,14 +26,18 @@
     "remark-marginnotes": "^0.1.5",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
+    "strip-markdown": "^6.0.0",
     "tailwindcss": "^4.1.8",
     "typescript": "^5.8.3",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
+    "glob": "^11.0.3",
+    "gray-matter": "^4.0.3",
     "prettier": "3.5.3",
     "prettier-plugin-astro": "0.14.1",
+    "tsx": "^4.20.3",
     "vite": "^6.3.5"
   }
 }

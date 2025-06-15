@@ -24,7 +24,7 @@ export const postSchema = baseSchema.extend({
 	citation_override: z.string().optional(),
 	doi: z.string().url().optional(),
 	blurb: z.string().optional(),
-	riposte_to: z.string().optional(),
+	riposte_to: reference('posts').optional(),
 	image: z.string().optional(),
 });
 type Post = CollectionEntry<'posts'>;

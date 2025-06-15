@@ -13,6 +13,7 @@ authors:
 citation_override: Mez Breeze
 blurb: Experimental storyteller and digital artist Mez Breeze explores the liminal spaces of The Backrooms, a found footage web series which is based on a popular creepypasta of the same name. In doing so, Breeze confronts the feelings of alienation and predation inherent to late-stage capitalist society.
 image: https://images.electronicbookreview.com/2025/02/backrooms-1-150x150.png
+riposte_to: the-end
 ---
 
 ## Introduction
