@@ -1,0 +1,22 @@
+meta {
+  name: search
+  type: http
+  seq: 1
+}
+
+post {
+  url: https://search.electronicbookreview.com/indexes/journal/search
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "attributesToRetrieve": ["id", "title", "url"],
+    "attributesToCrop": ["*"],
+    "attributesToHighlight": ["body"],
+    "cropLength": 30,
+    "hitsPerPage": 5,
+    "q": "winter"
+  }
+}
