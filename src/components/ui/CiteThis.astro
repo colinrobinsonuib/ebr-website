@@ -10,4 +10,4 @@ const publishedDate = post.data.publish_date.toLocaleDateString('en-GB', { year:
 const refUrl = post.data.doi ? post.data.doi : `https://electronicbookreview.com/publications/${post.data.slug}/`
 ---
 <h2 class="capitalize">Cite this {post.data.type}</h2>
-<p>{authorCitation}. "{cleanTitle}" <span class="italic">Electronic Book Review</span>, {publishedDate}, <a class="break-all" href={refUrl}>{refUrl}</a></p>
+<p class="not-prose">{authorCitation}. "{cleanTitle}" <span class="italic">Electronic Book Review</span>, {publishedDate}, <a class="text-red-500 underline font-medium break-all hover:no-underline" href={refUrl}>{refUrl}</a></p>

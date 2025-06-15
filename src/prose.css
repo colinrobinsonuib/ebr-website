@@ -1,3 +1,4 @@
+/* https://github.com/victorelgersma/tailwind-typography-stylesheet/blob/main/style.css */
 .prose {
     --tw-prose-body: #222933;
     --tw-prose-headings: #111827;
@@ -80,14 +81,14 @@
     margin-bottom: 1.2em;
 }
 
-.prose :where(a) {
+.prose :where(a):not(:where([class~="not-prose"],[class~="not-prose"] *)) {
     color: var(--tw-prose-links);
     text-decoration: underline;
     font-weight: 500;
     word-break: auto-phrase;
 }
 
-.prose :where(a):hover {
+.prose :where(a):hover:not(:where([class~="not-prose"],[class~="not-prose"] *)) {
     text-decoration: none;
 }
 
