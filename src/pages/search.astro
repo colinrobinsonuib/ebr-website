@@ -1,0 +1,359 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+---
+
+<style is:global>
+	@reference 'tailwindcss';
+
+  /**
+	 * Inputs
+	 */
+
+	.ais-SearchBox-input {
+		@apply w-full border-2 p-3 pr-10 font-mono;
+	}
+
+	.ais-SortBy-select {
+      @apply p-1 cursor-pointer;
+      background-color: rgba(65, 66, 71, .08);
+	}
+
+	/**
+	 * Refinement List
+	 */
+  .ais-HierarchicalMenu-link, .ais-RatingMenu-link, .ais-RefinementList-label {
+      align-items: center;
+      display: flex;
+  }
+  .ais-RefinementList-item, .ais-RefinementList-item *, .ais-RatingMenu-item {
+      cursor: pointer;
+  }
+  .ais-RefinementList-checkbox {
+      appearance: none;
+      height: 1rem;
+      width: 1rem;
+      background-color: rgba(65, 66, 71, .08);
+      border: none;
+      border-radius: 2px;
+      margin: 0 1rem 0 0;
+      position: relative;
+  }
+  .ais-RefinementList-item--selected .ais-RefinementList-checkbox {
+      background-color: black;
+  }
+  .ais-RefinementList-item--selected .ais-RefinementList-checkbox:after {
+      content: "";
+      height: 4px;
+      width: 4px;
+      background-color: #fff;
+      border-radius: 4px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-2px, -2px);
+  }
+	.ais-RefinementList-count {
+      color: black;
+      letter-spacing: 1.1px;
+      background-color: rgba(65, 66, 71, .08);
+      border-radius: 4px;
+      align-items: center;
+      margin-left: 8px;
+      padding: 0 4px;
+      font-size: .64rem;
+      font-weight: 600;
+      display: flex;
+	}
+
+  /**
+	 * Pagination
+	 */
+	.ais-Pagination-list {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+			gap: 0.5em;
+	}
+  .ais-Pagination-item, .ais-Pagination-link {
+      justify-content: center;
+      align-items: center;
+      display: flex;
+  }
+  .ais-Pagination-item {
+      height: 38px;
+      width: 38px;
+      color: #414247;
+      background-color: rgba(65, 66, 71, .08);
+      border-radius: 4px;
+  }
+  .ais-Pagination-item--selected {
+      @apply bg-teal-500 font-semibold text-white;
+  }
+  .ais-Pagination-item.ais-Pagination-item--previousPage,
+  .ais-Pagination-item.ais-Pagination-item--nextPage{
+      background: 0;
+  }
+
+</style>
+<ContentLayout title="search">
+	<div class="mx-auto mt-6 w-full max-w-7xl grow">
+		<div class="flex flex-row">
+			<div class="relative h-24 w-64">
+				<div
+					class="bg-teal-500 absolute bottom-0 flex w-64 transform flex-col rounded-t-4xl py-6 text-center font-mono text-lg">
+					<span class="text-white">search</span>
+				</div>
+			</div>
+		</div>
+		<div class="border-teal-500 relative bg-white px-6 md:border-10">
+			<main class="py-8">
+				<div id="search-container" class="grid grid-cols-1 gap-6 md:grid-cols-4">
+					<!-- Filters Column -->
+					<div class="space-y-6 md:col-span-1">
+						<div>
+							<h2 class="mb-3 text-xl font-semibold text-gray-700">Sort by Date</h2>
+							<div id="publish-date-sortby" class="ais-SortBy font-mono"></div>
+						</div>
+						<div>
+							<h2 class="mb-3 text-xl font-semibold text-gray-700">Content Type</h2>
+							<div id="content-type-filter" class="ais-RefinementList font-mono"></div>
+						</div>
+						<div>
+							<h2 class="mb-3 text-xl font-semibold text-gray-700">Thread</h2>
+							<div id="thread-filter" class="ais-RefinementList font-mono"></div>
+						</div>
+						<div>
+							<div id="clear-refinements" class="bg-teal-500 text-sm border-2 cursor-pointer border-black p-2 mt-4 font-mono hover:shadow-[4px_4px] transition-shadow ease-linear duration-200"></div>
+						</div>
+					</div>
+
+					<!-- Search Results Column -->
+					<div class="md:col-span-3">
+						<div id="searchbox" class="mb-6"></div>
+						<div id="stats" class="mb-4 text-sm text-gray-600"></div>
+						<div id="hits" class="space-y-4"></div>
+						<div id="pagination" class="mt-8 flex justify-center"></div>
+					</div>
+				</div>
+			</main>
+		</div>
+	</div>
+</ContentLayout>
+
+<script>
+	import { instantMeiliSearch } from '@meilisearch/instant-meilisearch';
+	import instantsearch from 'instantsearch.js';
+	import {
+		clearRefinements,
+		configure,
+		hits,
+		pagination,
+		refinementList,
+		searchBox,
+		sortBy,
+		stats,
+	} from 'instantsearch.js/es/widgets';
+
+	const { searchClient, setMeiliSearchParams } = instantMeiliSearch(
+		'https://search.electronicbookreview.com/',
+		'38dcd95be119ca601888b01e628248f4d64669d066d0d2bfaeb5b1ef0ffccb2b',
+		{
+			meiliSearchParams: {
+				attributesToRetrieve: ['id', 'title', 'url', 'publish_date', 'image'],
+				attributesToCrop: ['*'],
+				attributesToHighlight: ['title', 'body'],
+				cropLength: 30,
+			},
+		},
+	);
+
+	const MAIN_INDEX = 'journal';
+	const DATE_DESC_INDEX = 'publish_date';
+	const DATE_ASC_INDEX = 'journal_publish_date_asc';
+
+	const initialUiState = {
+		['journal']: {},
+	};
+
+	const search = instantsearch({
+		indexName: MAIN_INDEX,
+		searchClient,
+		initialUiState: initialUiState,
+		routing: false,
+		future: {
+			preserveSharedStateOnUnmount: true
+		}
+	});
+
+	// --- WIDGETS ---
+
+	// 1. Configure Widget (for parameters from your JSON)
+	search.addWidgets([
+		configure({
+			hitsPerPage: 5,
+			attributesToRetrieve: ['id', 'title', 'url', 'image', 'publish_date'], // Ensure publish_date is retrieved if you want to display it
+			attributesToSnippet: ['body:30'], // Corresponds to attributesToCrop and cropLength. Format is attributeName:wordCount
+			attributesToHighlight: ["body", "title"], // Example
+		}),
+
+		// 2. Search Box
+		searchBox({
+			container: '#searchbox',
+			placeholder: 'Search...',
+			showSubmit: false,
+			showReset: false,
+		}),
+
+		// 3. Stats
+		stats({
+			container: '#stats',
+			templates: {
+				text(data, { html }) {
+					let count = '';
+					if (data.hasManyResults) {
+						count += `${data.nbHits} results`;
+					} else if (data.hasOneResult) {
+						count += `1 result`;
+					} else {
+						count += `no results`;
+					}
+					return html`${count} found ${data.query ? html`for <q>${data.query}</q>` : ''} in ${data.processingTimeMS}ms`;
+				},
+			},
+		}),
+
+		// 4. Hits (Search Results)
+		hits({
+			container: '#hits',
+			templates: {
+				empty(results, { html }) {
+					return html`No results for <q>${results.query}</q>. Try a different search.`;
+				},
+				item(hit, { html, components }) {
+					// Helper to format date if publish_date is a timestamp
+					const formatDate = (timestamp) => {
+						if (!timestamp) return '';
+						try {
+							return new Date(timestamp * 1000).toLocaleDateString(undefined, {
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric',
+							});
+						} catch (e) {
+							return timestamp;
+						}
+					};
+
+					return html`
+						<article class="flex flex-col gap-4 p-4 sm:flex-row">
+							<div class="flex-grow">
+								<h3 class="mb-1 text-2xl font-semibold">
+									<a href="${hit.url}" class="underline hover:no-underline">
+										${components.Highlight({ attribute: 'title', hit })}
+									</a>
+								</h3>
+								${hit.publish_date
+									? html`<p class="mb-2 font-mono text-gray-500">${formatDate(hit.publish_date)}</p>`
+									: ''}
+								<div class="text-base text-gray-700">
+									${hit._snippetResult?.body
+										? components.Snippet({ attribute: 'body', hit })
+										: (hit.body || '').substring(0, 150) + '...'}
+								</div>
+							</div>
+							${hit.image
+								? html`<a href="${hit.url}" class="block flex-shrink-0 sm:w-1/3"
+										><img src="${hit.image}" class="h-24 w-24"
+									/></a>`
+								: ''}
+						</article>
+					`;
+				},
+			},
+		}),
+
+		// 5. Pagination
+		pagination({
+			container: '#pagination',
+			totalPages: 10,
+			showFirst: false,
+			showLast: false,
+			templates: {
+				previous() {
+					return '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><g fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.143"><path d="M9 5H1M5 9L1 5l4-4"></path></g></svg>';
+				},
+				next() {
+					return '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><g fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.143"><path d="M1 5h8M5 9l4-4-4-4"></path></g></svg>';
+				},
+			},
+		}),
+
+		// 6. Content Type Filter
+		refinementList({
+			container: '#content-type-filter',
+			attribute: 'content_type',
+			sortBy: ['name:asc'],
+			templates: {
+				searchableNoResults(data, {html}) {
+					return html`<div class="text-sm text-gray-500 p-2">No matching types.</div>`
+				},
+			},
+		}),
+
+		// 7. Thread Filter
+		refinementList({
+			container: '#thread-filter',
+			attribute: 'thread', // Assuming 'thread' is a facet attribute in Algolia
+			sortBy: ['name:asc'],
+			templates: {
+				searchableNoResults(data, {html}) {
+					return html`<div class="text-sm text-gray-500 p-2">No matching threads.</div>`
+				},
+			},
+		}),
+
+		// 8. Publish Date SortBy
+		sortBy({
+			container: '#publish-date-sortby',
+			items: [
+				{ label: 'Relevance', value: MAIN_INDEX }, // Default sort (relevance)
+				{ label: 'Newest First', value: DATE_DESC_INDEX },
+				{ label: 'Oldest First', value: DATE_ASC_INDEX },
+			],
+		}),
+
+		// 9. Clear Refinements
+		clearRefinements({
+			container: '#clear-refinements',
+			includedAttributes: ['content_type', 'thread'],
+			templates: {
+				resetLabel({ hasRefinements }, { html }) {
+					return html`Clear Filters`;
+				},
+			},
+		}),
+	]);
+
+	search.start();
+
+	// Small helper for initial state if no search query
+	function setInitialResultsMessage() {
+		const statsContainer = document.querySelector('#stats');
+		if (statsContainer && !search.helper.state.query) {
+			// Optionally set a default message or leave as is (handled by stats widget)
+		}
+	}
+
+	// Call it once on load
+	setInitialResultsMessage();
+	// And when refinements are cleared and query is empty
+	search.on('render', () => {
+		if (
+			!search.helper.state.query &&
+			search.helper.state.disjunctiveFacetsRefinements.length === 0 &&
+			search.helper.state.facetsRefinements.length === 0
+		) {
+			setInitialResultsMessage();
+		}
+	});
+</script>

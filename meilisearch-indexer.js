@@ -48,7 +48,6 @@ async function markdownToText(markdownContent) {
  * @returns {Promise<MarkdownDoc[]>} An array of parsed markdown documents.
  */
 async function getFilesForCollection(collectionName, globPatternInContentDir, collectionSubDir) {
-	const collectionBasePath = path.join(CONTENT_DIR, collectionSubDir);
 	const fullGlobPattern = path.join(CONTENT_DIR, globPatternInContentDir).replace(/\\/g, '/');
 
 	const filePaths = await glob(fullGlobPattern);
@@ -62,9 +61,10 @@ async function getFilesForCollection(collectionName, globPatternInContentDir, co
 			// pull out fields we dont need for search
 			const { draft, modified_date, post_id, doi, ...dataClean } = data;
 
+			let collectionRealName = collectionName==='posts' ? 'publications' : collectionName;
 			documents.push({
 				id: generateSafeId(collectionName, data.slug),
-				url: `${SITE_BASE_URL}/${collectionName}/${data.slug}`,
+				url: `${SITE_BASE_URL}/${collectionRealName}/${data.slug}`,
 				data: dataClean,
 				body,
 				collection: collectionName,
